@@ -1,0 +1,28 @@
+-------------- Short term --------------------
+
+- Clean the NAMESPACE
+- Get things clearer on the S4/S3 methods
+
+- Put some sample data (and document it)
+- Push the SpatialSpectraDataFrame class
+- Find a quick way to use the baseline package (wrapper)
+
+- Finish the integration of the smooth method (esp. implement the kernel smoother)
+- The latter is a way to subsample the spectral resolution maybe?
+
+- Implement a sample.Spectra() method
+- Implement the Kennard-Stone algorithm for sampling
+- mutate() should be able to apply diff()
+- outlier analysis methods (Mahalonobis?)
+- 2D correlation between two sets of spectra
+
+- Document how to centre the spectra
+- Same for variance scaling (maybe that would justify coding up a spectra_apply() kind of function?)
+- Implement wavelet-based wl selection
+- Implement the parameter orthogonalisation algorithm (Roger et al., 2003)
+
+------------- Longer term --------------------
+
+- File-based storage of big collections
+- Integration of a viewer, possibly using playwith, to
+manipulate (eg crop) the spectra in a collection.

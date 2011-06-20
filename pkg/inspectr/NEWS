@@ -1,0 +1,27 @@
+-------------------------- inspectr 0.1-7 (2011-06-20) --------------------------
+* Changed package name and swithed to R-forge
+
+-------------------------- specstore 0.1-6 (2011-06-07) --------------------------
+* bug fix of aggregate_spectra (bug #1, "evaluation nested too deeply" error)
+
+-------------------------- specstore 0.1-5 (2011-06-01) --------------------------
+* bug fix when initializing a Spectra object without any id field.
+
+-------------------------- specstore 0.1-4 (2011-05-31) --------------------------
+* `[i, j, ..` method now accepts j values to subset the wavelengths
+
+-------------------------- specstore 0.1-3 (2011-05-26) --------------------------
+* split() now works for any class inheriting from Spectra
+* New spectra<-.Spectra method, allowing to change the spectra of a Spectra* object by passing a matrix with the same number of rows.
+
+-------------------------- specstore 0.1-2 (2011-05-25) --------------------------
+* Method get_units() is now called units()
+* Method get_resolution() is now called resolution()
+* Method get_data() is now called data()
+* New units<- method (changes the unit in which the wavelengths are expressed)
+* New split.SpectraDataFrame method, see ?split
+* mutate() is now implemented as one only method (not anymore duplicated for each Class), and is now working properly with attributes. You can even muate the spcetra and the attributes of an object in one command.
+
+-------------------------- specstore 0.1-1 (2011-05-24) --------------------------
+* proper package structure and documentation
+* first semi-public release
