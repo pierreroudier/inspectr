@@ -41,7 +41,7 @@ while (!feof($handle)) {
 fclose($handle);
 echo $contents; } ?>
 
-<p> <strong>inspectr</strong> - A R package for storing and manipulating Vis-NIR data </p>
+<!-- <p> <strong>inspectr</strong> - A R package for storing and manipulating Vis-NIR data </p> -->
 
 <img alt="inspectr" src="img/inspectr.png">
 
