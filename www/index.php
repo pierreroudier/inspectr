@@ -41,11 +41,11 @@ while (!feof($handle)) {
 fclose($handle);
 echo $contents; } ?>
 
-<!-- end of project description -->
-
 <p> <strong>inspectr</strong> - A R package for storing and manipulating Vis-NIR data </p>
 
 <img alt="inspectr" src="img/inspectr.png">
+
+<!-- end of project description -->
 
 <p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 
