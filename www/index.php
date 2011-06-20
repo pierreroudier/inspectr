@@ -43,7 +43,9 @@ echo $contents; } ?>
 
 <!-- <p> <strong>inspectr</strong> - A R package for storing and manipulating Vis-NIR data </p> -->
 
+<p>
 <img alt="inspectr" src="img/inspectr.png">
+</p>
 
 <!-- end of project description -->
 
