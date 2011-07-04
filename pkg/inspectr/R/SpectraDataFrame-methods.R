@@ -37,12 +37,12 @@
     # If no id is given
     if (all(is.na(id))) {
       # If the object is void
-      if (length(nir) == 1) 
+      if (length(nir) == 1)
         id <- data.frame(NULL)
       # if a matrix is here
-      else 
+      else
         id <- data.frame(id = as.character(seq(1, nrow(nir))))
-    } 
+    }
     else {
       # Test of inconsistent ids when id is specified by the user
       if (is.null(nrow(nir))) { # if theres only one spectra
@@ -51,7 +51,7 @@
         if ((length(wl) > 1) & (length(nir) != length(wl)))
           stop("number of columns in the spectra matrix and number of observed wavelengths don't match")
         nir <- matrix(nir, nrow=1)
-      } 
+      }
       else {
         if (nrow(nir) != nrow(id))
           stop("number of individuals and number of rows in the spectra matrix don't match")
@@ -64,7 +64,7 @@
   }
   if (is(data, "numeric") | is(data, "integer"))
     data <- as.data.frame(data)
-  
+
   rownames(data) <- as.vector(do.call('rbind', id))
 
   new("SpectraDataFrame", wl=wl, nir=nir, id=id, units=units, data=data)
@@ -72,25 +72,32 @@
 
 ## coercition methods
 
-as.data.frame.SpectraDataFrame = function(x, ...)  {
-  df <- as.data.frame(spectra(x))
+as.data.frame.SpectraDataFrame = function(x, expand = FALSE, ...)  {
   data <- data(x)
   id <- id(x)
-  df <- data.frame(id, data, df)
-  names(df) <- c(names(id), names(data), wl(x))
+  df <- data.frame(id, data)
+  if (expand) {
+    df <- data.frame(df, spectra(x))
+    names(df) <- c(names(id), names(data), wl(x))
+  }
+  else
+    df <- data.frame(df, NIR = I(spectra(x)))
   df
 }
 
-setAs("SpectraDataFrame", "data.frame", function(from)
-	as.data.frame.SpectraDataFrame(from))
+setAs("SpectraDataFrame", "data.frame", function(from) {
+	as.data.frame.SpectraDataFrame(from)
+  })
 
 ## Getting the data
 
-if (!isGeneric("data"))
-  setGeneric("data", function(object, ...)
-    standardGeneric("data"))
+# setGeneric("data", function(object, ...) standardGeneric('data'))
+# 
+# setMethod("data", "ANY",
+#     utils::data
+# )
 
-setMethod("data", "SpectraDataFrame", 
+setMethod("data", "SpectraDataFrame",
   function(object)
     object@data
 )
@@ -106,7 +113,7 @@ setReplaceMethod("$", "SpectraDataFrame",
   }
 )
 
-setMethod("[[", c("SpectraDataFrame", "ANY", "missing"), 
+setMethod("[[", c("SpectraDataFrame", "ANY", "missing"),
   function(x, i, j, ...) {
     if (!("data" %in% slotNames(x)))
       stop("no [[ method for object without attributes")
@@ -114,7 +121,7 @@ setMethod("[[", c("SpectraDataFrame", "ANY", "missing"),
   }
 )
 
-setReplaceMethod("[[", c("SpectraDataFrame", "ANY", "missing", "ANY"), 
+setReplaceMethod("[[", c("SpectraDataFrame", "ANY", "missing", "ANY"),
   function(x, i, j, value) {
     if (!("data" %in% slotNames(x)))
       stop("no [[ method for object without attributes")
@@ -125,9 +132,9 @@ setReplaceMethod("[[", c("SpectraDataFrame", "ANY", "missing", "ANY"),
 
 names.SpectraDataFrame <- function(x) names(x@data)
 
-"names<-.SpectraDataFrame" <- function(x, value) { 
+"names<-.SpectraDataFrame" <- function(x, value) {
   names(x@data) <- value
-  x 
+  x
 }
 
 ## Subset SDF with a subset/select query
@@ -135,22 +142,22 @@ names.SpectraDataFrame <- function(x) names(x@data)
 subset.SpectraDataFrame <- function(x, subset, select, drop = FALSE, ...) {
   # adapted from subset.data.frame
   df <- data(x)
-  if (missing(subset)) 
+  if (missing(subset))
         r <- TRUE
   else {
     e <- substitute(subset)
     r <- eval(e, df, parent.frame())
-    if (!is.logical(r)) 
+    if (!is.logical(r))
 	stop("'subset' must evaluate to logical")
     r <- r & !is.na(r)
   }
-  if (missing(select)) 
+  if (missing(select))
     vars <- TRUE
   else {
     nl <- as.list(seq_along(df))
     names(nl) <- names(df)
     vars <- eval(substitute(select), nl, parent.frame())
-  }  
+  }
   df_sub <- df[r, vars, drop = drop]
   # remove unused factors
   df_sub <- droplevels(df_sub)
