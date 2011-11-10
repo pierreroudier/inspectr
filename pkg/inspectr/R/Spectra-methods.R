@@ -356,12 +356,12 @@ setMethod("[", c("Spectra", "ANY", "ANY", "missing"),
 
 ## Upgrade a Spectra object to a SpectraDataFrame
 
-if (!isGeneric('data<-'))
-  setGeneric('data<-', function(object, value)
-    standardGeneric('data<-'))
+if (!isGeneric('features<-'))
+  setGeneric('features<-', function(object, value)
+    standardGeneric('features<-'))
 
 #'
-setReplaceMethod("data", "Spectra",
+setReplaceMethod("features", "Spectra",
   function(object, value) {
     if (!inherits(value, "data.frame"))
       stop('invalid initialization for SpectraDataFrame object')
