@@ -24,14 +24,14 @@ setReplaceMethod("coordinates", signature(object = "SpectraDataFrame", value = "
     data <- features(object)
 
     if (inherits(value, "formula")) {
-      cc = model.frame(value, object) # retrieve coords
+      cc = model.frame(value, data) # retrieve coords
       if (dim(cc)[2] == 2) {
-	nm = as.character(as.list(value)[[2]])[2:3]
-	coord.numbers = match(nm, names(data))
+        nm = as.character(as.list(value)[[2]])[2:3]
+        coord.numbers = match(nm, names(data))
       }
       else if (dim(cc)[2] == 3) {
-	nm = c(as.character(as.list((as.list(value)[[2]])[2])[[1]])[2:3], as.character(as.list(value)[[2]])[3])
-	coord.numbers = match(nm, names(data))
+        nm = c(as.character(as.list((as.list(value)[[2]])[2])[[1]])[2:3], as.character(as.list(value)[[2]])[3])
+        coord.numbers = match(nm, names(data))
       } # else: give up.
     }
 
@@ -42,7 +42,7 @@ setReplaceMethod("coordinates", signature(object = "SpectraDataFrame", value = "
 
     else if (is.null(dim(value)) && length(value) > 1) { # coord.columns?
       if (any(value != as.integer(value) || any(value < 1)))
-	stop("coordinate columns should be positive integers")
+        stop("coordinate columns should be positive integers")
 
       cc = data[, value] # retrieve coords
       coord.numbers = value
@@ -59,8 +59,8 @@ setReplaceMethod("coordinates", signature(object = "SpectraDataFrame", value = "
       stripped = coord.numbers
       # ... but as.data.frame(x) will merge them back in, so nothing gets lost.
       if (ncol(data) == 0)
-	#stop("only coords columns present: use SpatialSpectra to create a points object without data")
-	return(SpatialSpectra(cc))
+        #stop("only coords columns present: use SpatialSpectra to create a points object without data")
+        return(SpatialSpectra(cc))
     }
     else
       stripped = numeric(0)
@@ -104,12 +104,14 @@ subset.SpatialSpectraDataFrame <- function(x, subset, select, drop = FALSE, ...)
     names(nl) <- names(df)
     vars <- eval(substitute(select), nl, parent.frame())
   }
+
   df_sub <- df[r, vars, drop = drop]
   SpPts <- as(x, 'SpatialPoints')
   SpPts <- SpPts[r, ]
+
   # remove unused factors
   df_sub <- droplevels(df_sub)
   id_selected <- which(rownames(df) %in% rownames(df_sub))
-  x <- SpatialSpectraDataFrame(SpPts, wl = wl(x), nir = spectra(x)[id_selected, , drop = FALSE], id = id(x)[id_selected, 1, drop = FALSE], units = get_units(x), data = df_sub)
+  x <- SpatialSpectraDataFrame(SpPts, wl = wl(x), nir = spectra(x)[id_selected, , drop = FALSE], id = id(x)[id_selected, 1, drop = FALSE], units = units(x), data = df_sub)
   x
 }

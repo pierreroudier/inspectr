@@ -97,7 +97,7 @@ if (!isGeneric("features"))
 
 setMethod("features", "SpectraDataFrame",
   function(obj)
-    object@data
+    obj@data
 )
 
 setMethod("$", "SpectraDataFrame",
