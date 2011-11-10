@@ -91,14 +91,12 @@ setAs("SpectraDataFrame", "data.frame", function(from) {
 
 ## Getting the data
 
-# setGeneric("data", function(object, ...) standardGeneric('data'))
-# 
-# setMethod("data", "ANY",
-#     utils::data
-# )
+if (!isGeneric("features"))
+  setGeneric("features", function(obj, ...)
+    standardGeneric("features"))
 
-setMethod("data", "SpectraDataFrame",
-  function(object)
+setMethod("features", "SpectraDataFrame",
+  function(obj)
     object@data
 )
 
