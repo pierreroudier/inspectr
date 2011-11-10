@@ -1,3 +1,8 @@
+-------------------------- inspectr 0.2-0 (2011-11-10) --------------------------
+* Switch the get_data()/data() methods to features() (as data() is protected)
+* Introduced sp bindings - and thus new spatial aware classes
+* Changed classes definitions location in a single file
+
 -------------------------- inspectr 0.1-7 (2011-06-20) --------------------------
 * Changed package name and swithed to R-forge
 

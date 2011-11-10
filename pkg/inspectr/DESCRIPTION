@@ -1,14 +1,14 @@
 Package: inspectr
 Type: Package
 Title: Stores and eases the manipulation of spectra and associated data
-Version: 0.1-7
-Date: 2011-06-20
+Version: 0.2-0
+Date: 2011-11-10
 Author: Pierre Roudier <pierre.roudier@gmail.com>
 Maintainer: Pierre Roudier <pierre.roudier@gmail.com>
 Description: Stores and eases the manipulation of spectra and associated data.
 URL: http://inspectr.r-forge.r-project.org/
 Depends: R (>= 2.12)
-Imports: methods, plyr, reshape2, stringr, lattice
+Imports: methods, plyr, reshape2, stringr, lattice, sp
 Suggests: ggplot2, pls, baseline
 License: GPL
 LazyData: true
