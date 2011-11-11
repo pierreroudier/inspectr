@@ -88,6 +88,7 @@ setAs("SpatialSpectraDataFrame", "data.frame", function(from)
 subset.SpatialSpectraDataFrame <- function(x, subset, select, drop = FALSE, ...) {
   # adapted from subset.data.frame
   df <- features(x)
+
   if (missing(subset))
         r <- TRUE
   else {
