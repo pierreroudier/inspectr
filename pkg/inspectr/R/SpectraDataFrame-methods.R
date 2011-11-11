@@ -73,7 +73,7 @@
 ## coercition methods
 
 as.data.frame.SpectraDataFrame = function(x, expand = FALSE, ...)  {
-  data <- data(x)
+  data <- features(x)
   id <- id(x)
   df <- data.frame(id, data)
   if (expand) {
@@ -139,7 +139,7 @@ names.SpectraDataFrame <- function(x) names(x@data)
 
 subset.SpectraDataFrame <- function(x, subset, select, drop = FALSE, ...) {
   # adapted from subset.data.frame
-  df <- data(x)
+  df <- features(x)
   if (missing(subset))
         r <- TRUE
   else {

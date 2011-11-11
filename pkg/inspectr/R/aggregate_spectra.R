@@ -41,15 +41,15 @@ setMethod("aggregate_spectra", "SpectraDataFrame",
       # applying the function to the spectra
       nir <- aaply(.data = spectra(obj), .margins = 2, .fun = fun, ...)
       res <- Spectra(wl = wl(obj), nir = nir, id = new_id, units = units(obj))
-      data <- aaply(.data = data(obj), .margins = 2, .fun = fun, ...)
+      data <- aaply(.data = features(obj), .margins = 2, .fun = fun, ...)
       res <- SpectraDataFrame(res, data = data.frame(matrix(data, nrow = 1, dimnames = list(id, names(data)))))
     }
 
     else {
-      if (id %in% names(data(obj))) {
+      if (id %in% names(features(obj))) {
 
-        idx <- which(names(data(obj)) == id)
-        s <- data.frame(id = data(obj)[, idx, drop = FALSE], spectra(obj))
+        idx <- which(names(features(obj)) == id)
+        s <- data.frame(id = features(obj)[, idx, drop = FALSE], spectra(obj))
         s <- dlply(s, id, mean, ...)
         s <- do.call("rbind", s)
         s[, 1] <- rownames(s)
