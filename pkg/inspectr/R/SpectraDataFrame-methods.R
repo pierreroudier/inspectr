@@ -19,7 +19,7 @@
     wl <- wl(s)
     nir <- spectra(s)
     id <- id(s)
-    units <- units(s)
+    units <- wl_units(s)
   }
 
   else {

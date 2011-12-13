@@ -220,9 +220,9 @@ setMethod("id", "Spectra",
 )
 
 # Getting the units
-if (!isGeneric("units"))
-  setGeneric("units", function(object)
-    standardGeneric("units"))
+if (!isGeneric("wl_units"))
+  setGeneric("wl_units", function(object)
+    standardGeneric("wl_units"))
 
 #' Returns the unit in which the wavelengths values are expressed
 #'
@@ -231,16 +231,16 @@ if (!isGeneric("units"))
 #'
 #' @export
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-setMethod("units", signature = "Spectra",
+setMethod("wl_units", signature = "Spectra",
   function(object)
     object@units
 )
 
-if (!isGeneric('units<-'))
-  setGeneric('units<-', function(object, value)
-    standardGeneric('units<-'))
+if (!isGeneric('wl_units<-'))
+  setGeneric('wl_units<-', function(object, value)
+    standardGeneric('wl_units<-'))
 
-setReplaceMethod("units", "Spectra",
+setReplaceMethod("wl_units", "Spectra",
   function(object, value) {
     if (!is.character(value) | length(value) != 1)
       stop("Units have to be passed as a single character string.")
@@ -460,7 +460,7 @@ setMethod("split", "Spectra", split.Spectra)
 mutate.Spectra <- function (.data, ...){
 
   wls <- wl(.data)
-  uns <- units(.data)
+  uns <- wl_units(.data)
   ids <- id(.data)
 
   cols <- as.list(substitute(list(...))[-1])
