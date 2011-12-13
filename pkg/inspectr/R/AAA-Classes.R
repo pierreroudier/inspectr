@@ -127,3 +127,55 @@ setClass(
     data = data.frame()
   )
 )
+
+
+## SOIL STUFF
+
+setClass(
+  Class = ".SoilSites",
+  representation = representation(
+    depths = 'list',
+    site_id = 'data.frame'
+  ),
+  prototype = prototype(
+    site_id = data.frame(),
+    depths = list(matrix(nrow=0, ncol=2, dimnames = list(NULL, c('top', 'bottom'))))
+  )
+)
+
+setClass(
+  Class = ".SpatialSoilSites",
+  representation = representation(
+    ".SoilSites",
+    "SpatialPoints"
+  ),
+  prototype = prototype(
+    site_id = data.frame(),
+    depths = list(matrix(nrow=0, ncol=2, dimnames = list(NULL, c('top', 'bottom')))),
+    bbox = matrix(NA),
+    proj4string = CRS(as.character(NA)),
+    coords = matrix(NA),
+    coords.nrs = numeric(0)
+  )
+)
+
+setClass(
+  Class = 'SoilSpectraDataFrame',
+  representation = representation(
+    'SpatialSpectraDataFrame',
+    '.SpatialSoilSites'
+  ),
+  prototype = prototype(
+    bbox = matrix(NA),
+    proj4string = CRS(as.character(NA)),
+    coords = matrix(NA),
+    coords.nrs = numeric(0),
+    wl = numeric(),
+    nir = matrix(),
+    id = data.frame(NA),
+    units = as.character(NA),
+    data = data.frame(),
+    site_id = data.frame(),
+    depths = list(matrix(nrow=0, ncol=2, dimnames = list(NULL, c('top', 'bottom'))))
+  )
+)
