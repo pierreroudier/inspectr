@@ -144,7 +144,7 @@ setReplaceMethod("wl", "Spectra",
   # :n: : sequence of numbers, emulates seq(x,y, by=n), like 350:n:2500
 
   # if used the ":"  placeholder
-  if (str_detect(formula[[length(formula)]], ":")) { # allowed only on the right hand element of the formula
+  if (any(str_detect(formula[[length(formula)]], ":"))) { # allowed only on the right hand element of the formula
     nir_seq <- aaply(unlist(str_split(formula[[length(formula)]], "[:]")), 1, as.numeric)
 
     # if this is a sequence of wl with by=1
@@ -296,6 +296,36 @@ setReplaceMethod("spectra", "Spectra",
     object
   }
 )
+
+## Spectra setter for col-based dataset
+if (!isGeneric('spectra_from_col<-'))
+  setGeneric('spectra_from_col<-', function(object, value)
+    standardGeneric('spectra_from_col<-'))
+
+## for a data.frame
+setReplaceMethod("spectra_from_col", "data.frame",
+  function(object, value) {
+    if (is(value, 'formula')) {
+      ind.vars <- lapply(.parse_formula(value, object), function(x) which(names(object) %in% x))
+      
+      wl <- object[, ind.vars$id]
+      nir_cols <- object[, ind.vars$nir, drop = FALSE]
+      nir <- t(nir_cols)
+      ids <- rownames(nir)
+
+    }
+    else 
+      stop("Only the formula interface is supported by spectra_from_col() for the time being. Refer to the man page for help using it.")
+  
+    res <- Spectra(id = ids, wl = wl, nir = nir)
+    cat("Wavelength range: ")
+    cat(min(wl(res), na.rm = TRUE), " to ", max(wl(res), na.rm = TRUE)," ", units(res), "\n", sep = "")
+    cat("Spectral resolution: ", resolution(wl(res)) , " ",  units(res), "\n", sep = "")
+
+    res
+  }
+)
+
 
 ## id
 
