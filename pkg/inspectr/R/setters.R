@@ -95,7 +95,7 @@ setReplaceMethod("wl", "Spectra",
       else if (length(value) < length(object)) {
 	ind.wl <- which(wl(d) %in% value)
 	nir <- spectra(object)[, ind.wl, drop=FALSE]
-	res <- Spectra(id = id(object), wl = value, nir = nir, units = units(object))
+	res <- Spectra(id = ids(object), wl = value, nir = nir, units = units(object))
 	if ("data" %in% slotNames(object))
 	  res <- SpectraDataFrame(res, data = features(object))
       }
@@ -329,11 +329,11 @@ setReplaceMethod("spectra_from_col", "data.frame",
 
 ## id
 
-if (!isGeneric('id<-'))
-  setGeneric('id<-', function(object, value)
-    standardGeneric('id<-'))
+if (!isGeneric('ids<-'))
+  setGeneric('ids<-', function(object, value)
+    standardGeneric('ids<-'))
 
-setReplaceMethod("id", "Spectra",
+setReplaceMethod("ids", "Spectra",
   function(object, value) {
     if (length(value) != nrow(object))
       stop("length of the new ID does not match the length of the object")
@@ -345,7 +345,7 @@ setReplaceMethod("id", "Spectra",
 )
 
 
-setReplaceMethod("id", "SpectraDataFrame",
+setReplaceMethod("ids", "SpectraDataFrame",
   function(object, value) {
     if (is(value, 'formula')){
       # the id needs to be unique!

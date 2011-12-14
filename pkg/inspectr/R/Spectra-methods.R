@@ -203,9 +203,9 @@ setMethod("wl", "Spectra",
 )
 
 # Getting the ids
-if (!isGeneric("id"))
-  setGeneric("id", function(object, ...)
-    standardGeneric("id"))
+if (!isGeneric("ids"))
+  setGeneric("ids", function(object, ...)
+    standardGeneric("ids"))
 
 #' Returns the ids of each spectra in the collection
 #'
@@ -214,7 +214,7 @@ if (!isGeneric("id"))
 #'
 #' @export
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-setMethod("id", "Spectra",
+setMethod("ids", "Spectra",
   function(object)
     object@id
 )
@@ -270,7 +270,7 @@ setMethod(f='length', signature='Spectra',
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 setMethod(f='nrow', signature='Spectra',
 definition=function(x)
-    nrow(id(x))
+    nrow(ids(x))
 )
 
 ## Returns spectral resolution of the wavelengths
@@ -354,18 +354,47 @@ setMethod("[", c("Spectra", "ANY", "ANY", "missing"),
   }
 )
 
-## Upgrade a Spectra object to a SpectraDataFrame
+## Promote a Spectra object to a SpectraDataFrame
 
 if (!isGeneric('features<-'))
-  setGeneric('features<-', function(object, value)
-    standardGeneric('features<-'))
+  setGeneric('features<-', function(object, value, ...)
+    standardGeneric('features<-')
+)
 
 #'
-setReplaceMethod("features", "Spectra",
-  function(object, value) {
+setReplaceMethod("features", signature("Spectra", "ANY"),
+  # safe enables id check
+  # key gives the column name of the ids in the data.frame
+  function(object, value, safe = TRUE, key = NULL) {
+    
     if (!inherits(value, "data.frame"))
       stop('invalid initialization for SpectraDataFrame object')
-    SpectraDataFrame(object, data=value)
+
+    if (safe) {
+      if (is.null(key))
+        stop("In the safe mode, you need to provide either the column name of the sample ids to the key option.")
+      if (length(key) != 1)
+        stop("Please provide only ONE id column.")
+
+      # Actual ID sanity check
+      spectra_ids <- data.frame(ids(object))
+      if (is.numeric(key)) {
+        ind.key <- key
+        key <- names(value)[key]
+      }
+      else
+        ind.key <- which(names(value) == key)
+      names(spectra_ids) <- key
+      data <- join(spectra_ids, value,  by = key)
+      # removing the id column
+      
+      data <- data[, -1*ind.key]
+    }
+    else {
+      warning("Sample ID check has been disabled. This mode assumes you made sure the order of the rows in your data is consistent with the order in which these samples appear in the Spectra object.")
+      data <- value
+    }
+    SpectraDataFrame(object, data = data)
   }
 )
 
@@ -461,7 +490,7 @@ mutate.Spectra <- function (.data, ...){
 
   wls <- wl(.data)
   uns <- wl_units(.data)
-  ids <- id(.data)
+  ids <- ids(.data)
 
   cols <- as.list(substitute(list(...))[-1])
   cols <- cols[names(cols) != ""]

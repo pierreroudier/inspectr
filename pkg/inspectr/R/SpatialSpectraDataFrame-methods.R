@@ -75,7 +75,7 @@ as.data.frame.SpatialSpectraDataFrame = function(x, ...)  {
   coords <- as.data.frame(as(x, 'SpatialPoints'))
   nir <- as.data.frame(spectra(x))
   data <- features(x)
-  id <- id(x)
+  id <- ids(x)
   df <- data.frame(id, coords, data, nir)
   names(df) <- c('id', coordnames(x), names(data), wl(x))
   df
@@ -120,7 +120,7 @@ subset.SpatialSpectraDataFrame <- function(x, subset, select, drop = FALSE, ...)
   # remove unused factors
   df_sub <- droplevels(df_sub)
   id_selected <- which(rownames(df) %in% rownames(df_sub))
-  x <- SpatialSpectraDataFrame(SpPts, wl = wl(x), nir = spectra(x)[id_selected, , drop = FALSE], id = id(x)[id_selected, 1, drop = FALSE], units = wl_units(x), data = df_sub)
+  x <- SpatialSpectraDataFrame(SpPts, wl = wl(x), nir = spectra(x)[id_selected, , drop = FALSE], id = ids(x)[id_selected, 1, drop = FALSE], units = wl_units(x), data = df_sub)
   x
 }
 

@@ -18,7 +18,7 @@
 
     wl <- wl(s)
     nir <- spectra(s)
-    id <- id(s)
+    id <- ids(s)
     units <- wl_units(s)
   }
 
@@ -74,7 +74,7 @@
 
 as.data.frame.SpectraDataFrame = function(x, expand = FALSE, ...)  {
   data <- features(x)
-  id <- id(x)
+  id <- ids(x)
   df <- data.frame(id, data)
   if (expand) {
     df <- data.frame(df, spectra(x))
@@ -96,7 +96,7 @@ if (!isGeneric("features"))
     standardGeneric("features"))
 
 setMethod("features", "SpectraDataFrame",
-  function(obj)
+  function(obj, ...)
     obj@data
 )
 
