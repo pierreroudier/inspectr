@@ -28,14 +28,16 @@ n_sites <- 8
 site_ids <- sample(LETTERS[1:n_sites], replace = TRUE, size = n_samples)
 site_locations <- 
 
+nir_values <- runif(n_wl*n_samples)
+
 nir_col <- data.frame(
   wl, 
-  matrix(runif(n_wl*n_samples), ncol = n_samples, dimnames=list(NULL, sample_ids))
+  matrix(nir_values, ncol = n_samples, dimnames=list(NULL, sample_ids))
 )
 
 nir_row <- data.frame(
   id = sample_ids,
-  matrix(runif(n_wl*n_samples), nrow = n_samples, dimnames=list(NULL, as.character(wl)))
+  matrix(nir_values, nrow = n_samples, dimnames=list(NULL, as.character(wl)), byrow = TRUE)
 )
 
 soil_plots <- ddply(data.frame(site_ids), 'site_ids', 
@@ -56,10 +58,36 @@ df <- data.frame(
   bar = sample(c("Some", "Categorical", "Data"), replace = TRUE, size = n_samples)
   )
 
+df <- df[sample(1:nrow(df), size=nrow(df)), ]
+
 test_data <- join(df, nir_row, by = 'id')
 
 ## TESTS ##
 
-foo <- nir_row
-spectra(foo) <- id ~ ...
-features(foo, safe = TRUE, key = 'id') <- df
+# Spectra and SpectraDataFrame inits
+
+# From long to wide format (in case you got data in cols)
+foo <- nir_col
+spectra_from_col(foo) <- wl ~ ...
+
+# Create Spectra
+bar <- nir_row
+spectra(bar) <- id ~ ...
+identical(foo, bar) # TRUE
+# Promoting Spectra to SpectraDataFrame by adding external data
+features(bar, safe = TRUE, key = 'id') <- df
+
+# Create SpectraDataFrame directly from a data.frame
+baz <- test_data
+spectra(baz) <- id ~ ... ~ 350:500
+identical(bar, baz) # FALSE, but just because sample orders are different
+
+# Spatial bindings
+library(sp)
+bar_sp <- bar
+coordinates(bar_sp) <- ~x+y
+proj4string(bar_sp) <- CRS("+init=epsg:4326")
+str(bar_sp)
+
+# Soil init
+
