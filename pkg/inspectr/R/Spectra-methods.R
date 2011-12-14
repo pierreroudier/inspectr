@@ -365,7 +365,7 @@ if (!isGeneric('features<-'))
 setReplaceMethod("features", signature("Spectra", "ANY"),
   # safe enables id check
   # key gives the column name of the ids in the data.frame
-  function(object, value, safe = TRUE, key = NULL) {
+  function(object, value, safe = TRUE, key = NULL, remove_id = TRUE) {
     
     if (!inherits(value, "data.frame"))
       stop('invalid initialization for SpectraDataFrame object')
@@ -388,7 +388,8 @@ setReplaceMethod("features", signature("Spectra", "ANY"),
       data <- join(spectra_ids, value,  by = key)
       # removing the id column
       
-      data <- data[, -1*ind.key]
+      if (remove_id)
+        data <- data[, -1*ind.key]
     }
     else {
       warning("Sample ID check has been disabled. This mode assumes you made sure the order of the rows in your data is consistent with the order in which these samples appear in the Spectra object.")
