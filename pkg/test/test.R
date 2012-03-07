@@ -82,11 +82,28 @@ baz <- test_data
 spectra(baz) <- id ~ ... ~ 350:500
 identical(bar, baz) # FALSE, but just because sample orders are different
 
+# rbind
+baz_bar <- rbind(bar, baz, create_new_ids = TRUE)
+# also works for Spectra
+baz_bar <- rbind(as(bar, "Spectra"), as(baz, "Spectra"), create_new_ids = TRUE)
+
+# Cut
+# Select wl
+test <- cut(bar, wl = 350:370)
+plot(test)
+# remove wl
+test <- cut(bar, wl = -1*350:370)
+plot(test)
+
+# Apply function on spectra
+a <- apply_spectra(bar, diff, 2)
+
 # Spatial bindings
 library(sp)
 bar_sp <- bar
 coordinates(bar_sp) <- ~x+y
 proj4string(bar_sp) <- CRS("+init=epsg:4326")
+bbox(bar_sp)
 str(bar_sp)
 
 # Soil init

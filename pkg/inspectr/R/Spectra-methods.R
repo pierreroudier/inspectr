@@ -89,7 +89,7 @@ summary.Spectra <- function (object, ...){
     obj
 }
 
-setMethod("summary", "summary.Spectra", summary.Spectra)
+# setMethod("summary", "summary.Spectra", summary.Spectra)
 
 #' @param object a summary for an object inheriting from \code{Spectra}
 #' @param ... Ignored
@@ -118,7 +118,7 @@ print.summary.Spectra = function(x, ...) {
     invisible(x)
 }
 
-setMethod("print", "summary.Spectra", print.summary.Spectra)
+# setMethod("print", "summary.Spectra", print.summary.Spectra)
 
 ## PRINT
 
@@ -215,8 +215,14 @@ if (!isGeneric("ids"))
 #' @export
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 setMethod("ids", "Spectra",
-  function(object)
-    object@id
+  function(object, ..., as.vector = FALSE) {
+    if (as.vector) {
+      res <- object@id[[1]]
+    } else {
+      res <- object@id
+    }
+    res
+  }
 )
 
 # Getting the units
@@ -271,6 +277,19 @@ setMethod(f='length', signature='Spectra',
 setMethod(f='nrow', signature='Spectra',
 definition=function(x)
     nrow(ids(x))
+)
+
+#' Returns the number of data cols in the object
+#'
+setMethod(f='ncol', signature='Spectra',
+definition = function(x) {
+    if ("data" %in% slotNames(x)) {
+      n <- ncol(x@data)
+    } else {
+      n <- NULL
+    }
+    n
+  }
 )
 
 ## Returns spectral resolution of the wavelengths
@@ -402,64 +421,126 @@ setReplaceMethod("features", signature("Spectra", "ANY"),
 ## Adding objects together
 # Maybe to be moved into the Spectra() and SpectraDataFrame() method.
 
-if (!isGeneric("add"))
-  setGeneric("add", function(x, y, ...)
-    standardGeneric("add"))
+# if (!isGeneric("add"))
+#   setGeneric("add", function(x, y, ...)
+#     standardGeneric("add"))
+# 
+# #' Adds two Spectra objects together
+# #'
+# #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+# .add.Spectra <- function(x, y){
+#   tmp <- list()
+# 
+#   if (identical(x@wl, y@wl))
+#     tmp$wl <- x@wl
+#   else
+#     stop('You can not add objects with different wavelength ranges')
+# 
+#   if (identical(ncol(x@wl), ncol(y@wl)))
+#     tmp$nir <- rbind(x@nir, y@nir)
+#   else
+#     stop('You can not add objects with different wavelength ranges')
+# 
+#   if (!any(x@id %in% y@id))
+#     tmp$id <- rbind(x@id, y@id)
+#   else
+#     stop('You can not add objects with overlapping IDs')
+# 
+#   if (x@units %in% y@units)
+#     tmp$units <- x@units
+#   else
+#     stop('You can not add objects with different wavelength units')
+# 
+#   if (("data" %in% slotNames(x)) & ("data" %in% slotNames(y))) {
+#     tmp$data <- join(x@data, y@data, type="full")
+#     res <- SpectraDataFrame(wl=tmp$wl, nir=tmp$nir, id=tmp$id, units=tmp$units, data=tmp$data)
+#   }
+#   else
+#     res <- Spectra(wl=tmp$wl, nir=tmp$nir, id=tmp$id, units=tmp$units)
+# 
+#   res
+# }
+# 
+# add.Spectra <- function(...){
+#   dotargs <- list(...)
+#   if ( !all(sapply(dotargs, function(x) is(x,"Spectra") )) )
+#     stop('the arguments must be Spectra objects')
+# 
+#   res <- dotargs[[1]]
+#   if (nargs() >= 2) {
+#     for (i in 2:length(dotargs))
+#       res <- .add.Spectra(res, dotargs[[i]])
+#   }
+#   res
+# }
+# 
+# setMethod("add", signature=c("Spectra", "Spectra"),
+#   function(x,y,...) add.Spectra(x, y, ...))
+# 
+# setMethod("add", signature=c("SpectraDataFrame", "SpectraDataFrame"),
+#   function(x,y,...) add.Spectra(x, y, ...))
 
-#' Adds two Spectra objects together
-#'
-#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-.add.Spectra <- function(x, y){
-  tmp <- list()
+## rbind overload to put together Spectra* objects
 
-  if (identical(x@wl, y@wl))
-    tmp$wl <- x@wl
-  else
-    stop('You can not add objects with different wavelength ranges')
+rbind.Spectra <- function(..., create_new_ids = FALSE, new_ids = NULL) {
+  dots <- list(...)
+  names(dots) <- NULL
 
-  if (identical(ncol(x@wl), ncol(y@wl)))
-    tmp$nir <- rbind(x@nir, y@nir)
-  else
-    stop('You can not add objects with different wavelength ranges')
-
-  if (!any(x@id %in% y@id))
-    tmp$id <- rbind(x@id, y@id)
-  else
-    stop('You can not add objects with overlapping IDs')
-
-  if (x@units %in% y@units)
-    tmp$units <- x@units
-  else
-    stop('You can not add objects with different wavelength units')
-
-  if (("data" %in% slotNames(x)) & ("data" %in% slotNames(y))) {
-    tmp$data <- join(x@data, y@data, type="full")
-    res <- SpectraDataFrame(wl=tmp$wl, nir=tmp$nir, id=tmp$id, units=tmp$units, data=tmp$data)
+  # wl
+  wls <- lapply(dots, wl)
+  wl_test <-all(laply(wls, function(x) identical(wls[[1]], x)))
+  if (!wl_test) {
+    stop("To be added together, all Spectra objects must share the same wavelengths.")
+  } else {
+    wls <- apply(do.call('rbind', wls), 2, unique)
   }
-  else
-    res <- Spectra(wl=tmp$wl, nir=tmp$nir, id=tmp$id, units=tmp$units)
 
+  # units
+  wl_uts <- unique(laply(dots, wl_units))
+  if (length(wl_uts) > 1)
+    stop("To be added together, all Spectra objects must share the same wavelength units.")
+
+  # nir
+  nir <- do.call("rbind", lapply(dots, spectra))
+  
+  # id
+  if (is.null(new_ids)) { # We try to keep the old IDs
+    ids <- do.call('c', lapply(dots, ids, as.vector = TRUE))
+  } else {
+    # New IDs are provided
+    if (length(new_ids) == length(ids))
+      ids <- new_ids
+    else
+      stop("new_ids must have the same length as the total number of sopectra you are trying to collate together.")
+  }
+    
+  # If ids are not unique
+  if (length(unique(ids)) != length(ids)) {
+    if (create_new_ids) {
+      warning("Redundant IDs found. Creating new set of unique IDs.")
+      ids <- 1:length(ids)
+    }
+    else {
+      stop("Redundant IDs found. Either allow the creation of new ids using the create_new_ids option, or provide the function with a set of unique ids using the new_ids option.")
+    }
+  }
+  
+  res <- Spectra(wl = wls, nir = nir, id = ids, units = wl_uts)
+
+  # data
+  test_data <- laply(dots, function(x) "data" %in% slotNames(x))
+  if (all(test_data)) {
+    # Unify id colname for join
+    data <- llply(dots, features, include_id = TRUE)
+    data <- llply(data, function(x) {names(x)[1] <- 'id'; x})
+    data <- do.call("rbind", data)
+    res <- SpectraDataFrame(res, data = data)
+  }
+  
   res
 }
 
-add.Spectra <- function(...){
-  dotargs <- list(...)
-  if ( !all(sapply(dotargs, function(x) is(x,"Spectra") )) )
-    stop('the arguments must be Spectra objects')
-
-  res <- dotargs[[1]]
-  if (nargs() >= 2) {
-    for (i in 2:length(dotargs))
-      res <- .add.Spectra(res, dotargs[[i]])
-  }
-  res
-}
-
-setMethod("add", signature=c("Spectra", "Spectra"),
-  function(x,y,...) add.Spectra(x, y, ...))
-
-setMethod("add", signature=c("SpectraDataFrame", "SpectraDataFrame"),
-  function(x,y,...) add.Spectra(x, y, ...))
+rbind.SpectraDataFrame <- rbind.Spectra
 
 ## Split
 
@@ -551,3 +632,38 @@ melt_spectra <- function(obj, ...){
   names(res)[3] <- "nir" # tmp fix - waiting for fix upstream in reshape2
   res
 }
+
+## Selecting/cutting wavelengths
+
+# Negative values will be to remove, positive to select
+cut.Spectra <- function(obj, wl, ...) {
+  
+  # If wl is negative, we REMOVE these
+  if (any(wl < 0) & any(wl > 0) | any(wl == 0))
+    stop("You can't mix positive and negative wavelengths, or use zero.")
+
+  if (all(wl < 0)) {
+    wl <- abs(wl)
+    wl <- setdiff(wl(obj), wl)
+  } 
+
+  # Checking that wl in available wavelengths
+  if (!all(wl %in% wl(obj))) {
+    stop("Selected wavelengths not present in the object")
+  }
+  
+  ids <- ids(obj)
+  unts <- wl_units(obj)
+  idx <- laply(wl, function(x) which(wl(obj) == x))
+  nir <- spectra(obj)[, idx]
+  
+  res <- Spectra(wl = wl, nir = nir, id = ids, units = unts)
+
+  if ("data" %in% slotNames(obj)) {
+    res <- SpectraDataFrame(res, data = features(obj))
+  }
+  
+  res
+}
+
+setMethod("cut", "Spectra", cut.Spectra)

@@ -3,6 +3,13 @@
 ## Pre-processing of Vis-NIR spectra
 ##
 
+## Apply for spectra
+apply_spectra <- function(obj, fun, ...) {
+  nir <- aaply(spectra(obj), 1, fun)
+  spectra(obj) <- nir
+  obj
+}
+
 ## SNV
 ## Barnes et al., 1989
 ##
@@ -70,8 +77,8 @@ continuum_removal <- function(obj){
 
   for (i in 1:nrow(sp)) {
     ch.index <- sort(chull(sp[i,]))
-    ch <- data.frame(wl=wl(obj)[ch.index], nir=sp[i, ch.index])
-    ch <- approx(x=ch$wl, y=ch$nir, xout=wl(obj))
+    ch <- data.frame(wl = wl(obj)[ch.index], nir = sp[i, ch.index])
+    ch <- approx(x = ch$wl, y = ch$nir, xout = wl(obj))
     res[i, ] <- sp[i, ] - ch$y
   }
 

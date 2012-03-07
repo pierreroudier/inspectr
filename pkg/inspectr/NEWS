@@ -1,3 +1,12 @@
+-------------------------- inspectr 0.3-0 (2012-03-07) --------------------------
+* ids can be returned as a data.frame or a vector (using as.vector option of ids())
+* ids can be collated to the features in the features() method
+* New rbind.Spectra*() method
+* add() method to retire
+* new cut() method to select or remove WLs
+* new apply_spectra() method
+* various improvements on the plotting routine
+
 -------------------------- inspectr 0.2-0 (2011-11-10) --------------------------
 * Switch the get_data()/data() methods to features() (as data() is protected)
 * Introduced sp bindings - and thus new spatial aware classes

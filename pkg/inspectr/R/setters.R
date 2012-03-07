@@ -39,17 +39,18 @@
     nm <- .guessWl(names(data))
     ind_col_spectra <- which(nm %in% wl)
   }
-  if (length(ind_col_spectra) == 0)
+  if (length(ind_col_spectra) == 0) {
     stop('No columns found.')
-
+  }
   ind_col_spectra
 }
 
 ## setters for Spectra objects
 
-if (!isGeneric('wl<-'))
+if (!isGeneric('wl<-')) {
   setGeneric('wl<-', function(object, value)
     standardGeneric('wl<-'))
+}
 
 setReplaceMethod("wl", "data.frame",
   function(object, value) {
@@ -64,12 +65,13 @@ setReplaceMethod("wl", "data.frame",
 
       # If there are some columns left, we use them to initiate a SpectraDataFrame object
       if (ncol(nir) < ncol(object)) {
-	data <- object[, -ind_nir, drop=FALSE]
-	data(res) <- data
+        data <- object[, -ind_nir, drop=FALSE]
+        data(res) <- data
       }
     }
-    else
+    else {
       stop('Bad initialisation, please provide wavelengths as a numeric vector.')
+    }
   res
   }
 )
@@ -81,30 +83,33 @@ setReplaceMethod("wl", "Spectra",
 
     # value as to be a numeric vector
     if (is(value, 'numeric')) {
-
       # if the same number of wl is provided, we simply change the content of
       # the @wl slot of the object
-      if (length(value) == length(object)){
-	res <- object
-	res@wl <- value
+      if (length(value) == length(object)) {
+        res <- object
+        res@wl <- value
       }
 
       # if the number of wl provided is smaller than the number of wavelengths
       # in the @wl slot, it is interpreted as a reduction of the object to a certain
       # set of wavelengths
-      else if (length(value) < length(object)) {
-	ind.wl <- which(wl(d) %in% value)
-	nir <- spectra(object)[, ind.wl, drop=FALSE]
-	res <- Spectra(id = ids(object), wl = value, nir = nir, units = units(object))
-	if ("data" %in% slotNames(object))
-	  res <- SpectraDataFrame(res, data = features(object))
-      }
+      else { 
+        if (length(value) < length(object)) {
+          ind.wl <- which(wl(d) %in% value)
+          nir <- spectra(object)[, ind.wl, drop = FALSE]
+          res <- Spectra(id = ids(object), wl = value, nir = nir, units = units(object))
+          if ("data" %in% slotNames(object))
+            res <- SpectraDataFrame(res, data = features(object))
+          }
 
-      else
-	stop('More wavelengths that the object originally has.')
+        else {
+          stop('More wavelengths that the object originally has.')
+        }
+      }
     }
-    else
+    else {
       stop('Please provide wavelengths as a numeric vector.')
+    }
 
     res
   }
@@ -148,17 +153,21 @@ setReplaceMethod("wl", "Spectra",
     nir_seq <- aaply(unlist(str_split(formula[[length(formula)]], "[:]")), 1, as.numeric)
 
     # if this is a sequence of wl with by=1
-    if (length(nir_seq) == 2)
+    if (length(nir_seq) == 2) {
       nir_wl <- seq(nir_seq[1], nir_seq[2], by=1)
+    }
     # if this is a sequence of wl with by!=1
-    else if (length(nir_seq) == 3)
-      nir_wl <- seq(nir_seq[1], nir_seq[3], by=nir_seq[2])
-    # if there's more than two ":" placeholders
-    else
-      stop("Bad formula.")
-
+    else {
+      if (length(nir_seq) == 3) {
+        nir_wl <- seq(nir_seq[1], nir_seq[3], by=nir_seq[2])
+      }
+      # if there's more than two ":" placeholders
+      else {
+        stop("Bad formula.")
+      }
+    }
     # finding the corresponding col names
-    cols_nir  <- names(object)[.findSpectraCols(data=object, wl=nir_wl)]
+    cols_nir  <- names(object)[.findSpectraCols(data = object, wl = nir_wl)]
     # replacing the placeholder by the actual col names
     formula[[length(formula)]] <- cols_nir
   }
@@ -170,10 +179,13 @@ setReplaceMethod("wl", "Spectra",
     remainder <- setdiff(names(object), c(all_vars, 'id')) # setting id as a reserved name for id columns
 
     replace.remainder <- function(x) {
-      if (any(x == "..."))
-	c(x[x != "..."], remainder)
-      else x
+      if (any(x == "...")) {
+        c(x[x != "..."], remainder)
+      } else {
+        x
+      }
     }
+
     formula <- lapply(formula, replace.remainder)
   }
 
@@ -192,19 +204,20 @@ setReplaceMethod("wl", "Spectra",
     cols_data <- formula[[2]]
     cols_nir <- formula[[3]]
   }
-  else
+  else {
     stop('wrong formula.')
-
-  list(id=cols_id, data=cols_data, nir=cols_nir)
+  }
+  list(id = cols_id, data = cols_data, nir = cols_nir)
 }
 
 ## setting the spectra of a Spectra* object
 ##
 ## - if applied to a data.frame --> we create a Spectra* object
 ## - if applied to a Spectra* --> we change its @nir slot
-if (!isGeneric('spectra<-'))
+if (!isGeneric('spectra<-')) {
   setGeneric('spectra<-', function(object, value)
     standardGeneric('spectra<-'))
+}
 
 ## for a data.frame
 setReplaceMethod("spectra", "data.frame",
@@ -215,24 +228,28 @@ setReplaceMethod("spectra", "data.frame",
       # parsing the formula to retrieve the different slots (id, data, nir)
       ind.vars <- lapply(.parse_formula(value, object), function(x) which(names(object) %in% x))
 
-      if (length(ind.vars$nir) == 0)
+      if (length(ind.vars$nir) == 0) {
         ind.vars$nir <- .findSpectraCols(object, .parse_formula(value, object)$nir)
-
+      }
       nir <- object[, ind.vars$nir, drop = FALSE]
-      if (length(ind.vars$id) == 0)
+
+      if (length(ind.vars$id) == 0) {
         ids <- as.character(NA)
-      else
+      }
+      else {
         ids <- object[, ind.vars$id, drop = FALSE]
+      }
 
       wl <- .guessWl(names(nir))
-      res <- Spectra(id=ids, wl=wl, nir=nir)
+      res <- Spectra(id = ids, wl = wl, nir = nir)
 
       cat("Wavelength range: ")
       cat(min(wl(res), na.rm=TRUE), " to ", max(wl(res), na.rm = TRUE)," ", wl_units(res), "\n", sep="")
       cat("Spectral resolution: ", resolution(wl(res)) , " ",  wl_units(res), "\n", sep="")
 
-      if (length(ind.vars$data != 0))
+      if (length(ind.vars$data != 0)) {
         res <- SpectraDataFrame(res, data=object[, ind.vars$data, drop = FALSE])
+      }
     }
 
     # if given a numeric vector (interpreted as the index of the cols)
@@ -265,9 +282,10 @@ setReplaceMethod("spectra", "data.frame",
       }
     }
 
-    else
+    else {
       stop('Wrong Spectra initialisation.')
-
+    }
+  
     res
   }
 )
@@ -278,29 +296,31 @@ setReplaceMethod("spectra", "Spectra",
     if (is(value, 'matrix')) {
 
       # this method should not allow to change the number of samples in the colection
-      if (nrow(value) != nrow(spectra(object)))
-	stop("Dimensions of the matrix do not match the number of spectra in the Spectra object.")
-
+      if (nrow(value) != nrow(spectra(object))) {
+        stop("Dimensions of the matrix do not match the number of spectra in the Spectra object.")
+      }
       # matrix of same dimensions is given
       if (ncol(value) == ncol(spectra(object))) {
-	object@nir <- value
+        object@nir <- value
       }
       # matrix of different number of columns is given
       else {
-	object@nir <- value
-	object@wl <- as.numeric(colnames(value))
+        object@nir <- value
+        object@wl <- as.numeric(colnames(value))
       }
     }
-    else
+    else {
       stop(paste("You can't set the spectra of a Spectra* object by an object of class ", class(value), ". It has to be a matrix.", sep=""))
+    }
     object
   }
 )
 
 ## Spectra setter for col-based dataset
-if (!isGeneric('spectra_from_col<-'))
+if (!isGeneric('spectra_from_col<-')) {
   setGeneric('spectra_from_col<-', function(object, value)
     standardGeneric('spectra_from_col<-'))
+}
 
 ## for a data.frame
 setReplaceMethod("spectra_from_col", "data.frame",
@@ -314,9 +334,10 @@ setReplaceMethod("spectra_from_col", "data.frame",
       ids <- rownames(nir)
 
     }
-    else 
+    else {
       stop("Only the formula interface is supported by spectra_from_col() for the time being. Refer to the man page for help using it.")
-  
+    }
+
     res <- Spectra(id = ids, wl = wl, nir = nir)
     cat("Wavelength range: ")
     cat(min(wl(res), na.rm = TRUE), " to ", max(wl(res), na.rm = TRUE)," ", wl_units(res), "\n", sep = "")
@@ -329,16 +350,19 @@ setReplaceMethod("spectra_from_col", "data.frame",
 
 ## id
 
-if (!isGeneric('ids<-'))
+if (!isGeneric('ids<-')) {
   setGeneric('ids<-', function(object, value)
     standardGeneric('ids<-'))
+}
 
 setReplaceMethod("ids", "Spectra",
   function(object, value) {
-    if (length(value) != nrow(object))
+    if (length(value) != nrow(object)) {
       stop("length of the new ID does not match the length of the object")
-    if (!is.character(value))
+    }
+    if (!is.character(value)) {
       value <- as.character(value)
+    }
     object@id <- value
     object
   }
@@ -347,33 +371,38 @@ setReplaceMethod("ids", "Spectra",
 
 setReplaceMethod("ids", "SpectraDataFrame",
   function(object, value) {
-    if (is(value, 'formula')){
+    if (is(value, 'formula')) {
       # the id needs to be unique!
       if (length(all.vars(value)) == 1) {
-	mf <- model.frame(formula=value, data=object)
-	# assigning the id slot
-	object@id <- as.character(mf[, 1])
-	# removing the id col from the data slot
-	object@data <- object@data[, -which(names(object@data) == names(mf))]
-	# if nothing left in the data slot, back to a Spectra object!
-	if (ncol(object@data) == 0)
-	  object <- Spectra(wl=object@wl, nir=object@nir, id=object@id, units=object@units)
+        mf <- model.frame(formula=value, data=object)
+        # assigning the id slot
+        object@id <- as.character(mf[, 1])
+        # removing the id col from the data slot
+        object@data <- object@data[, -which(names(object@data) == names(mf))]
+        # if nothing left in the data slot, back to a Spectra object!
+        if (ncol(object@data) == 0) {
+          object <- Spectra(wl=object@wl, nir=object@nir, id=object@id, units=object@units)
+        }
       }
-      else
-	stop('wrong id initialisation: id must be unique.')
+      else {
+        stop('wrong id initialisation: id must be unique.')
+      }
     }
     else{
       if (inherits(value, 'numeric')) {
-	if (length(value) != length(object))
-	  stop("length of the new ID does not match the length of the object")
-	if (!is.character(value))
-	  value <- as.character(value)
-	object@id <- value
+        if (length(value) != length(object)) {
+          stop("length of the new ID does not match the length of the object")
+        }
+        if (!is.character(value)) {
+          value <- as.character(value)
+        }
+        object@id <- value
       }
       else {
-	object@id <- as.character(value)
+        object@id <- as.character(value)
       }
     }
     object
   }
 )
+ 

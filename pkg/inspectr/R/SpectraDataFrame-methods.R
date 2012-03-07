@@ -96,8 +96,14 @@ if (!isGeneric("features"))
     standardGeneric("features"))
 
 setMethod("features", "SpectraDataFrame",
-  function(obj, ...)
-    obj@data
+  function(obj, ..., include_id = FALSE) {
+    if (include_id) {
+      res <- data.frame(ids(obj), obj@data) 
+    } else {
+      res <- obj@data
+    }
+    res
+  }
 )
 
 setMethod("$", "SpectraDataFrame",

@@ -10,9 +10,15 @@ plot.Spectra <- function(x, gg=FALSE, ...){
   s.melt <- melt_spectra(x)
   if (gg) {
     .try_require("ggplot2")
-    p <- ggplot(s.melt) + geom_line(aes(x=wl, y=nir, group=id)) # + ylim(c(0,1))
+    p <- ggplot(s.melt) + 
+      geom_line(aes(x=wl, y=nir, group = id, colour = factor(id))) + 
+      labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Reflectance") +
+      scale_colour_grey(legend = FALSE) +
+      theme_bw()
   }
   else
-    p <- xyplot(nir ~ wl, groups=id, data=s.melt, type='l', col.line='black', ...)
+    p <- xyplot(nir ~ wl, groups = id, data = s.melt, type = 'l', col.line = 'black', ...)
   p
 }
+
+## TODO: plot_summary() plotting mean spectra +- sd
