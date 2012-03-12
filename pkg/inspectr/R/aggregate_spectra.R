@@ -19,47 +19,61 @@ if (!isGeneric("aggregate_spectra"))
     standardGeneric("aggregate_spectra"))
 
 setMethod("aggregate_spectra", "Spectra",
-  function(obj, fun = mean, id = NULL, ...){
+  function(obj, fun = mean, ...){
+    
     # making up an id name from the aggregation function
-    new_id <- as.character(substitute(fun))[1]
-
+    id_fun <- as.character(substitute(fun, env = parent.frame()))[1]
+    id_obj <- as.character(substitute(obj, env = parent.frame()))
+    id <- paste(id_fun, id_obj, sep = '.')
+  
     # applying the function to the spectra
     nir <- aaply(.data = spectra(obj), .margins = 2, .fun = fun, ...)
 
-    res <- Spectra(wl = wl(obj), nir = nir, id = new_id, units = units(obj))
-
-    res
+    # Create and return Spectra object
+    Spectra(wl = wl(obj), nir = nir, id = id, units = wl_units(obj))
   }
 )
 
+# In the case of a SDF, an id can be given to split the SDF and apply fun
+#
 setMethod("aggregate_spectra", "SpectraDataFrame",
   function(obj, fun = mean, id = NULL, ...){
 
+    # No split --> the whole data is aggregated together
     if (is.null(id)) {
       # making up an id name from the aggregation function
-      new_id <- as.character(substitute(fun))[1]
+      id_fun <- as.character(substitute(fun, env = parent.frame()))[1]
+      id_obj <- as.character(substitute(obj, env = parent.frame()))
+      id <- paste(id_fun, id_obj, sep = '.')
+
       # applying the function to the spectra
       nir <- aaply(.data = spectra(obj), .margins = 2, .fun = fun, ...)
-      res <- Spectra(wl = wl(obj), nir = nir, id = new_id, units = units(obj))
+
+      res <- Spectra(wl = wl(obj), nir = nir, id = id, units = wl_units(obj))
+
       data <- aaply(.data = features(obj), .margins = 2, .fun = fun, ...)
+
       res <- SpectraDataFrame(res, data = data.frame(matrix(data, nrow = 1, dimnames = list(id, names(data)))))
     }
 
+    # There is a variable against which the data will be aggregated
     else {
       if (id %in% names(features(obj))) {
 
+        # Col index of the splitting variable
         idx <- which(names(features(obj)) == id)
+
+        # Creating spectra splits
         s <- data.frame(id = features(obj)[, idx, drop = FALSE], spectra(obj))
-        s <- dlply(s, id, mean, ...)
+        s <- dlply(s, id, fun, ...)
         s <- do.call("rbind", s)
-        s[, 1] <- rownames(s)
+        s <- s[, -1]
 
         # new data slot
-        d <- data.frame(s[,1])
-        names(d) <- id
+        d <- ddply(features(obj), id, numcolwise(fun))
 
         # recompose the object
-        res <- SpectraDataFrame(wl = wl(obj), nir = s[, -1], units = units(obj), data = d)
+        res <- SpectraDataFrame(wl = wl(obj), nir = s, units = wl_units(obj), data = d)
       }
       else
         stop('Bad aggregation identifier.')

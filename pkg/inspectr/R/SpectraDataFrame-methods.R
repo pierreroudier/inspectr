@@ -72,16 +72,18 @@
 
 ## coercition methods
 
-as.data.frame.SpectraDataFrame = function(x, expand = FALSE, ...)  {
-  data <- features(x)
-  id <- ids(x)
-  df <- data.frame(id, data)
+as.data.frame.SpectraDataFrame = function(x, expand = TRUE, include_id = TRUE, ...)  {
+  
+  data <- features(x, include_id = include_id)
+
   if (expand) {
-    df <- data.frame(df, spectra(x))
-    names(df) <- c(names(id), names(data), wl(x))
+    df <- data.frame(data, spectra(x))
+    names(df) <- c(names(data), wl(x))
   }
-  else
-    df <- data.frame(df, NIR = I(spectra(x)))
+  else {
+    df <- data.frame(data, NIR = I(spectra(x)))
+  }
+
   df
 }
 
@@ -134,12 +136,94 @@ setReplaceMethod("[[", c("SpectraDataFrame", "ANY", "missing", "ANY"),
   }
 )
 
+setMethod("[", c("SpectraDataFrame", "ANY", "ANY", "missing"),
+  function(x, i, j, ..., drop = FALSE) {
+
+    .bracket <- function(x, i, j, k, ..., drop = FALSE) {
+
+      missing.i <- missing(i)
+      missing.j <- missing(j)
+      missing.k <- missing(k)
+
+      # ROWS
+      if (missing.i) {
+        i <- TRUE
+      } 
+      else {
+        # throws an error if trying to index rows using NAs
+        if (any(is.na(i))) {
+          stop("NAs not permitted in row index")
+        }
+        # in the case indexing rows by ids
+        if (is.character(i)) {
+          i <- which(x@id %in% i)
+        }
+      }
+
+      # COLS
+      if (missing.j) {
+        j <- TRUE
+      } 
+      else {
+        if (is.numeric(j)) {
+          # If the indices are all negative, cols are removed
+          if (all(j < 0)) {
+            j <- setdiff(1:ncol(x), abs(j))
+          }
+        }
+        else {
+          j <- which(names(x) %in% j)
+        }
+      }
+
+      # WAVELENGTHS
+      if (missing.k) {
+        k <- TRUE
+      } 
+      else {
+        # If the indices are all negative, cols are removed
+        if (all(k < 0)) {
+          k <- setdiff(as.numeric(wl(x)), abs(k))
+        }
+        k <- which(as.numeric(wl(x)) %in% k)
+      }
+
+      SpectraDataFrame(wl = x@wl[k], nir = x@nir[i, k, drop = FALSE], id = x@id[i, , drop = FALSE], data = features(x)[i, j, drop = FALSE])
+    }
+  
+  .bracket(x, i, j, ..., drop = drop)
+  }
+)
+
 names.SpectraDataFrame <- function(x) names(x@data)
 
 "names<-.SpectraDataFrame" <- function(x, value) {
   names(x@data) <- value
   x
 }
+
+#` Melting the spectra matrix
+#'
+melt_spectra.SpectraDataFrame <- function(obj, attr = NULL, ...){
+  
+  id.nm <- names(ids(obj))
+
+  if (!is.null(attr)) {
+    data <- subset(features(obj), select = attr)
+    x <- data.frame(ids(obj), data, spectra(obj))
+    names(x) <- c(id.nm, attr, wl(obj))
+  }
+  else {
+    x <- data.frame(ids(obj), spectra(obj))
+    names(x) <- c(id.nm, wl(obj))
+  }
+  
+  res <- reshape2:::melt.data.frame(x, id.vars = c(id.nm, attr), variable.name = 'wl', value.name = "nir")
+  res$wl <- as.numeric(as.character(res$wl))
+  res
+}
+
+setMethod("melt_spectra", "SpectraDataFrame", melt_spectra.SpectraDataFrame)
 
 ## Subset SDF with a subset/select query
 

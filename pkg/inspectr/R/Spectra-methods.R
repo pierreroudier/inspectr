@@ -157,9 +157,12 @@ setMethod(
 #' @param ... Ignored
 #' @return a \code{data.frame} object
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-as.data.frame.Spectra <- function(x, ...)  {
+as.data.frame.Spectra <- function(x, include_id = TRUE, ...)  {
   df <- as.data.frame(spectra(x))
   names(df) <- wl(x)
+  if (include_id) {
+    df <- data.frame(ids(x), df)
+  }
   df
 }
 
@@ -181,8 +184,11 @@ if (!isGeneric("spectra"))
 #' @export
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 setMethod("spectra", "Spectra",
-  function(object)
-    object@nir
+  function(object) {
+    res <- object@nir
+    colnames(res) <- object@wl
+    res
+  }
 )
 
 # Getting the wavelengths
@@ -338,40 +344,41 @@ setMethod("resolution", "Spectra", resolution.Spectra)
 #'
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 setMethod("[", c("Spectra", "ANY", "ANY", "missing"),
-  function(x, i, j, ...) {
+  function(x, i, j, ..., drop = FALSE) {
 
     missing.i <- missing(i)
     missing.j <- missing(j)
-    nargs <- nargs() # e.g., a[3,] gives 2 for nargs, a[3] gives 1.
 
-    if (missing.i)
+    # ROWS
+    if (missing.i) {
       i <- TRUE
+    } 
     else {
       # throws an error if trying to index rows using NAs
-      if (any(is.na(i)))
-	stop("NAs not permitted in row index")
+      if (any(is.na(i))) {
+        stop("NAs not permitted in row index")
+      }
       # in the case indexing rows by ids
-      if (is.character(i))
-	i <- which(x@id %in% i)
+      if (is.character(i)) {
+        i <- which(x@id %in% i)
+      }
     }
 
-    if (missing.j)
+    # WAVELENGTHS
+    if (missing.j) {
       j <- TRUE
-    else
+    } else {
+      # If the indices are all negative, cols are removed
+      if (all(j < 0)) {
+        j <- setdiff(as.numeric(wl(x)), abs(j))
+      }
       j <- which(as.numeric(wl(x)) %in% j)
-
-    # If there is a data slot
-    if ("data" %in% slotNames(x)) {
-      df <- x@data[i, , drop = FALSE]
-      res <- SpectraDataFrame(wl=x@wl[j], nir=x@nir[i, j, drop = FALSE], id=x@id[i, , drop = FALSE], data=df)
     }
-    # if this is a Spectra obecjt
-    else
-      res <- Spectra(wl=x@wl[j], nir=x@nir[i, j, drop = FALSE], id=x@id[i, , drop = FALSE])
 
-    res
+    Spectra(wl = x@wl[j], nir=x@nir[i, j, drop = FALSE], id = x@id[i, , drop = FALSE]) 
   }
 )
+
 
 ## Promote a Spectra object to a SpectraDataFrame
 
@@ -614,24 +621,17 @@ setMethod("mutate", "Spectra", mutate.Spectra)
 #' @export
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #` @import reshape2
-melt_spectra <- function(obj, ...){
+melt_spectra.Spectra <- function(obj, ...){
 
-  # if obj is Spectra* class
-  if (inherits(obj, 'Spectra')){
-    x <- spectra(obj)
-  }
-  # if obj is a data.frame or a matrix (ass returned by spectra)
-  else {
-    if ((inherits(obj, 'data.frame')) | (inherits(obj, 'matrix'))){
-      x <- obj
-    }
-    else
-      stop('The object you try to melt either be a matrix or data.frame, or a Spectra* object')
-  }
-  res <- reshape2:::melt.array(x, varnames=c('id', 'wl'), value.name="nir")
-  names(res)[3] <- "nir" # tmp fix - waiting for fix upstream in reshape2
+  id.nm <- names(ids(obj))
+  x <- data.frame(ids(obj), spectra(obj))
+  names(x) <- c(id.nm, wl(obj))
+  res <- reshape2:::melt.data.frame(x, id.vars = id.nm, variable.name = 'wl', value.name="nir")
+  res$wl <- as.numeric(as.character(res$wl))
   res
 }
+
+setMethod("melt_spectra", "Spectra", melt_spectra.Spectra)
 
 ## Selecting/cutting wavelengths
 

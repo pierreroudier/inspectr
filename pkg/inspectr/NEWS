@@ -1,11 +1,21 @@
--------------------------- inspectr 0.3-0 (2012-03-07) --------------------------
+-------------------------- inspectr 0.3-0 (2012-03-12) --------------------------
 * ids can be returned as a data.frame or a vector (using as.vector option of ids())
 * ids can be collated to the features in the features() method
 * New rbind.Spectra*() method
-* add() method to retire
+* add() method removed
 * new cut() method to select or remove WLs
 * new apply_spectra() method
 * various improvements on the plotting routine
+* Added plot_summary() method
+* Bugfixes on aggregate_spectra()
+* spectra() now returns wavelengths specified by the @wl slot
+* Added proper split-apply-combine strategy for aggregate_spectra()
+* features()<- method introduced
+* first prototype of a soil data support
+* `[` method improved to support negative indices
+* `[i, j, k, ...` method introduced for SpectraDataFrame. i for rows, j for data cols, k for spectra
+* Fixed and improved as.data.frame() methods
+* improved melt_spectra() method. Now accepts a attr=... option for SDF.
 
 -------------------------- inspectr 0.2-0 (2011-11-10) --------------------------
 * Switch the get_data()/data() methods to features() (as data() is protected)
