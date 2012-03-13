@@ -24,6 +24,42 @@ rnv <- function(x, r){
   (x - pct)/(sd(x[x <= pct]))
 }
 
+## Savitzky-Golay Filter
+#library(signal)
+#foo <- apply_spectra(s, sgolayfilt, p = 4, n = 33, m = 1)
+#
+# ---- Using custom Savitzky-Golay Filter (inspired by: http://tolstoy.newcastle.edu.au/R/help/04/02/0385.html)
+# sav.gol <- function(nir, fl = 33, forder=4, der=0){
+#                     ## -- nir: Spectral Data (matrix) [1 spectra per row]
+#                     ## -- fl: Filter length (must be odd)
+#                     ## -- forder: Filter order
+#                     ## -- dorder: Derivative Order
+#     # -- Outpout: Processed Spectra will be stored in res matrix
+#     res=NULL
+#     nir=as.matrix(nir)
+#     # -- Each Spectra is smoothed separatedly
+#     for (row in 1:nrow(nir)){
+#         T <- as.vector(nir[row,])
+#         m <- length(T)
+#         dorder <- der + 1
+#         # -- calculate filter coefficients --
+#         fc <- (fl-1)/2 # index: window left and right
+#         X <- outer(-fc:fc, 0:forder, FUN="^") # polynomial terms and coefficients
+#         # -- calculate X pseudoinverse
+#         s <- svd(X)
+#         Y <- s$v %*% diag(1/s$d) %*% t(s$u)
+#         # -- filter via convolution and take care of the end points --
+#         T2 <- convolve(T, rev(Y[dorder,]), type="o") # convolve(...)
+#         T2 <- T2[(fc+1):(length(T2)-fc)]  
+#         # -- Store smoothed spectra in res
+#         res=rbind(res,T2)
+#     }
+#     # -- Formatting Data
+#     rownames(res) <- NULL
+#     names(res) <- names(nir)
+#     res
+# }
+
 ## Baseline using the baseline package
 
 baseline.Spectra <- function(spectra, method = 'irls', ...) {
@@ -32,6 +68,11 @@ baseline.Spectra <- function(spectra, method = 'irls', ...) {
   spectra(object) <- getCorrected(new_nir)
   object
 }
+
+if (!isGeneric('baseline'))
+  setGeneric('baseline', function(spectra, method, ...)
+    standardGeneric('baseline')
+)
 
 setMethod('baseline', 'Spectra', baseline.Spectra)
 

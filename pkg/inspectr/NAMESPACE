@@ -3,6 +3,7 @@ import(reshape2)
 import(stringr)
 import(plyr)
 import(sp)
+importFrom(baseline, baseline, baselineGUI, getCorrected)
 
 exportClasses(
   Spectra,
@@ -11,14 +12,15 @@ exportClasses(
   SpatialSpectraDataFrame
 )
 
-export(continuum_removal, big.head, big.tail, melt_spectra)
+export(continuum_removal, big.head, big.tail, apply_spectra)
 export(Spectra, SpectraDataFrame)
+export(snv, rnv)
 
 S3method(plot, Spectra)
 S3method(names, SpectraDataFrame)
 S3method("names<-", SpectraDataFrame)
 
-exportMethods(spectra, "spectra<-", wl, "wl<-", ids, "ids<-", features, "features<-", wl_units, "wl_units<-", resolution, "[", "$", "[[", add)
+exportMethods(spectra, "spectra<-", wl, "wl<-", ids, "ids<-", features, "features<-", wl_units, "wl_units<-", resolution, "[", "$", "[[", cut, melt_spectra, baseline)
 exportMethods("coordinates<-")
 exportMethods(aggregate_spectra, subset, mutate, split)
 

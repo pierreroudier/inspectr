@@ -8,7 +8,7 @@ Maintainer: Pierre Roudier <pierre.roudier@gmail.com>
 Description: Stores and eases the manipulation of spectra and associated data.
 URL: http://inspectr.r-forge.r-project.org/
 Depends: R (>= 2.12)
-Imports: methods, plyr, reshape2, stringr, lattice, sp
-Suggests: ggplot2, pls, baseline
+Imports: methods, plyr, reshape2, stringr, lattice, sp, baseline
+Suggests: ggplot2, pls
 License: GPL
 LazyData: true

@@ -631,12 +631,17 @@ melt_spectra.Spectra <- function(obj, ...){
   res
 }
 
+if (!isGeneric('melt_spectra'))
+  setGeneric('melt_spectra', function(obj, ...)
+    standardGeneric('melt_spectra')
+)
+
 setMethod("melt_spectra", "Spectra", melt_spectra.Spectra)
 
 ## Selecting/cutting wavelengths
 
 # Negative values will be to remove, positive to select
-cut.Spectra <- function(obj, wl, ...) {
+cut.Spectra <- function(x, wl, ...) {
   
   # If wl is negative, we REMOVE these
   if (any(wl < 0) & any(wl > 0) | any(wl == 0))
@@ -644,26 +649,31 @@ cut.Spectra <- function(obj, wl, ...) {
 
   if (all(wl < 0)) {
     wl <- abs(wl)
-    wl <- setdiff(wl(obj), wl)
+    wl <- setdiff(wl(x), wl)
   } 
 
   # Checking that wl in available wavelengths
-  if (!all(wl %in% wl(obj))) {
+  if (!all(wl %in% wl(x))) {
     stop("Selected wavelengths not present in the object")
   }
   
-  ids <- ids(obj)
-  unts <- wl_units(obj)
-  idx <- laply(wl, function(x) which(wl(obj) == x))
-  nir <- spectra(obj)[, idx]
+  ids <- ids(x)
+  unts <- wl_units(x)
+  idx <- laply(wl, function(x) which(wl(x) == x))
+  nir <- spectra(x)[, idx]
   
   res <- Spectra(wl = wl, nir = nir, id = ids, units = unts)
 
-  if ("data" %in% slotNames(obj)) {
-    res <- SpectraDataFrame(res, data = features(obj))
+  if ("data" %in% slotNames(x)) {
+    res <- SpectraDataFrame(res, data = features(x))
   }
   
   res
 }
+
+if (!isGeneric("cut")) {
+    setGeneric("cut", function(x, ...)
+        standardGeneric("cut"))
+}   
 
 setMethod("cut", "Spectra", cut.Spectra)

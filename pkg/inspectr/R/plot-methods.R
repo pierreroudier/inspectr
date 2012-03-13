@@ -22,7 +22,7 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
 
   if (gg) {
     .try_require("ggplot2")
-    p <- ggplot(s.melt)
+    p <- ggplot(s.melt) 
 
     if (is.null(attr)) {
       p <- p + geom_line(aes(x = wl, y = nir, group = id))
