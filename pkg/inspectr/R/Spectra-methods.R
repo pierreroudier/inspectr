@@ -403,19 +403,23 @@ setReplaceMethod("features", signature("Spectra", "ANY"),
         stop("Please provide only ONE id column.")
 
       # Actual ID sanity check
-      spectra_ids <- data.frame(ids(object))
+      spectra_ids <- ids(object)
       if (is.numeric(key)) {
         ind.key <- key
         key <- names(value)[key]
       }
       else
         ind.key <- which(names(value) == key)
+
+      # Using the "key" name for ids
       names(spectra_ids) <- key
-      data <- join(spectra_ids, value,  by = key)
-      # removing the id column
       
+      # Put data together
+      data <- join(spectra_ids, value,  by = key, type = "left", match = "first")
+      
+      # removing the id column      
       if (remove_id)
-        data <- data[, -1*ind.key]
+        data <- data[, -1*which(names(data) == key)]
     }
     else {
       warning("Sample ID check has been disabled. This mode assumes you made sure the order of the rows in your data is consistent with the order in which these samples appear in the Spectra object.")

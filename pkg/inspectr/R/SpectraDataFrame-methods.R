@@ -65,7 +65,7 @@
   if (is(data, "numeric") | is(data, "integer"))
     data <- as.data.frame(data)
 
-  rownames(data) <- as.vector(do.call('rbind', id))
+  rownames(data) <- id[, 1]
 
   new("SpectraDataFrame", wl=wl, nir=nir, id=id, units=units, data=data)
 }
