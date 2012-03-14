@@ -26,6 +26,10 @@ There is two distinct function for \code{Spectra} and \code{SpectraDataFrame} cl
 \seealso{\code{\link{apply_spectra}}}
 
 \examples{
-#aggregate_spectra(foo, fun = median)
-#aggregate_spectra(foo, fun = median, id = 'someFactor')
+#m <- aggregate_spectra(foo, fun = mean)
+#summary(m)
+#plot(m)
+#m <- aggregate_spectra(foo, fun = mean, id = 'someFactor')
+#summary(m)
+#plot(m)
 }

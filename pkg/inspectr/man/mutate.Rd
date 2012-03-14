@@ -16,8 +16,6 @@ the transformations iteratively so that later transformations can use the
 columns created by earlier transformations. Like transform, unnamed
 components are silently dropped.
 
-Mutate seems to be considerably faster than transform for large data.frames.
-
 Either the spectra, and/or the attributes (if the \code{.data} inherits from the \code{SpectraDataFrame} class) can be affected:
 \itemize{
   \item {To affect the spectra, one should use the \code{nir} placeholder, eg \code{nir = log(1/nir)}}
@@ -38,4 +36,15 @@ Either the spectra, and/or the attributes (if the \code{.data} inherits from the
 \arguments{
   \item{.data}{an object inheriting from the \code{Spectra} class}
   \item{...}{named parameters giving definitions of new columns}
+}
+
+\examples{
+# Modifying spectra
+#m <- mutate(foo, nir = log1p(1/nir))
+#plot(m)
+
+# Modifying and creating attributes
+#m <- mutate(foo, octane = sqrt(octane), foo = octane + 1000, nir = log1p(1/nir))
+#summary(m)
+#plot(m)
 }

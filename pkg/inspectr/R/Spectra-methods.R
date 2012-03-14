@@ -597,8 +597,11 @@ mutate.Spectra <- function (.data, ...){
   if (any(names(cols) == 'nir')) {
     nir <- reshape2::melt(spectra(.data), varnames=c('id', 'wl'), value.name = "nir")
     nir[["nir"]] <- eval(cols[["nir"]], nir, parent.frame())
-    nir <- acast(nir, id ~ wl)
+    nir <- reshape2::acast(nir, id ~ wl)
+    # remove it from the cols list
+    cols[['nir']] <- NULL
   }
+  # no transformations on the spectra
   else
     nir <- spectra(.data)
 
@@ -606,17 +609,8 @@ mutate.Spectra <- function (.data, ...){
 
   # transformations on the data - only for classes inheriting from SpectraDataFrame
   if ("data" %in% slotNames(.data)) {
-
-    d <- data(.data)
-
-    if (any(names(cols) %in% names(.data))) {
-      cols_data <- names(cols)[which(names(cols) %in% names(.data))]
-      for (col in cols_data){
-	d[[col]] <- eval(cols[[col]], d, parent.frame())
-      }
-    }
-
-    res <- SpectraDataFrame(res, data = d)
+    d <- sapply(cols, function(x) eval(x, features(.data), parent.frame()))
+    res <- SpectraDataFrame(res, data = as.data.frame(d))
   }
 
   res
