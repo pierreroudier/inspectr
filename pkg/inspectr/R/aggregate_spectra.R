@@ -44,16 +44,19 @@ setMethod("aggregate_spectra", "SpectraDataFrame",
       # making up an id name from the aggregation function
       id_fun <- as.character(substitute(fun, env = parent.frame()))[1]
       id_obj <- as.character(substitute(obj, env = parent.frame()))
+      # Select and paste only alphanumeric chars
+      id_obj <- paste(id_obj[grep(x = id_obj, pattern = '[[:alnum:]]')], collapse = '.')
+      # Combine object name and function name into an id
       id <- paste(id_fun, id_obj, sep = '.')
-
+  
       # applying the function to the spectra
-      nir <- aaply(.data = spectra(obj), .margins = 2, .fun = fun, ...)
-
+      nir <- apply(spectra(obj), 2, fun, ...)
+      
       res <- Spectra(wl = wl(obj), nir = nir, id = id, units = wl_units(obj))
-
-      data <- aaply(.data = features(obj), .margins = 2, .fun = fun, ...)
-
-      res <- SpectraDataFrame(res, data = data.frame(matrix(data, nrow = 1, dimnames = list(id, names(data)))))
+      
+      data <- sapply(features(obj), fun, ...)
+            
+      res <- SpectraDataFrame(res, data = data.frame(matrix(data, nrow = 1, dimnames = list(id, names(obj)))))
     }
 
     # There is a variable against which the data will be aggregated
@@ -65,13 +68,13 @@ setMethod("aggregate_spectra", "SpectraDataFrame",
 
         # Creating spectra splits
         s <- data.frame(id = features(obj)[, idx, drop = FALSE], spectra(obj))
-        s <- dlply(s, id, fun, ...)
-        s <- do.call("rbind", s)
+        s <- ddply(s, id, colwise(fun, ...))
+        # Remove id used to split data.frame
         s <- s[, -1]
-
+        
         # new data slot
-        d <- ddply(features(obj), id, numcolwise(fun))
-
+        d <- ddply(features(obj), id, colwise(fun, ...))
+        
         # recompose the object
         res <- SpectraDataFrame(wl = wl(obj), nir = s, units = wl_units(obj), data = d)
       }
