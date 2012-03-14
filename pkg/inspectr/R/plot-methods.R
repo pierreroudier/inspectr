@@ -28,7 +28,7 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
       p <- p + geom_line(aes(x = wl, y = nir, group = id))
     }
     else {
-      p <- p + geom_line(aes_string(x = 'wl', y = 'nir', group = 'id', colour = factor(attr)))
+      p <- p + geom_line(aes_string(x = 'wl', y = 'nir', group = 'id', colour = attr))
     }
     p <- p +
       labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Reflectance") +
@@ -100,7 +100,7 @@ plot_summary.Spectra <- function(x, fun = mean, se = FALSE, ...) {
 .fillSpectra <- function(obj) {
 
   # Detect missing WLs
-  missing_wl <- setdiff(min(wl(obj)):max(wl(obj)), wl(obj))
+  missing_wl <- setdiff(seq(from = min(wl(obj)), to = max(wl(obj)), by = res(obj)), wl(obj))
   
   # Create matrix of NAs for the missing WLs
   new_nir <- matrix(NA, ncol = length(missing_wl), nrow = nrow(obj))
