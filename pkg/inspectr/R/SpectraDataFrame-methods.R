@@ -10,7 +10,7 @@
       ss <- dotargs[id_spectra]
       s <- ss[[1]]
       for (i in 2:length(id_spectra))
-	s <- add(s, ss[[i]])
+	s <- rbind(s, ss[[i]])
     }
     # if theres only one Spectra object
     else
@@ -72,7 +72,7 @@
 
 ## coercition methods
 
-as.data.frame.SpectraDataFrame = function(x, expand = TRUE, include_id = TRUE, ...)  {
+as.data.frame.SpectraDataFrame = function(x, ..., expand = TRUE, include_id = TRUE)  {
   
   data <- features(x, include_id = include_id)
 
@@ -256,30 +256,15 @@ subset.SpectraDataFrame <- function(x, subset, select, drop = FALSE, ...) {
 
 setMethod("subset", "SpectraDataFrame", subset.SpectraDataFrame)
 
-## Separate calibration set vs validation set
-
-if (!isGeneric("separate"))
-  setGeneric("separate", function(obj, calibration, ...)
-    standardGeneric("separate"))
-
-separate.SpectraDataFrame <- function(obj, calibration){
-  if (calibration < 1)
-    calibration <- floor(calibration*length(obj))
-  calib <- sample(x=seq_len(length(obj)), size=calibration, replace = FALSE)
-  valid <- setdiff(seq_len(length(obj)), calib)
-  list(calibration=obj[calib, , drop = FALSE], validation=obj[valid, , drop = FALSE])
-}
-
-setMethod("separate", "SpectraDataFrame", separate.SpectraDataFrame)
-
-if (!isGeneric("unseparate"))
-  setGeneric("unseparate", function(obj, ...)
-    standardGeneric("unseparate"))
-
-unseparate.SpectraDataFrame <- function(obj){
-  #' Warning: does not recover the order of the samples
-  #'
-  add(obj$calibration, obj$validation)
-}
-
-setMethod("unseparate", "list", unseparate.SpectraDataFrame)
+## REMOVED - rbind is doing the same thing now
+# if (!isGeneric("unseparate"))
+#   setGeneric("unseparate", function(obj, ...)
+#     standardGeneric("unseparate"))
+# 
+# unseparate.SpectraDataFrame <- function(obj){
+#   #' Warning: does not recover the order of the samples
+#   #'
+#   add(obj$calibration, obj$validation)
+# }
+# 
+# setMethod("unseparate", "list", unseparate.SpectraDataFrame)

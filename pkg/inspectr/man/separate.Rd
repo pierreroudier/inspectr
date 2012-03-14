@@ -1,19 +1,15 @@
 \name{separate}
 \alias{separate}
-\alias{unseparate}
-\alias{separate.SpectraDataFrame}
-\alias{unseparate.SpectraDataFrame}
+\alias{separate.Spectra}
 
-\title{Separates a \code{SpectraDataFrame} object into a calibration and a validation set.}
+
+\title{Separates a \code{Spectra*} object into a calibration and a validation set.}
 
 \usage{
 separate(obj, calibration, ...)
-unseparate(obj, ...)
 }
 
-\description{Separates a \code{SpectraDataFrame} object into a calibration and a validation set.}
-
-\details{The \code{unseparate} function provides a way back to the oriiginal object, but it still under development.}
+\description{Separates a \code{Spectra*} object into a calibration and a validation set.}
 
 \value{An list with two \code{SpectraDataFrame} objects, one for the calibration, and the other for the validation.}
 
@@ -24,3 +20,11 @@ unseparate(obj, ...)
 }
 
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
+
+\seealso{\code{\link{split}}, \code{\link{melt_spectra}}, \code{\link{lapply}}, and the \code{l*pply} family of function inthe plyr package.}
+
+\examples{
+#res <- separate(foo, calibration=0.7)
+#str(res)
+#lapply(res, nrow)
+}

@@ -1,12 +1,12 @@
-\name{id}
-\alias{id}
-\alias{id<-}
+\name{ids}
+\alias{ids}
+\alias{ids<-}
 
 \title{Retrieves or sets the ids of a \code{Spectra*} object.}
 
 \usage{
-id(object, ...)
-id(object) <- value
+ids(object, ...)
+ids(object) <- value
 }
 
 \description{Either retrieves the wavelengths from a \code{Spectra*} object, or creates a \code{Spectra*} object from a \code{"data.frame"} object by setting some of its columns as the wavelengths.}
@@ -30,3 +30,9 @@ If all the columns are used to create the \code{Spectra*} object, a \code{Spectr
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
 
 \seealso{\code{\link{spectra}}, \code{\link{Spectra-class}}, \code{\link{SpectraDataFrame-class}}}
+
+\examples{
+ids(foo)
+ids(foo) <- seq_len(nrow(foo))
+ids(foo)
+}

@@ -97,12 +97,12 @@ subset.SpatialSpectraDataFrame <- function(x, subset, select, drop = FALSE, ...)
 
     if (is.logical(r))
       r <- r & !is.na(r)
-    else if (inherits(r, "Spatial")) {
-      require(rgeos)
-      which_intersects <- gIntersects(as(x, "SpatialPoints"), subset, byid = TRUE)
-      r <- which(which_intersects)
-    }
-    else stop("subset must evaluate to either logical or Spatial")
+#     else if (inherits(r, "Spatial")) {
+#       require(rgeos)
+#       which_intersects <- gIntersects(as(x, "SpatialPoints"), subset, byid = TRUE)
+#       r <- which(which_intersects)
+#     }
+#     else stop("subset must evaluate to either logical or Spatial")
   }
 
   if (missing(select))

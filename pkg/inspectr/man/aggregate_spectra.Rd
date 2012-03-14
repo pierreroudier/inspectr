@@ -8,7 +8,9 @@
 \description{Aggregates spectral and data information of a \code{Spectra} object using a user-defined function.}
 
 \details{Aggregates the spectral information of a \code{Spectra} object using 
-an aggregation function chosen by the user. There is two distinct function for \code{Spectra} and \code{SpectraDataFrame} classes. For \code{SpectraDataFrame} objects, associated data is also aggregated using the function provided by the \code{fun} option. Additionally, the method for \code{SpectraDataFrame} has an \code{id} option that allows to specify an attribute which will be used to split the object, apply sequentially the \code{fun} function, and recombine the results in an unique object.}
+an aggregation function chosen by the user. 
+
+There is two distinct function for \code{Spectra} and \code{SpectraDataFrame} classes. For \code{SpectraDataFrame} objects, associated data is also aggregated using the function provided by the \code{fun} option. Additionally, the method for \code{SpectraDataFrame} has an \code{id} option that allows to specify an attribute which will be used to split the object, apply sequentially the \code{fun} function, and recombine the results in an unique object.}
 
 \value{An object of the same class as \code{obj}}
 
@@ -22,3 +24,8 @@ an aggregation function chosen by the user. There is two distinct function for \
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
 
 \seealso{\code{\link{apply_spectra}}}
+
+\examples{
+#aggregate_spectra(foo, fun = median)
+#aggregate_spectra(foo, fun = median, id = 'someFactor')
+}

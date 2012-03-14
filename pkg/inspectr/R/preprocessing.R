@@ -1,4 +1,4 @@
-## transformations.R
+## preprocessing.R
 ##
 ## Pre-processing of Vis-NIR spectra
 ##
@@ -6,6 +6,11 @@
 ## Apply for spectra
 apply_spectra <- function(obj, fun, ...) {
   nir <- aaply(spectra(obj), 1, fun, ...)
+
+  # Managing case where only one spectra
+  if (nrow(obj) == 1)
+    nir <- matrix(nir, nrow = 1, dimnames = list(ids(obj), names(nir)))
+
   spectra(obj) <- nir
   obj
 }
@@ -84,55 +89,10 @@ setMethod('baseline', 'Spectra', baseline.Spectra)
 #' common baseline. The removal is based on the upper convex hull of
 #' the spectra.
 #'
-#' @param obj an object inheriting from Spectra
-#' @return an object of same class with the continuum removed from its spectra.
-#' @references R.N. Clark and T.L. Roush (1984).Reflectance spectroscopy: 
-#' Quantitative analysis techniques for remote sensing applications, 
-#' Journal of Geophysical Research 89 (B7), pp. 6329–6340.
-#' @export
-#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-continuum_removal <- function(obj){
-
-# # using plyr
-#   require(plyr)
-#   require(reshape)
-#   res <- aaply(.data=spectra(obj), .margins=1, .fun=function(x) {
-#     ch.index <- sort(chull(x))
-#     ch <- data.frame(wl=wl(obj)[ch.index], nir=x[ch.index])
-#     ch <- approx(x=ch$wl, y=ch$nir, xout=wl(obj)) 
-#     x - ch$y
-#     })
-
-  # using a for loop
-  sp <- spectra(obj)
-  res <- sp
-
-  for (i in 1:nrow(sp)) {
-    ch.index <- sort(chull(sp[i,]))
-    ch <- data.frame(wl = wl(obj)[ch.index], nir = sp[i, ch.index])
-    ch <- approx(x = ch$wl, y = ch$nir, xout = wl(obj))
-    res[i, ] <- sp[i, ] - ch$y
-  }
-
-  obj@nir <- res
-  obj
+continuum_removal <- function(x, wl = as.numeric(names(x))){
+  ch.index <- sort(chull(x = wl, y = x))
+  ch <- data.frame(wl = wl[ch.index], nir = x[ch.index])
+  res <- approx(x = ch$wl, y = ch$nir, xout = wl)
+#   res2 <- signal::interp1(ch$wl, ch$nir, wl, method = 'linear', extrap = TRUE)
+  x - res$y
 }
-
-## from Raphael
-# continuum.removal <- function(obj, wavelength=wl(obj), method="linear"){
-#   require(signal)
-# 
-#   spc <- spectra(obj)
-#   cr <- spc
-# 
-#   for (i in 1:nrow(spc)){
-#     id <- sort(chull(wavelength, spc[i,]))
-#     cr[i, ] <- spc[i,] - interp1(wavelength[id], spc[i,id], wavelength, method=method, extrap=TRUE)
-#   }
-#   obj@nir <- cr
-#   obj
-# }
-
-## for baseline, see the baseline package
-
-## what about derivatives? See KernSmooth package. (locpoly function)

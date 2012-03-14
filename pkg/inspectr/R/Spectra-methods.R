@@ -101,7 +101,7 @@ print.summary.Spectra = function(x, ...) {
     if (nrow(x[['id']]) > 0){
       cat("Wavelength range: ")
       cat(min(x[["wl"]], na.rm=TRUE), " to ", max(x[["wl"]], na.rm=TRUE)," ", x[["units"]], "\n", sep="")
-      SpectralResolution <- resolution(x[["wl"]])
+      SpectralResolution <- res(x[["wl"]])
       if (length(SpectralResolution) > 1)
 	cat("Spectral resolution: irregular wavelength spacing\n")
       else {
@@ -134,7 +134,7 @@ setMethod(
     cat("Set of ", nrow(object@id)," spectra\n", sep='')
     if (nrow(object@id) > 0){
       cat("Wavelength range: ", min(object@wl, na.rm=TRUE),"-",max(object@wl, na.rm=TRUE)," ", object@units, "\n", sep="")
-      SpectralResolution <- resolution(object)
+      SpectralResolution <- res(object)
       if (length(SpectralResolution) > 1)
         cat("Spectral resolution: irregular wavelength spacing\n")
       else {
@@ -157,7 +157,7 @@ setMethod(
 #' @param ... Ignored
 #' @return a \code{data.frame} object
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-as.data.frame.Spectra <- function(x, include_id = TRUE, ...)  {
+as.data.frame.Spectra <- function(x, ..., include_id = TRUE)  {
   df <- as.data.frame(spectra(x))
   names(df) <- wl(x)
   if (include_id) {
@@ -300,9 +300,9 @@ definition = function(x) {
 
 ## Returns spectral resolution of the wavelengths
 
-if (!isGeneric("resolution"))
-  setGeneric("resolution", function(object, ...)
-    standardGeneric("resolution"))
+if (!isGeneric("res"))
+  setGeneric("res", function(x)
+    standardGeneric("res"))
 
 #' Returns the spectral resolution of an object
 #'
@@ -312,8 +312,8 @@ if (!isGeneric("resolution"))
 #'
 #' @method resolution numeric
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-resolution.numeric <- function(object, digits = 10, ...){
-  unique(round(diff(object), digits = digits)) # round - otherwise diff() picks some unsignificant values
+res.numeric <- function(x){
+  unique(round(diff(x), digits = 10)) # round - otherwise diff() picks some unsignificant values
 }
 
 #' Returns the spectral resolution of an object
@@ -324,14 +324,13 @@ resolution.numeric <- function(object, digits = 10, ...){
 #'
 #' @method resolution Spectra
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-resolution.Spectra <- function(object, digits=10, ...){
-  x <- wl(object)
-  unique( round( diff(x), digits=digits) )
+res.Spectra <- function(x){
+  unique( round( diff(wl(x)), digits = 10) )
 }
 
-setMethod("resolution", "numeric", resolution.numeric)
-setMethod("resolution", "integer", resolution.numeric)
-setMethod("resolution", "Spectra", resolution.Spectra)
+setMethod("res", "numeric", res.numeric)
+setMethod("res", "integer", res.numeric)
+setMethod("res", "Spectra", res.Spectra)
 
 ## overloads
 
@@ -556,7 +555,13 @@ rbind.SpectraDataFrame <- rbind.Spectra
 ## Split
 
 split.Spectra <- function(x, f, drop = FALSE, ...){
-  lapply(split(seq_len(nrow(x)), f, drop = drop, ...), function(ind) x[ind, , drop = FALSE])
+  
+  # If length(f) <= 1, we consider f is giving the colname or index
+  if (length(f) <= 1) {
+    f <- features(x)[, f]
+  }
+
+  lapply(split(seq_len(nrow(x)), f, ...), function(ind) x[ind, ])
 }
 
 setMethod("split", "Spectra", split.Spectra)
@@ -616,6 +621,22 @@ mutate.Spectra <- function (.data, ...){
 
   res
 }
+
+## Separate calibration set vs validation set
+
+if (!isGeneric("separate"))
+  setGeneric("separate", function(obj, calibration, ...)
+    standardGeneric("separate"))
+
+separate.Spectra <- function(obj, calibration){
+  if (calibration < 1)
+    calibration <- floor(calibration*nrow(obj))
+  calib <- sample(x=seq_len(nrow(obj)), size=calibration, replace = FALSE)
+  valid <- setdiff(seq_len(nrow(obj)), calib)
+  list(calibration=obj[calib, ], validation=obj[valid, ])
+}
+
+setMethod("separate", "Spectra", separate.Spectra)
 
 setMethod("mutate", "Spectra", mutate.Spectra)
 

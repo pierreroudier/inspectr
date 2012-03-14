@@ -26,11 +26,12 @@ Either the spectra, and/or the attributes (if the \code{.data} inherits from the
 }
 }
 
-\section{References}{
+\references{
   Hadley Wickham (2011). The Split-Apply-Combine Strategy for Data                                                                                          
   Analysis. Journal of Statistical Software, 40(1), 1-29. URL                                                                                               
   http://www.jstatsoft.org/v40/i01/.
 }
+
 
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}, from code from Hadley Wickham}
 

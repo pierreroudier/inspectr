@@ -29,3 +29,9 @@ If applied on a \code{Spectra*} object, a data.frame.
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
 
 \seealso{\code{\link{spectra}}, \code{\link{wl}}, \code{\link{SpectraDataFrame-class}}}
+
+\examples{
+#features(foo)
+#bar <- as(foo, "Spectra")
+#features(bar, key = 'id') <- some_data
+}
