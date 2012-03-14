@@ -68,7 +68,8 @@ setMethod("aggregate_spectra", "SpectraDataFrame",
 
         # Creating spectra splits
         s <- data.frame(id = features(obj)[, idx, drop = FALSE], spectra(obj))
-        s <- ddply(s, id, colwise(fun, ...))
+        
+        s <- ddply(s, id, colwise(fun), ...)
         # Remove id used to split data.frame
         s <- s[, -1]
         
