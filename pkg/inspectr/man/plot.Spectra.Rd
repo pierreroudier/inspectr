@@ -22,3 +22,22 @@ The philosophy of this plotting routine is to provide a "quick'n'dirty" way to p
   \item{attr}{attribute against which lines are coloured}
   \item{...}{options to be passed to xyplot}
 }
+
+
+\examples{
+# Default plotting method
+#plot(foo)
+
+# Default plot using ggplot2
+#plot(foo, gg = TRUE)
+
+# Managing gaps in the spectra
+#bar <- cut(foo, c(-1*450:500, -1*1800:2050))
+#plot(foo, gg = TRUE, gaps = TRUE)
+#plot(foo, gg = TRUE, gaps = FALSE)
+
+# Using an attribute to group spectra
+#bar <- aggregate_spectra(foo, fun = mean, id = 'someFactor')
+#plot(bar, gg = TRUE, attr = 'someFactor')
+
+}

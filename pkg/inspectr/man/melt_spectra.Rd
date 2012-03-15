@@ -1,5 +1,8 @@
 \name{melt_spectra}
+\docType{methods}
 \alias{melt_spectra}
+\alias{melt_spectra,Spectra-method}
+\alias{melt_spectra,SpectraDataFrame-method}
 
 \title{melt_spectra}
 \description{Melts the spectra data of a Spectra object and returns it as wide format.}

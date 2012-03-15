@@ -1,7 +1,8 @@
 \name{mutate}
-
+\docType{methods}
 \alias{mutate}
 \alias{mutate.Spectra}
+\alias{mutate,Spectra-method}
 
 \title{Mutate a Spectra* object by transforming the spectra values, and/or adding new or replacing existing attributes.}
 

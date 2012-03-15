@@ -1,6 +1,8 @@
 \name{separate}
+\docType{methods}
 \alias{separate}
 \alias{separate.Spectra}
+\alias{separate,Spectra-method}
 
 
 \title{Separates a \code{Spectra*} object into a calibration and a validation set.}

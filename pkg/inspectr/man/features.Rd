@@ -1,12 +1,16 @@
 \name{features}
+\docType{methods}
+
 \alias{features}
 \alias{features<-}
+\alias{features,SpectraDataFrame-method}
+\alias{features<-,Spectra-method}
 
 \title{Retrieves or sets the data slot of a SpectraDataFrame object.}
 
 \usage{
-features(object, ..., include_id = FALSE)
-features(object, safe = TRUE, key = NULL, remove_id = TRUE) <- value
+\S4method{features}{Spectra}(object, ..., include_id = FALSE)
+\S4method{features<-}{Spectra}(object, safe = TRUE, key = NULL, remove_id = TRUE) <- value
 }
 
 \description{Either retrieves the attributes values from the data slot of a SpectraDataFrame object, or upgrades a Spectra object to a SpectraDataFrame object by initialising its data slot by a suitable \code{"data.frame"} object.}

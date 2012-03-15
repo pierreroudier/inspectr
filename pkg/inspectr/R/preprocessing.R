@@ -75,7 +75,7 @@ baseline.Spectra <- function(spectra, method = 'irls', ...) {
 }
 
 if (!isGeneric('baseline'))
-  setGeneric('baseline', function(spectra, method, ...)
+  setGeneric('baseline', function(spectra, method = 'irls', ...)
     standardGeneric('baseline')
 )
 

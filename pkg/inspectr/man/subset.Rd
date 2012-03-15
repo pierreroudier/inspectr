@@ -1,7 +1,8 @@
 \name{subset}
-
+\docType{methods}
 \alias{subset}
 \alias{subset.SpectraDataFrame}
+\alias{subset,SpectraDataFrame-method}
 
 \title{Subset SpectraDataFrame object}
 

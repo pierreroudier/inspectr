@@ -16,7 +16,7 @@
 \title{Spectra* classes}
 
 \description{
-The inspectr package provides the user with two S4 classes that have been developped to store and manipulate spectroscopy data. 
+The inspectr package provides the user with S4 classes that have been developped to store and manipulate spectroscopy data. 
 
 The \code{Spectra} class is storing the spectra matrix, along with the wavelengths at which those have been measured, the units in whioch those wavelengths are expressed, and a unique id for each sample in the collection.
 
@@ -24,7 +24,7 @@ The \code{SpectraDataFrame} classe is extending the \code{Spectra} class by givi
 
 Common generic methods implemented for these classes include: 
  
-\code{summary}, \code{show}, \code{nrow}, \code{length}, \code{plot, ...}, \code{[}, \code{[[}, \code{$}. 
+\code{summary}, \code{show}, \code{nrow}, \code{length}, \code{plot}, \code{[}, \code{[[}, \code{$}. 
 }
 
 

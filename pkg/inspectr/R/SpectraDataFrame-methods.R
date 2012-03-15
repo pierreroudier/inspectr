@@ -112,9 +112,18 @@ setMethod("$", "SpectraDataFrame",
   definition=function(x, name) x@data[[name]]
 )
 
-setReplaceMethod("$", "SpectraDataFrame",
+setReplaceMethod("$", "Spectra",
   definition=function(x, name, value) {
-    x@data[[name]] <- value
+    # For SpectraDataFrame
+    if ('data' %in% slotNames(x)) {
+      x@data[[name]] <- value
+    }
+    # Else promoting Spectra to SpectraDataFrame
+    else {
+      data <- data.frame(value)
+      names(data) <- name
+      x <- SpectraDataFrame(x, data = data)
+    }
     x
   }
 )
@@ -127,17 +136,24 @@ setMethod("[[", c("SpectraDataFrame", "ANY", "missing"),
   }
 )
 
-setReplaceMethod("[[", c("SpectraDataFrame", "ANY", "missing", "ANY"),
+setReplaceMethod("[[", c("Spectra", "ANY", "missing", "ANY"),
   function(x, i, j, value) {
-    if (!("data" %in% slotNames(x)))
-      stop("no [[ method for object without attributes")
-    x@data[[i]] <- value
+    # For SpectraDataFrame
+    if ('data' %in% slotNames(x)) {
+      x@data[[i]] <- value
+    }
+    # Else promoting Spectra to SpectraDataFrame
+    else {
+      data <- data.frame(value)
+      names(data) <- i
+      x <- SpectraDataFrame(x, data = data)
+    }
     x
   }
 )
 
 setMethod("[", c("SpectraDataFrame", "ANY", "ANY", "missing"),
-  function(x, i, j, ..., drop = FALSE) {
+  function(x, i, j, ..., k, drop = FALSE) {
 
     .bracket <- function(x, i, j, k, ..., drop = FALSE) {
 
@@ -191,7 +207,7 @@ setMethod("[", c("SpectraDataFrame", "ANY", "ANY", "missing"),
       SpectraDataFrame(wl = x@wl[k], nir = x@nir[i, k, drop = FALSE], id = x@id[i, , drop = FALSE], data = features(x)[i, j, drop = FALSE])
     }
   
-  .bracket(x, i, j, ..., drop = drop)
+  .bracket(x, i, j, k, ..., drop = drop)
   }
 )
 

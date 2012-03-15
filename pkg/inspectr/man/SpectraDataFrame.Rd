@@ -1,4 +1,5 @@
 \name{SpectraDataFrame}
+
 \alias{SpectraDataFrame}
 
 \title{Constructor for the SpectraDataFrame class.}

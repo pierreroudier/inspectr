@@ -1,6 +1,10 @@
 \name{wl}
+\docType{methods}
 \alias{wl}
 \alias{wl<-}
+\alias{wl,Spectra-method}
+\alias{wl<-,Spectra-method}
+\alias{wl<-,data.frame-method}
 
 \title{Retrieves or sets the wavelengths of a \code{Spectra*} object.}
 

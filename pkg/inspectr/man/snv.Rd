@@ -37,3 +37,8 @@ These function are to be used in conjonction with \code{\link{apply_spectra}}.
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
 
 \seealso{\code{\link{apply_spectra}}, \code{\link{baseline}}}
+
+\examples{
+#bar <- apply_spectra(foo, snv)
+#plot(bar)
+}

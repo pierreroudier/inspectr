@@ -85,43 +85,43 @@ setAs("SpatialSpectraDataFrame", "data.frame", function(from)
 	as.data.frame.SpatialSpectraDataFrame(from))
 
 ## data manipulation
-subset.SpatialSpectraDataFrame <- function(x, subset, select, drop = FALSE, ...) {
-  # adapted from subset.data.frame
-  df <- features(x)
-
-  if (missing(subset))
-        r <- TRUE
-  else {
-    e <- substitute(subset)
-    r <- eval(e, df, parent.frame())
-
-    if (is.logical(r))
-      r <- r & !is.na(r)
-#     else if (inherits(r, "Spatial")) {
-#       require(rgeos)
-#       which_intersects <- gIntersects(as(x, "SpatialPoints"), subset, byid = TRUE)
-#       r <- which(which_intersects)
-#     }
-#     else stop("subset must evaluate to either logical or Spatial")
-  }
-
-  if (missing(select))
-    vars <- TRUE
-  else {
-    nl <- as.list(seq_along(df))
-    names(nl) <- names(df)
-    vars <- eval(substitute(select), nl, parent.frame())
-  }
-
-  df_sub <- df[r, vars, drop = drop]
-  SpPts <- as(x, 'SpatialPoints')
-  SpPts <- SpPts[r, ]
-
-  # remove unused factors
-  df_sub <- droplevels(df_sub)
-  id_selected <- which(rownames(df) %in% rownames(df_sub))
-  x <- SpatialSpectraDataFrame(SpPts, wl = wl(x), nir = spectra(x)[id_selected, , drop = FALSE], id = ids(x)[id_selected, 1, drop = FALSE], units = wl_units(x), data = df_sub)
-  x
-}
-
-setMethod("subset", "SpatialSpectraDataFrame", subset.SpatialSpectraDataFrame)
+# subset.SpatialSpectraDataFrame <- function(x, subset, select, drop = FALSE, ...) {
+#   # adapted from subset.data.frame
+#   df <- features(x)
+# 
+#   if (missing(subset))
+#         r <- TRUE
+#   else {
+#     e <- substitute(subset)
+#     r <- eval(e, df, parent.frame())
+# 
+#     if (is.logical(r))
+#       r <- r & !is.na(r)
+# #     else if (inherits(r, "Spatial")) {
+# #       require(rgeos)
+# #       which_intersects <- gIntersects(as(x, "SpatialPoints"), subset, byid = TRUE)
+# #       r <- which(which_intersects)
+# #     }
+# #     else stop("subset must evaluate to either logical or Spatial")
+#   }
+# 
+#   if (missing(select))
+#     vars <- TRUE
+#   else {
+#     nl <- as.list(seq_along(df))
+#     names(nl) <- names(df)
+#     vars <- eval(substitute(select), nl, parent.frame())
+#   }
+# 
+#   df_sub <- df[r, vars, drop = drop]
+#   SpPts <- as(x, 'SpatialPoints')
+#   SpPts <- SpPts[r, ]
+# 
+#   # remove unused factors
+#   df_sub <- droplevels(df_sub)
+#   id_selected <- which(rownames(df) %in% rownames(df_sub))
+#   x <- SpatialSpectraDataFrame(SpPts, wl = wl(x), nir = spectra(x)[id_selected, , drop = FALSE], id = ids(x)[id_selected, 1, drop = FALSE], units = wl_units(x), data = df_sub)
+#   x
+# }
+# 
+# setMethod("subset", "SpatialSpectraDataFrame", subset.SpatialSpectraDataFrame)

@@ -1,7 +1,8 @@
 \name{split}
-
+\docType{methods}
 \alias{split}
 \alias{split.Spectra}
+\alias{split,Spectra-method}
 
 \title{Split a Spectra* object using factors}
 

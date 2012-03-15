@@ -1,4 +1,5 @@
 \name{Spectra}
+
 \alias{Spectra}
 
 \title{Constructor for the Spectra class.}

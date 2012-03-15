@@ -66,7 +66,7 @@ setReplaceMethod("wl", "data.frame",
       # If there are some columns left, we use them to initiate a SpectraDataFrame object
       if (ncol(nir) < ncol(object)) {
         data <- object[, -ind_nir, drop=FALSE]
-        data(res) <- data
+        res <- SpectraDataFrame(res, data = data)
       }
     }
     else {
@@ -214,14 +214,17 @@ setReplaceMethod("wl", "Spectra",
 ##
 ## - if applied to a data.frame --> we create a Spectra* object
 ## - if applied to a Spectra* --> we change its @nir slot
+##
+## IMPORTANT: The spectra() functionis for wide-formatted data. See spectra_long()
+## method for long-formated data
+##
 if (!isGeneric('spectra<-')) {
   setGeneric('spectra<-', function(object, value)
     standardGeneric('spectra<-'))
 }
 
 ## for a data.frame
-setReplaceMethod("spectra", "data.frame",
-  function(object, value) {
+spectra_replace.data.frame <-  function(object, value) {
 
     # if given a formula
     if (is(value, 'formula')) {
@@ -288,7 +291,8 @@ setReplaceMethod("spectra", "data.frame",
   
     res
   }
-)
+
+setReplaceMethod("spectra", "data.frame", spectra_replace.data.frame)
 
 ## for a Spectra* object
 setReplaceMethod("spectra", "Spectra",
@@ -316,14 +320,22 @@ setReplaceMethod("spectra", "Spectra",
   }
 )
 
-## Spectra setter for col-based dataset
-if (!isGeneric('spectra_from_col<-')) {
-  setGeneric('spectra_from_col<-', function(object, value)
-    standardGeneric('spectra_from_col<-'))
+## 
+if (!isGeneric('spectra_wide<-')) {
+  setGeneric('spectra_wide<-', function(object, value)
+    standardGeneric('spectra_wide<-'))
+}
+
+setReplaceMethod("spectra_wide", "data.frame", spectra_replace.data.frame)
+
+## Spectra setter for long-formatted (col-based) dataset
+if (!isGeneric('spectra_long<-')) {
+  setGeneric('spectra_long<-', function(object, value)
+    standardGeneric('spectra_long<-'))
 }
 
 ## for a data.frame
-setReplaceMethod("spectra_from_col", "data.frame",
+setReplaceMethod("spectra_long", "data.frame",
   function(object, value) {
     if (is(value, 'formula')) {
       ind.vars <- lapply(.parse_formula(value, object), function(x) which(names(object) %in% x))
@@ -335,7 +347,7 @@ setReplaceMethod("spectra_from_col", "data.frame",
 
     }
     else {
-      stop("Only the formula interface is supported by spectra_from_col() for the time being. Refer to the man page for help using it.")
+      stop("Only the formula interface is supported by spectra_long() for the time being. Refer to the man page for help using it.")
     }
 
     res <- Spectra(id = ids, wl = wl, nir = nir)
@@ -363,7 +375,10 @@ setReplaceMethod("ids", "Spectra",
     if (!is.character(value)) {
       value <- as.character(value)
     }
-    object@id <- value
+    nm <- names(object@id)
+    id <- data.frame(value)
+    names(id) <- nm
+    object@id <- id
     object
   }
 )
@@ -376,7 +391,10 @@ setReplaceMethod("ids", "SpectraDataFrame",
       if (length(all.vars(value)) == 1) {
         mf <- model.frame(formula=value, data=object)
         # assigning the id slot
-        object@id <- as.character(mf[, 1])
+        nm <- names(object@id)
+        id <- data.frame(as.character(mf[, 1]))
+        names(id) <- nm
+        object@id <- id
         # removing the id col from the data slot
         object@data <- object@data[, -which(names(object@data) == names(mf))]
         # if nothing left in the data slot, back to a Spectra object!
@@ -396,10 +414,16 @@ setReplaceMethod("ids", "SpectraDataFrame",
         if (!is.character(value)) {
           value <- as.character(value)
         }
-        object@id <- value
+        nm <- names(object@id)
+        id <- data.frame(value)
+        names(id) <- nm
+        object@id <- id
       }
       else {
-        object@id <- as.character(value)
+        nm <- names(object@id)
+        id <- data.frame(as.character(value))
+        names(id) <- nm
+        object@id <- id
       }
     }
     object

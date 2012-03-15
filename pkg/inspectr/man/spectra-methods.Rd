@@ -1,12 +1,23 @@
 \name{spectra}
+\docType{methods}
 \alias{spectra}
 \alias{spectra<-}
+\alias{spectra_wide<-}
+\alias{spectra_long<-}
+\alias{spectra,Spectra-method}
+\alias{spectra<-,data.frame-method}
+\alias{spectra_wide<-,data.frame-method}
+\alias{spectra_long<-,data.frame-method}
+\alias{spectra<-,Spectra-method}
+\alias{spectra<-,SpectraDataFrame-method}
 
 \title{Retrieves or sets the spectra of a \code{Spectra*} objects.}
 
 \usage{
 spectra(object, ...)
 spectra(object) <- value
+spectra_wide(object) <- value
+spectra_long(object) <- value
 }
 
 \description{Either retrieves the spectra matrix from a \code{Spectra*} object, or creates a \code{Spectra*} object from a \code{"data.frame"} object different interfaces detailed below.}
@@ -48,6 +59,10 @@ You can also combine the placeholders:
     \item \code{spectra(object) <- id_field ~ ... ~ 350:2500} will create a \code{SpectraDataFrame} object with ids from the id_field column, all spectral bands between 350 and 2500 nm. The data slot is given all the remaining columns.
   }
 }
+}
+
+\section{About long and wide formats}{
+
 }
 
 \value{If applied on a \code{"data.frame"}, either a \code{Spectra} or a \code{SpectraDataFrame} object. If applied on a \code{Spectra*} object, a vector.}

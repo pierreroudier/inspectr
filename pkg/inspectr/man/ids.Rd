@@ -1,6 +1,10 @@
 \name{ids}
+\docType{methods}
 \alias{ids}
 \alias{ids<-}
+\alias{ids,Spectra-method}
+\alias{ids<-,Spectra-method}
+\alias{ids<-,SpectraDataFrame-method}
 
 \title{Retrieves or sets the ids of a \code{Spectra*} object.}
 
@@ -32,7 +36,15 @@ If all the columns are used to create the \code{Spectra*} object, a \code{Spectr
 \seealso{\code{\link{spectra}}, \code{\link{Spectra-class}}, \code{\link{SpectraDataFrame-class}}}
 
 \examples{
-ids(foo)
-ids(foo) <- seq_len(nrow(foo))
-ids(foo)
+# Retrieving ids
+#ids(foo)
+
+# Setting ids using a vector of values
+#ids(foo) <- seq_len(nrow(foo))
+#ids(foo)
+
+# Setting ids using an attribute
+#foo$new_id <- seq_len(nrow(foo)) + 1000
+#ids(foo) <- ~ new_id
+#ids(foo)
 }

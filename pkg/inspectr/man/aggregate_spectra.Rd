@@ -1,4 +1,8 @@
 \name{aggregate_spectra}
+\docType{methods}
+
+\alias{aggregate_spectra,Spectra-method}
+\alias{aggregate_spectra,SpectraDataFrame-method}
 \alias{aggregate_spectra}
 
 \title{Aggregates spectral and data information}

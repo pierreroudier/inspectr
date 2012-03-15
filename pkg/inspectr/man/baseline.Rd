@@ -1,9 +1,11 @@
 \name{baseline}
+\docType{methods}
 \alias{baseline}
+\alias{baseline,Spectra-method}
 
 \title{Baseline correction using the baseline package}
 
-\usage{baseline(obj, method = 'irls', ...)}
+\usage{baseline(spectra, method = 'irls', ...)}
 
 \description{Estimates baselines for the spectra in the \code{obj} object, using the algorithm named in 'method'.}
 
@@ -30,7 +32,7 @@ Additionally, the baseline package provides a nice GUI that helps choosing the g
 \value{An object of the same class as \code{obj} with the continuum removed from its spectra.}
 
 \arguments{
-  \item{obj}{an object inheriting from class \code{Spectra}}
+  \item{spectra}{an object inheriting from class \code{Spectra}}
   \item{method}{baseline correction method available in the baseline package}
   \item{...}{additional arguments to be passed to \code{method}}
 }

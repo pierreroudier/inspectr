@@ -19,6 +19,9 @@
 * resolution method renamed res to avoid conflict with ggplot2
 * removed unseparate() method as rbind() is doing the exact same thing now
 * separate() now available for Spectra objects
+* bugfixes on mutate()
+* introduced distinct spectra_wide<- and spectra_long<- initialising functions
+* `[[` and `$` can now be used to promote a Spectra to a SpectraDataFrame object
 
 -------------------------- inspectr 0.2-0 (2011-11-10) --------------------------
 * Switch the get_data()/data() methods to features() (as data() is protected)
