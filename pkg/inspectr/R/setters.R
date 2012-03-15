@@ -224,7 +224,7 @@ if (!isGeneric('spectra<-')) {
 }
 
 ## for a data.frame
-spectra_replace.data.frame <-  function(object, value) {
+.spectra_replace.data.frame <-  function(object, value) {
 
     # if given a formula
     if (is(value, 'formula')) {
@@ -292,7 +292,7 @@ spectra_replace.data.frame <-  function(object, value) {
     res
   }
 
-setReplaceMethod("spectra", "data.frame", spectra_replace.data.frame)
+setReplaceMethod("spectra", "data.frame", .spectra_replace.data.frame)
 
 ## for a Spectra* object
 setReplaceMethod("spectra", "Spectra",
@@ -326,7 +326,7 @@ if (!isGeneric('spectra_wide<-')) {
     standardGeneric('spectra_wide<-'))
 }
 
-setReplaceMethod("spectra_wide", "data.frame", spectra_replace.data.frame)
+setReplaceMethod("spectra_wide", "data.frame", .spectra_replace.data.frame)
 
 ## Spectra setter for long-formatted (col-based) dataset
 if (!isGeneric('spectra_long<-')) {

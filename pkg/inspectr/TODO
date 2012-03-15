@@ -3,15 +3,17 @@
 - Clean the NAMESPACE
 
 - Put some sample data (and document it)
+- Documentation, documentation
 - Push the SpatialSpectraDataFrame class
 
-- implement `features()<-` for SpectraDataFrames
+- allow rbind to work on Spectra + SpectraDataFrames (including NA for Spectra individuals)
+- what about cbind/strategy to add wavelengths to a collection?
 
 - Implement a sample.Spectra() method
 - Implement the Kennard-Stone algorithm for sampling
 
-- outlier analysis methods (Mahalonobis?) --> Just an illustration in the vignette
-- 2D correlation between two sets of spectra
+- outlier analysis methods (Mahalonobis?) --> Just an illustration in the vignette, use package:chemometrics
+- 2D correlation between two sets of spectra --> same
 
 - Document how to centre the spectra --> apply_spectra(foo, scale)
 - Implement wavelet-based wl selection

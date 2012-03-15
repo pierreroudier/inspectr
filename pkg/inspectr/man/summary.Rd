@@ -1,4 +1,4 @@
-\name{Summary}
+\name{summary}
 
 \alias{summary.Spectra}
 \alias{print.summary.Spectra}

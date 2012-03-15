@@ -1,4 +1,13 @@
--------------------------- inspectr 0.3-0 (2012-03-12) --------------------------
+-------------------------- inspectr 0.3-2 (2012-03-16) --------------------------
+* fixed important bug on plot() method
+* fixed silly bug on subset.SpectraDataFrame
+* fixed big on cut.Spectra
+
+-------------------------- inspectr 0.3-1 (2012-03-15) --------------------------
+* included new dim() method
+* corrected important bug: now init possible using SDF (not only S) using SpectraDataFrame()
+
+-------------------------- inspectr 0.3-0 (2012-03-15) --------------------------
 * ids can be returned as a data.frame or a vector (using as.vector option of ids())
 * ids can be collated to the features in the features() method
 * New rbind.Spectra*() method

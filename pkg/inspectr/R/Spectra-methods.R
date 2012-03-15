@@ -28,7 +28,6 @@
     else
       id <- data.frame(id = as.character(seq(1, nrow(nir))))
   }
-
   # if ids are actually given by the user
   else {
     # Test of inconsistent ids when id is specified by the user
@@ -298,6 +297,16 @@ definition = function(x) {
   }
 )
 
+setMethod(f='dim', signature='Spectra',
+definition=function(x) {
+    r <- c(nrow(obj), length(obj))
+    if ('data' %in% slotNames(x))
+      r <- c(r, ncol(features(obj)))
+    r
+  }
+)
+
+
 ## Returns spectral resolution of the wavelengths
 
 if (!isGeneric("res"))
@@ -404,11 +413,8 @@ setReplaceMethod("features", signature("Spectra", "ANY"),
       # Actual ID sanity check
       spectra_ids <- ids(object)
       if (is.numeric(key)) {
-        ind.key <- key
         key <- names(value)[key]
       }
-      else
-        ind.key <- which(names(value) == key)
 
       # Using the "key" name for ids
       names(spectra_ids) <- key
@@ -521,7 +527,7 @@ rbind.Spectra <- function(..., create_new_ids = FALSE, new_ids = NULL) {
     if (length(new_ids) == length(ids))
       ids <- new_ids
     else
-      stop("new_ids must have the same length as the total number of sopectra you are trying to collate together.")
+      stop("new_ids must have the same length as the total number of spectra you are trying to collate together.")
   }
     
   # If ids are not unique
@@ -554,7 +560,7 @@ rbind.SpectraDataFrame <- rbind.Spectra
 
 ## Split
 
-split.Spectra <- function(x, f, drop = FALSE, ...){
+setMethod("split", "Spectra", function(x, f, drop = FALSE, ...){
   
   # If length(f) <= 1, we consider f is giving the colname or index
   if (length(f) <= 1) {
@@ -562,9 +568,7 @@ split.Spectra <- function(x, f, drop = FALSE, ...){
   }
 
   lapply(split(seq_len(nrow(x)), f, ...), function(ind) x[ind, ])
-}
-
-setMethod("split", "Spectra", split.Spectra)
+})
 
 #`  Mutate a Spectra object by adding new or replacing existing columns.
 #`
@@ -584,7 +588,7 @@ setMethod("split", "Spectra", split.Spectra)
 #' @seealso \code{\link{mutate}}
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #' @export
-mutate.Spectra <- function (.data, ...){
+setMethod("mutate", "Spectra", function (.data, ...){
 
   wls <- wl(.data)
   uns <- wl_units(.data)
@@ -614,7 +618,7 @@ mutate.Spectra <- function (.data, ...){
   }
 
   res
-}
+})
 
 ## Separate calibration set vs validation set
 
@@ -622,17 +626,13 @@ if (!isGeneric("separate"))
   setGeneric("separate", function(obj, calibration, ...)
     standardGeneric("separate"))
 
-separate.Spectra <- function(obj, calibration){
+setMethod("separate", "Spectra", function(obj, calibration){
   if (calibration < 1)
     calibration <- floor(calibration*nrow(obj))
   calib <- sample(x=seq_len(nrow(obj)), size=calibration, replace = FALSE)
   valid <- setdiff(seq_len(nrow(obj)), calib)
   list(calibration=obj[calib, ], validation=obj[valid, ])
-}
-
-setMethod("separate", "Spectra", separate.Spectra)
-
-setMethod("mutate", "Spectra", mutate.Spectra)
+})
 
 #` Melting the spectra matrix
 #'
@@ -640,7 +640,12 @@ setMethod("mutate", "Spectra", mutate.Spectra)
 #' @export
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #` @import reshape2
-melt_spectra.Spectra <- function(obj, ...){
+if (!isGeneric('melt_spectra'))
+  setGeneric('melt_spectra', function(obj, ...)
+    standardGeneric('melt_spectra')
+)
+
+setMethod("melt_spectra", "Spectra", function(obj, ...){
 
   id.nm <- names(ids(obj))
   x <- data.frame(ids(obj), spectra(obj))
@@ -648,19 +653,17 @@ melt_spectra.Spectra <- function(obj, ...){
   res <- reshape2:::melt.data.frame(x, id.vars = id.nm, variable.name = 'wl', value.name="nir")
   res$wl <- as.numeric(as.character(res$wl))
   res
-}
-
-if (!isGeneric('melt_spectra'))
-  setGeneric('melt_spectra', function(obj, ...)
-    standardGeneric('melt_spectra')
-)
-
-setMethod("melt_spectra", "Spectra", melt_spectra.Spectra)
+})
 
 ## Selecting/cutting wavelengths
 
 # Negative values will be to remove, positive to select
-cut.Spectra <- function(x, wl, ...) {
+if (!isGeneric("cut")) {
+    setGeneric("cut", function(x, ...)
+        standardGeneric("cut"))
+}   
+
+setMethod("cut", "Spectra", function(x, ..., wl) {
   
   # If wl is negative, we REMOVE these
   if (any(wl < 0) & any(wl > 0) | any(wl == 0))
@@ -675,24 +678,17 @@ cut.Spectra <- function(x, wl, ...) {
   if (!all(wl %in% wl(x))) {
     stop("Selected wavelengths not present in the object")
   }
-  
-  ids <- ids(x)
-  unts <- wl_units(x)
-  idx <- laply(wl, function(x) which(wl(x) == x))
+
+  # Getting indices of the wavelengths to select
+  idx <- laply(wl, function(w) which(wl(x) == w))
+  # Subsetting spectra matrix
   nir <- spectra(x)[, idx]
   
-  res <- Spectra(wl = wl, nir = nir, id = ids, units = unts)
+  res <- Spectra(wl = wl, nir = nir, id = ids(x), units = wl_units(x))
 
   if ("data" %in% slotNames(x)) {
     res <- SpectraDataFrame(res, data = features(x))
   }
   
   res
-}
-
-if (!isGeneric("cut")) {
-    setGeneric("cut", function(x, ...)
-        standardGeneric("cut"))
-}   
-
-setMethod("cut", "Spectra", cut.Spectra)
+})

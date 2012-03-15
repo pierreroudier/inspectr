@@ -20,12 +20,15 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
     s.melt <- melt_spectra(x, attr = attr)
   }
 
+  # force id colname
+  names(s.melt)[1] <- 'id'
+
   if (gg) {
     .try_require("ggplot2")
     p <- ggplot(s.melt) 
 
     if (is.null(attr)) {
-      p <- p + geom_line(aes(x = wl, y = nir, group = id))
+      p <- p + geom_line(aes_string(x = 'wl', y = 'nir', group = 'id'))
     }
     else {
       p <- p + geom_line(aes_string(x = 'wl', y = 'nir', group = 'id', colour = attr))
@@ -34,8 +37,10 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
       labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Reflectance") +
       theme_bw()
   }
-  else
+  else {
+    .try_require("lattice")
     p <- xyplot(nir ~ wl, groups = id, data = s.melt, type = 'l', col.line = 'black', ...)
+  }
   p
 }
 

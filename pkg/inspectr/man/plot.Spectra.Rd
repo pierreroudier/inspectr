@@ -1,7 +1,7 @@
 \name{plot.Spectra}
 
 \alias{plot.Spectra}
-\alias{plot.SpectraDataFrame}
+\alias{plot_summary.Spectra}
 
 \title{Plots an object inheriting  from the Spectra class}
 

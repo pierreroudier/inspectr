@@ -28,6 +28,6 @@ Clark, R.N., and Roush,  T.L. 1984. Reflectance spectroscopy: Quantitative analy
 \seealso{\code{\link{baseline}}, \code{\link{snv}}, \code{\link{rnv}}}
 
 \examples{
-# res <- apply_spectra(foo, continuum_removal)
-# plot(res)
+# r <- apply_spectra(foo, continuum_removal)
+# plot(r)
 }

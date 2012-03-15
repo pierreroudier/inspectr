@@ -67,19 +67,17 @@ rnv <- function(x, r){
 
 ## Baseline using the baseline package
 
-baseline.Spectra <- function(spectra, method = 'irls', ...) {
-  object <- spectra
-  new_nir <- baseline(spectra(object), method = method, ...)
-  spectra(object) <- getCorrected(new_nir)
-  object
-}
-
 if (!isGeneric('baseline'))
   setGeneric('baseline', function(spectra, method = 'irls', ...)
     standardGeneric('baseline')
 )
 
-setMethod('baseline', 'Spectra', baseline.Spectra)
+setMethod('baseline', 'Spectra', function(spectra, method = 'irls', ...) {
+  object <- spectra
+  new_nir <- baseline(spectra(object), method = method, ...)
+  spectra(object) <- getCorrected(new_nir)
+  object
+})
 
 #' Continuum removal
 #'

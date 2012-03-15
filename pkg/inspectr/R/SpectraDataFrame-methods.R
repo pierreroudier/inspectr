@@ -3,8 +3,8 @@
   dotargs <- list(...)
 
   # Initialisation from Spectra object(s)
-  if (any(sapply(dotargs, class) == "Spectra")) {
-    id_spectra <- which(sapply(dotargs, class) == "Spectra")
+  if (any(sapply(dotargs, inherits, "Spectra"))) {
+    id_spectra <- which(sapply(dotargs, inherits, "Spectra"))
     # if there's more than one Spectra object
     if (length(id_spectra) > 1) {
       ss <- dotargs[id_spectra]
@@ -105,6 +105,59 @@ setMethod("features", "SpectraDataFrame",
       res <- obj@data
     }
     res
+  }
+)
+
+## Append or replace data
+
+if (!isGeneric('features<-'))
+  setGeneric('features<-', function(object, value, ...)
+    standardGeneric('features<-')
+)
+
+setReplaceMethod("features", signature("SpectraDataFrame", "ANY"),
+  # safe enables id check
+  # key gives the column name of the ids in the data.frame
+  function(object, value, safe = TRUE, key = NULL, remove_id = TRUE, append = TRUE) {
+    
+    if (!inherits(value, "data.frame"))
+      stop('data must be provided as a data.frame object')
+
+    if (safe) {
+      if (is.null(key))
+        stop("In the safe mode, you need to provide either the column name of the sample ids to the key option.")
+      if (length(key) != 1)
+        stop("Please provide only ONE id column.")
+
+      if (is.numeric(key)) {
+        key <- names(value)[key]
+      }
+
+      if (append) {
+        # Actual ID sanity check
+        d <- features(object, include_id = TRUE)
+        # Using the "key" name for ids
+        names(d[names(ids(object))]) <- key
+      }
+      else {
+        d <- ids(object)
+        # Using the "key" name for ids
+        names(d) <- key
+      }
+      # Put data together
+      data <- join(d, value,  by = key, type = "left", match = "first")
+      # removing the id column      
+      if (remove_id)
+        data <- data[, -1*which(names(data) == key), drop = FALSE]
+    }
+    else {
+      warning("Sample ID check has been disabled. This mode assumes you made sure the order of the rows in your data is consistent with the order in which these samples appear in the Spectra object.")
+      
+      if (append) data <- data.frame(existing_data, value)
+      else data <- value
+    }
+    
+    SpectraDataFrame(object, data = data)
   }
 )
 
@@ -220,7 +273,7 @@ names.SpectraDataFrame <- function(x) names(x@data)
 
 #` Melting the spectra matrix
 #'
-melt_spectra.SpectraDataFrame <- function(obj, attr = NULL, ...){
+setMethod("melt_spectra", "SpectraDataFrame", function(obj, attr = NULL, ...){
   
   id.nm <- names(ids(obj))
 
@@ -237,9 +290,7 @@ melt_spectra.SpectraDataFrame <- function(obj, attr = NULL, ...){
   res <- reshape2:::melt.data.frame(x, id.vars = c(id.nm, attr), variable.name = 'wl', value.name = "nir")
   res$wl <- as.numeric(as.character(res$wl))
   res
-}
-
-setMethod("melt_spectra", "SpectraDataFrame", melt_spectra.SpectraDataFrame)
+})
 
 ## Subset SDF with a subset/select query
 
@@ -266,8 +317,7 @@ subset.SpectraDataFrame <- function(x, subset, select, drop = FALSE, ...) {
   # remove unused factors
   df_sub <- droplevels(df_sub)
   id_selected <- which(rownames(df) %in% rownames(df_sub))
-  x <- SpectraDataFrame(wl=wl(x), nir=spectra(x)[id_selected, , drop = FALSE], id=id(x)[id_selected, 1, drop = FALSE], units=units(x), data=df_sub)
-  x
+  SpectraDataFrame(wl = wl(x), nir = spectra(x)[id_selected, , drop = FALSE], id = ids(x)[id_selected, 1, drop = FALSE], units = wl_units(x), data = df_sub)
 }
 
 setMethod("subset", "SpectraDataFrame", subset.SpectraDataFrame)

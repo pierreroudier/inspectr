@@ -5,12 +5,14 @@
 \alias{features<-}
 \alias{features,SpectraDataFrame-method}
 \alias{features<-,Spectra-method}
+\alias{features<-,SpectraDataFrame-method}
 
 \title{Retrieves or sets the data slot of a SpectraDataFrame object.}
 
 \usage{
-\S4method{features}{Spectra}(object, ..., include_id = FALSE)
-\S4method{features<-}{Spectra}(object, safe = TRUE, key = NULL, remove_id = TRUE) <- value
+  \S4method{features}{SpectradataFrame}(object, ..., include_id = FALSE)
+  \S4method{"features<-"}{Spectra}(object, safe = TRUE, key = NULL, remove_id = TRUE) <- value
+  \S4method{"features<-"}{SpectraDataFrame}(object, safe = TRUE, key = NULL, remove_id = TRUE, append = TRUE) <- value
 }
 
 \description{Either retrieves the attributes values from the data slot of a SpectraDataFrame object, or upgrades a Spectra object to a SpectraDataFrame object by initialising its data slot by a suitable \code{"data.frame"} object.}
@@ -28,6 +30,7 @@ If applied on a \code{Spectra*} object, a data.frame.
   \item{key}{name of the column of the data.frame storing the ids for the SQL join.}
   \item{remove_id}{if TRUE, ids used for the SQL join are removed from the data slot after the join.}
   \item{include_id}{if TRUE, the ids of the spectra are added in a field of the data.frame}
+  \item{append}{if TRUE, the data is appended to any existing data. if FALSE, the data provided is erasing any existing data.}
 }
 
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
@@ -35,7 +38,18 @@ If applied on a \code{Spectra*} object, a data.frame.
 \seealso{\code{\link{spectra}}, \code{\link{wl}}, \code{\link{SpectraDataFrame-class}}}
 
 \examples{
+# Printing available data
 #features(foo)
+
+# Promoting a Spectra to a SpectraDataFrame object
 #bar <- as(foo, "Spectra")
 #features(bar, key = 'id') <- some_data
+
+# Adding data to an existing SpectraDataFrame object
+#features(foo, key = 'id') <- bar
+#features(foo)
+
+# Replacing data of an existing SpectraDataFrame object
+#features(foo, key = 'id', append = FALSE) <- bar
+#features(foo)
 }
