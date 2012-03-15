@@ -67,14 +67,15 @@ rnv <- function(x, r){
 
 ## Baseline using the baseline package
 
-if (!isGeneric('baseline'))
-  setGeneric('baseline', function(spectra, method = 'irls', ...)
-    standardGeneric('baseline')
+if (!isGeneric('base_line'))
+  setGeneric('base_line', function(object, ...)
+    standardGeneric('base_line')
 )
 
-setMethod('baseline', 'Spectra', function(spectra, method = 'irls', ...) {
-  object <- spectra
-  new_nir <- baseline(spectra(object), method = method, ...)
+setMethod('base_line', 'Spectra', function(object, ...) {
+  .try_require('baseline')
+  nir <- spectra(object)
+  new_nir <- baseline:::baseline(nir, ...)
   spectra(object) <- getCorrected(new_nir)
   object
 })

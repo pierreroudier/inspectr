@@ -20,7 +20,7 @@ S3method(plot, Spectra)
 S3method(names, SpectraDataFrame)
 S3method("names<-", SpectraDataFrame)
 
-exportMethods(spectra, "spectra<-", "spectra_long<-", "spectra_wide<-", wl, "wl<-", ids, "ids<-", features, "features<-", wl_units, "wl_units<-", res, "[", "$", "[[", cut, melt_spectra, baseline)
+exportMethods(spectra, "spectra<-", "spectra_long<-", "spectra_wide<-", wl, "wl<-", ids, "ids<-", features, "features<-", wl_units, "wl_units<-", res, "[", "$", "[[", cut, melt_spectra, base_line)
 exportMethods("coordinates<-")
 exportMethods(aggregate_spectra, subset, mutate, split)
 

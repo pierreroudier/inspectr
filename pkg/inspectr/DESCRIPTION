@@ -1,7 +1,7 @@
 Package: inspectr
 Type: Package
 Title: Stores and eases the manipulation of spectra and associated data
-Version: 0.3-2
+Version: 0.3-3
 Date: 2012-03-16
 Author: Pierre Roudier <pierre.roudier@gmail.com>
 Maintainer: Pierre Roudier <pierre.roudier@gmail.com>

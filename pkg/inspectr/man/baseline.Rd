@@ -1,11 +1,11 @@
-\name{baseline}
+\name{base_line}
 \docType{methods}
-\alias{baseline}
-\alias{baseline,Spectra-method}
+\alias{base_line}
+\alias{base_line,Spectra-method}
 
 \title{Baseline correction using the baseline package}
 
-\usage{baseline(spectra, method = 'irls', ...)}
+\usage{base_line(object, ...)}
 
 \description{Estimates baselines for the spectra in the \code{obj} object, using the algorithm named in 'method'.}
 
@@ -32,9 +32,8 @@ Additionally, the baseline package provides a nice GUI that helps choosing the g
 \value{An object of the same class as \code{obj} with the continuum removed from its spectra.}
 
 \arguments{
-  \item{spectra}{an object inheriting from class \code{Spectra}}
-  \item{method}{baseline correction method available in the baseline package}
-  \item{...}{additional arguments to be passed to \code{method}}
+  \item{object}{an object inheriting from class \code{Spectra}}
+  \item{...}{additional arguments to be passed to the \code{baseline} function in the baseline package. The main option would be \code{'method'}, to switch between the several baseline methods presented in teh details section.}
 }
 
 \references{
@@ -46,8 +45,25 @@ Kristian Hovde Liland and Bjrn-Helge Mevik (2011). baseline: Baseline Correction
 \seealso{\code{\link{continuum_removal}}, \code{\link{snv}}, \code{\link{rnv}}}
 
 \examples{
+# Correction using the default method (irls)
+#plot(foo)
+#bar <- base_line(foo)
+#plot(bar)
 
-## Not run:
+# Specifying another method for baseline calculation
+#plot(foo)
+#bar <- base_line(foo, method = "rfbaseline")
+#plot(bar)
+
+# Using the baseline package independently (useful to plot the corrections)
+#plot(foo)
+#bl <- baseline(spectra(foo), method = 'irls')
+#class(bl) # this is a baseline object
+#plot(bl)
+#spectra(foo) <- getCorrected(bl)
+#plot(foo)
+
+# Using the baselineGUI with inspectr
 # plot(df)
 # baselineGUI(spectra(df))
 ## When happy with a configuration, clik "Apply to all" and 
