@@ -1,9 +1,9 @@
+import(baseline)
 importFrom(lattice,xyplot)
 import(reshape2)
 import(stringr)
 import(plyr)
 import(sp)
-import(baseline)
 
 exportClasses(
   Spectra,
