@@ -267,10 +267,11 @@ setReplaceMethod("wl_units", "Spectra",
 #'
 #' @export
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-setMethod(f='length', signature='Spectra',
-  definition=function(x)
+# setMethod(f='length', signature='Spectra',
+#   definition=
+length.Spectra <- function(x)
     ncol(x@nir)
-)
+# )
 
 #' Returns the number of samples in the object
 #'
@@ -280,31 +281,33 @@ setMethod(f='length', signature='Spectra',
 #' @export
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 setMethod(f='nrow', signature='Spectra',
-definition=function(x)
-    nrow(ids(x))
+definition = function(x)
+  nrow(ids(x))
 )
 
-#' Returns the number of data cols in the object
-#'
+' Returns the number of data cols in the object
+'
 setMethod(f='ncol', signature='Spectra',
 definition = function(x) {
-    if ("data" %in% slotNames(x)) {
-      n <- ncol(x@data)
-    } else {
-      n <- NULL
-    }
-    n
+  if ("data" %in% slotNames(x)) {
+    n <- ncol(x@data)
+  } else {
+    n <- NULL
   }
+  n
+}
 )
 
-setMethod(f='dim', signature='Spectra',
-definition=function(x) {
-    r <- c(nrow(obj), length(obj))
-    if ('data' %in% slotNames(x))
-      r <- c(r, ncol(features(obj)))
-    r
+# setMethod(f='dim', signature='Spectra',
+# definition=
+dim.Spectra <- function(x) {
+  r <- c(nrow(x), length(x))
+  if ('data' %in% slotNames(x)) {
+    r <- c(r, ncol(features(x)))
   }
-)
+  r
+}
+# )
 
 
 ## Returns spectral resolution of the wavelengths

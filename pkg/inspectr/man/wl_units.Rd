@@ -17,7 +17,7 @@
 \usage{
 wl_units(object)
 wl_units(object) <- value
-res(x, ...)
+res(x)
 }
 
 \description{Retrieves the wavelengths units and the spectral resolution from \code{Spectra*} objects.}
@@ -27,16 +27,21 @@ res(x, ...)
 \arguments{
   \item{object, x}{an object inheriting from class \code{Spectra}, or a \code{"numeric"} vector for \code{resolution}}
   \item{value}{a character string}
-  \item{...}{ignored}
 }
 
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
 
 \examples{
-#wl(foo)
-#range(wl(foo))
-#res(foo)
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
 
-#wl(foo) <- wl(foo) + 1000
-#wl(foo)
+# Print wavelength information
+wl(australia)
+range(wl(australia))
+res(australia)
+
+# Manipulate wavelength information
+wl(australia) <- wl(australia) + 1000
+wl(australia)
 }

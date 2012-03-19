@@ -1,6 +1,24 @@
-.kenstone.Spectra <- function(x, size, ...) {
-  kenstone.matrix(spectra(x), size = size, ...)
-}
+if (!isGeneric("kenstone"))
+  setGeneric("kenstone", function(x, size, ...)
+    standardGeneric("kenstone"))
+
+setMethod("kenstone", "Spectra", 
+  function(x, size, ...) {
+    idx <- kenstone.matrix(spectra(x), size = size, ...)
+    x[idx,]
+  }
+)
+
+if (!isGeneric("optisim"))
+  setGeneric("optisim", function(x, size, ...)
+    standardGeneric("optisim"))
+
+setMethod("optisim", "Spectra", 
+  function(x, size, ...) {
+    idx <- optisim.matrix(spectra(x), size = size, ...)
+    x[idx,]
+  }
+)
 
 ## Kennard-Stone algorithm for calibration set selection
 ##
@@ -96,8 +114,14 @@ kenstone.matrix <- function(x, size, progress = TRUE, ...){
 ## -- use it on PCs to compress the data !! --
 ##
 #
-# b is the number of objects in the random subset
+# In my (short) experience, optisim() is usually ~10 times
+# faster than kenstone().
 #
+# B is the number of objects in the random subset
+#
+# idx <- optisim(spectra(foo), size = 15)
+# idx <- optisim(foo[, 'PC1', 'PC2', 'PC3'], size = 15)
+# 
 optisim.matrix <- function(x, size, B = round(0.10*nrow(x)), progress = TRUE, ...) { 
   
   n <- nrow(x)

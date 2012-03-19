@@ -2,20 +2,18 @@
 \docType{methods}
 \title{Retrieve dimensions of Spectra* objects}
 
-\alias{nrow}
-\alias{ncol}
-\alias{dim}
-\alias{length}
 \alias{nrow,Spectra-method}
 \alias{ncol,Spectra-method}
-\alias{dim,Spectra-method}
-\alias{length,Spectra-method}
+\alias{dim}
+\alias{length}
+\alias{dim.Spectra}
+\alias{length.Spectra}
 
 \usage{
-\S4method{nrow}{Spectra}(x)
+dim(x)
+length(x)
 \S4method{ncol}{Spectra}(x)
-\S4method{length}{Spectra}(x)
-\S4method{dim}{Spectra}(x)
+\S4method{nrow}{Spectra}(x)
 }
 
 \arguments{
@@ -50,8 +48,12 @@
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
 
 \examples{
-#nrow(foo)
-#ncol(foo)
-#length(foo)
-#dim(foo)
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
+nrow(australia)
+ncol(australia)
+length(australia)
+dim(australia)
 }

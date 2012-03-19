@@ -1,3 +1,8 @@
+-------------------------- inspectr 0.3-4 (2012-03-19) --------------------------
+* added "australia" data 
+* big clean NAMESPACE 
+* various bugfixes
+
 -------------------------- inspectr 0.3-3 (2012-03-16) --------------------------
 * baseline renamed base_line to remove confusion
 * bugfix for base_line()

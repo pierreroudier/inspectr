@@ -10,7 +10,7 @@
 \title{Retrieves or sets the data slot of a SpectraDataFrame object.}
 
 \usage{
-  \S4method{features}{SpectradataFrame}(object, ..., include_id = FALSE)
+  \S4method{features}{SpectraDataFrame}(object, ..., include_id = FALSE)
   \S4method{"features<-"}{Spectra}(object, safe = TRUE, key = NULL, remove_id = TRUE) <- value
   \S4method{"features<-"}{SpectraDataFrame}(object, safe = TRUE, key = NULL, remove_id = TRUE, append = TRUE) <- value
 }
@@ -38,18 +38,27 @@ If applied on a \code{Spectra*} object, a data.frame.
 \seealso{\code{\link{spectra}}, \code{\link{wl}}, \code{\link{SpectraDataFrame-class}}}
 
 \examples{
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
 # Printing available data
-#features(foo)
+features(australia)
 
 # Promoting a Spectra to a SpectraDataFrame object
-#bar <- as(foo, "Spectra")
-#features(bar, key = 'id') <- some_data
+s <- as(australia, "Spectra")
+# Generating dummy data
+d <- data.frame(id = ids(australia)[,1], foo = runif(nrow(australia)), bar = sample(LETTERS[1:5], size = nrow(australia), replace = TRUE))
+head(d)
+# Affecting data to Spectra object
+features(s, key = 'id') <- d
+summary(s)
 
 # Adding data to an existing SpectraDataFrame object
-#features(foo, key = 'id') <- bar
-#features(foo)
+features(australia, key = 'id') <- d
+features(australia)
 
 # Replacing data of an existing SpectraDataFrame object
-#features(foo, key = 'id', append = FALSE) <- bar
-#features(foo)
+features(australia, key = 'id', append = FALSE) <- d
+features(australia)
 }

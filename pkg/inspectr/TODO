@@ -1,6 +1,9 @@
 -------------- Short term --------------------
 
 - Clean the NAMESPACE
+- implement "[<-"
+- implement ids(foo, as.vector = TRUE)
+- implement how to delete features from @data slot
 
 - Put some sample data (and document it)
 - Documentation, documentation

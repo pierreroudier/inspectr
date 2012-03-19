@@ -153,7 +153,7 @@ setReplaceMethod("features", signature("SpectraDataFrame", "ANY"),
     else {
       warning("Sample ID check has been disabled. This mode assumes you made sure the order of the rows in your data is consistent with the order in which these samples appear in the Spectra object.")
       
-      if (append) data <- data.frame(existing_data, value)
+      if (append) data <- data.frame(features(object), value)
       else data <- value
     }
     
