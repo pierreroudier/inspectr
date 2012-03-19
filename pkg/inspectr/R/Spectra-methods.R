@@ -612,15 +612,15 @@ setMethod("mutate", "Spectra", function (.data, ...){
   else
     nir <- spectra(.data)
 
-  res <- Spectra(wl = wls, nir = nir, id = ids, units = uns)
+  r <- Spectra(wl = wls, nir = nir, id = ids, units = uns)
 
   # transformations on the data - only for classes inheriting from SpectraDataFrame
-  if ("data" %in% slotNames(.data)) {
+  if (("data" %in% slotNames(.data)) & (length(cols) > 0)) { # testing if theres transformations left
     d <- sapply(cols, function(x) eval(x, features(.data), parent.frame()))
-    res <- SpectraDataFrame(res, data = as.data.frame(d))
+    r <- SpectraDataFrame(r, data = as.data.frame(d))
   }
 
-  res
+  r
 })
 
 ## Separate calibration set vs validation set

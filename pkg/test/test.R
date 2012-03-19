@@ -68,7 +68,7 @@ test_data <- join(df, nir_row, by = 'id')
 
 # From long to wide format (in case you got data in cols)
 foo <- nir_col
-spectra_from_col(foo) <- wl ~ ...
+spectra_long(foo) <- wl ~ ...
 
 # Create Spectra
 bar <- nir_row

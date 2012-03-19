@@ -6,11 +6,9 @@
 
 \description{
 This data set gathers 100 soil spectra, along side with their organic carbon, pH and clay content values. This data set has been collected by CSIRO.
-}
 
-\format{
-  This data frame contains the following columns:
-  \describe{
+The \code{data.frame} contains the following columns:
+  \itemize{
     \item{sr_no}{a unique identifier for each spectrum}
     \item{carbon}{soil organic carbon values}
     \item{ph}{soil pH values}
@@ -18,6 +16,7 @@ This data set gathers 100 soil spectra, along side with their organic carbon, pH
     \item{X350, X351, \dots, X2499, X2500}{reflectance in wavelengths 350 to 2500nm}
   }
 }
+
 \usage{
   data(australia)
 }

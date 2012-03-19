@@ -30,10 +30,19 @@ There is two distinct function for \code{Spectra} and \code{SpectraDataFrame} cl
 \seealso{\code{\link{apply_spectra}}}
 
 \examples{
-#m <- aggregate_spectra(foo, fun = mean)
-#summary(m)
-#plot(m)
-#m <- aggregate_spectra(foo, fun = mean, id = 'someFactor')
-#summary(m)
-#plot(m)
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
+# Aggregation on the whole collection
+m <- aggregate_spectra(australia, fun = mean)
+summary(m)
+plot(m)
+
+# Aggregation factor-wise
+australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE) # Generate some kind of factor
+summary(australia)
+m <- aggregate_spectra(australia, fun = mean, id = 'fact')
+summary(m)
+plot(m)
 }

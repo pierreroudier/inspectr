@@ -1,6 +1,6 @@
 \name{melt_spectra}
 \docType{methods}
-\alias{melt_spectra}
+\alias{melt_spectra-methods}
 \alias{melt_spectra,Spectra-method}
 \alias{melt_spectra,SpectraDataFrame-method}
 
@@ -33,8 +33,25 @@ This function is very useful when wanting to plot spectra using the lattice or g
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
 
 \examples{
-#head(res <- melt_spectra(foo))
-#head(res <- melt_spectra(foo, attr = 'somefactor'))
-#p <- ggplot(res) + geom_line(aes(x=wl, y=nir, group=id, colour=somefactor)) + theme_bw()
-#print(p)
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
+# Simple melt
+r <- melt_spectra(australia)
+head(r)
+
+\dontrun{
+# Melt against some factor (or continuous data), and plot
+# using ggplot2
+
+# Create some factor
+australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE) # Generate some kind of factor
+r <- melt_spectra(australia, attr = 'fact')
+
+# Create plot
+library(ggplot2)
+p <- ggplot(r) + geom_line(aes(x=wl, y=nir, group=id, colour=fact)) + theme_bw()
+print(p)
+}
 }

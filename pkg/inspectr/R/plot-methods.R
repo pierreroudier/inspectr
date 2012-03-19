@@ -115,7 +115,7 @@ plot_summary.Spectra <- function(x, fun = mean, se = FALSE, ...) {
   new_nir <- cbind(spectra(obj), new_nir)
   # Re-order the spectra matrix
   idx <- order(as.numeric(colnames(new_nir)))
-  new_nir <- new_nir[, idx]
+  new_nir <- new_nir[, idx, drop = FALSE]
 
   spectra(obj) <- new_nir
 

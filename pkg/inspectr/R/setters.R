@@ -340,22 +340,22 @@ setReplaceMethod("spectra_long", "data.frame",
     if (is(value, 'formula')) {
       ind.vars <- lapply(.parse_formula(value, object), function(x) which(names(object) %in% x))
       
-      wl <- object[, ind.vars$id]
-      nir_cols <- object[, ind.vars$nir, drop = FALSE]
-      nir <- t(nir_cols)
+      # In that case, id = names(nir), wl = id
+      wl <- as.numeric(as.character(object[, ind.vars$id]))
+      nir_mat <- object[, ind.vars$nir, drop = FALSE]
+      nir <- t(nir_mat)
       ids <- rownames(nir)
-
     }
     else {
       stop("Only the formula interface is supported by spectra_long() for the time being. Refer to the man page for help using it.")
     }
 
-    res <- Spectra(id = ids, wl = wl, nir = nir)
+    r <- Spectra(id = ids, wl = wl, nir = nir)
     cat("Wavelength range: ")
-    cat(min(wl(res), na.rm = TRUE), " to ", max(wl(res), na.rm = TRUE)," ", wl_units(res), "\n", sep = "")
-    cat("Spectral resolution: ", res(wl(res)) , " ",  wl_units(res), "\n", sep = "")
+    cat(min(wl(r), na.rm = TRUE), " to ", max(wl(r), na.rm = TRUE)," ", wl_units(r), "\n", sep = "")
+    cat("Spectral resolution: ", res(wl(r)) , " ",  wl_units(r), "\n", sep = "")
 
-    res
+    r
   }
 )
 

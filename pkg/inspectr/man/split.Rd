@@ -30,18 +30,26 @@ This is an adaptation of the \code{split} function in the base package.
 \seealso{\code{\link{separate}}, \code{\link{melt_spectra}}, \code{\link{lapply}}, and the \code{l*pply} family of function inthe plyr package.}
 
 \examples{
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
 # On a Spectra object, we need to provide a vector of factors
 # to split the object
-#idx <- sample(letters[1:5], replace = TRUE, size = nrow(s))
-#res <- split(s, idx)
-#str(res)
+s <- as(australia, 'Spectra')
+# We make up some kind of factor to split the data. 
+idx <- sample(letters[1:5], replace = TRUE, size = nrow(s)) # This is a vector
+r <- split(s, idx)
+str(r)
 
 # On a SpectradataFrame object, we can also provide the name or index 
 # of an attribute
-#res <- split(bar, 'let')
-#str(res)
+australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE) # Generate some kind of factor
+summary(australia)
+r <- split(australia, 'fact')
+str(r)
 
 # A list is returned, and is thus ready for use with lapply, or any
 # of the l*ply functions from the plyr package
-#lapply(res, nrow)
+lapply(r, nrow)
 }

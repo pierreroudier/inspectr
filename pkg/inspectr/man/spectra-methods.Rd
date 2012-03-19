@@ -62,7 +62,7 @@ You can also combine the placeholders:
 }
 
 \section{About long and wide formats}{
-
+...
 }
 
 \value{If applied on a \code{"data.frame"}, either a \code{Spectra} or a \code{SpectraDataFrame} object. If applied on a \code{Spectra*} object, a vector.}
@@ -76,3 +76,30 @@ You can also combine the placeholders:
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
 
 \seealso{\code{\link{wl}}, \code{\link{Spectra-class}}, \code{\link{SpectraDataFrame-class}}}
+
+\examples{
+# Loading example data
+data(australia)
+spectra_wide(australia) <- sr_no ~ ... ~ 350:2500
+
+# spectra is a short-hand for spectra_wide
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
+# For data formatted in the long format, 
+# use the spectra_long() constructor
+
+# Simulating data provided in long format
+m <- melt_spectra(australia)
+dl <- reshape2::acast(m, ... ~ sr_no)
+dl <- data.frame(wl = rownames(dl), dl, check.names = FALSE)
+big.head(dl)
+
+# Convert it into Spectra object
+spectra_long(dl) <- wl ~ ...
+summary(dl)
+
+# Then data can be added to promote it as a SpectraDataFrame
+features(dl, key = 'sr_no') <- features(australia, include_id = TRUE)
+summary(dl)
+}

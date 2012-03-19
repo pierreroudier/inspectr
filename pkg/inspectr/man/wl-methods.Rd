@@ -34,3 +34,22 @@ If all the columns are used to create the \code{Spectra*} object, a \code{Spectr
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
 
 \seealso{\code{\link{spectra}}, \code{\link{Spectra-class}}, \code{\link{SpectraDataFrame-class}}}
+
+\examples{
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
+# Retrieving wavelengths from Spectra* object
+wl(australia)
+
+# Replacing wavelength values - USE WITH CAUTION!
+wl(australia) <- 1:length(australia)
+wl(australia)
+
+# Use to initiate a Spectra* object from a data.frame
+data(australia)
+wl(australia) <- 350:2500
+ids(australia) <- ~ sr_no
+summary(australia)
+}

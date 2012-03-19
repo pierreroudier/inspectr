@@ -26,7 +26,15 @@ separate(obj, calibration, ...)
 \seealso{\code{\link{split}}, \code{\link{melt_spectra}}, \code{\link{lapply}}, and the \code{l*pply} family of function inthe plyr package.}
 
 \examples{
-#res <- separate(foo, calibration=0.7)
-#str(res)
-#lapply(res, nrow)
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
+l <- separate(australia, calibration=0.7)
+# The result is a list of two Spectra* objects
+str(l)
+lapply(l, nrow)
+
+summary(l$calibration)
+summary(l$validation)
 }

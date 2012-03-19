@@ -22,8 +22,9 @@
 \seealso{\code{\link{spectra}}, \code{\link{wl}}, \code{\link{Spectra-class}}, \code{\link{SpectraDataFrame}}}
 
 \examples{
-  my.wl <- 350:2500
-  my.id <- c("A", "B")
-  my.nir <- matrix(runif(2*length(my.wl)), nrow=2)
-  my.spec <- Spectra(wl = my.wl, nir = my.nir, id = my.id)
+  wls <- 350:2500
+  id <- c("A", "B")
+  nir <- matrix(runif(2*length(wls)), nrow = 2)
+  s <- Spectra(wl = wls, nir = nir, id = id, units = "nm")
+  summary(s)
 }

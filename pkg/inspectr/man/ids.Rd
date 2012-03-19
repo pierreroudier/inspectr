@@ -9,7 +9,7 @@
 \title{Retrieves or sets the ids of a \code{Spectra*} object.}
 
 \usage{
-ids(object, ...)
+ids(object, ..., as.vector = FALSE)
 ids(object) <- value
 }
 
@@ -23,12 +23,13 @@ If applied on a \code{"data.frame"} object, it is an helper function to create a
 If all the columns are used to create the \code{Spectra*} object, a \code{Spectra} object is created. If some attributes are left, they will be used to generate a \code{SpectraDataFrame} object.
 }
 
-\value{If applied on a \code{"data.frame"}, either a \code{Spectra} or a \code{SpectraDataFrame} object. If applied on a \code{Spectra*} object, a vector.}
+\value{If \code{as.vector} is TRUE, returns a vector, otherwise, returns a \code{data.frame}.}
 
 \arguments{
   \item{object}{a \code{"data.frame"} or an object inheriting from class \code{Spectra}}
   \item{value}{the wavelengths of the \code{Spectra*} object to create}
   \item{...}{Ignored}
+  \item{as.vector}{if set to TRUE, returns a vector, otherwise, returns a \code{data.frame}}
 }
 
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
@@ -36,15 +37,19 @@ If all the columns are used to create the \code{Spectra*} object, a \code{Spectr
 \seealso{\code{\link{spectra}}, \code{\link{Spectra-class}}, \code{\link{SpectraDataFrame-class}}}
 
 \examples{
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
 # Retrieving ids
-#ids(foo)
+ids(australia)
 
 # Setting ids using a vector of values
-#ids(foo) <- seq_len(nrow(foo))
-#ids(foo)
+ids(australia) <- seq_len(nrow(australia))
+ids(australia)
 
 # Setting ids using an attribute
-#foo$new_id <- seq_len(nrow(foo)) + 1000
-#ids(foo) <- ~ new_id
-#ids(foo)
+australia$new_id <- seq_len(nrow(australia)) + 1000
+ids(australia) <- ~ new_id
+ids(australia)
 }

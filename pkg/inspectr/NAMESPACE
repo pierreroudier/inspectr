@@ -30,6 +30,7 @@ importFrom(stringr,
 
 importFrom(plyr,
   aaply,
+  colwise,
   ddply,
   laply,
   llply,

@@ -39,6 +39,16 @@ These function are to be used in conjonction with \code{\link{apply_spectra}}.
 \seealso{\code{\link{apply_spectra}}, \code{\link{baseline}}}
 
 \examples{
-#bar <- apply_spectra(foo, snv)
-#plot(bar)
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
+# Standard Normal Variate transform
+s <- apply_spectra(australia, snv)
+plot(s)
+
+# Robust Normal Variate transform
+s <- apply_spectra(australia, rnv, r = 0.25)
+plot(s)
 }
+

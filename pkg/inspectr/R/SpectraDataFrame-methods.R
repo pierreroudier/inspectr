@@ -135,9 +135,9 @@ setReplaceMethod("features", signature("SpectraDataFrame", "ANY"),
 
       if (append) {
         # Actual ID sanity check
-        d <- features(object, include_id = TRUE)
+        d <- data.frame(ids(object), features(object))
         # Using the "key" name for ids
-        names(d[names(ids(object))]) <- key
+        names(d)[1] <- key
       }
       else {
         d <- ids(object)

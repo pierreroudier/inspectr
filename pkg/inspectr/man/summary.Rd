@@ -10,3 +10,9 @@
 \value{A \code{"summary.Spectra"} object}
 
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
+
+\examples{
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+summary(australia)
+}

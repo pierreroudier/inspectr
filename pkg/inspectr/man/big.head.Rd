@@ -25,11 +25,15 @@ implemented to check big data frames.}
   \item{f}{a single, positive integer}
 }
 
-\examples{big.head(mtcars)
-  big.tail(mtcars)
-  big.tail(mtcars, 10)
-  big.head(mtcars, 10, 2, 4)
-  big.head(mtcars, , , 1)
+\examples{
+big.head(mtcars)
+big.tail(mtcars)
+big.tail(mtcars, 10)
+big.head(mtcars, 10, 2, 4)
+big.head(mtcars, , , 1)
+
+data(australia)
+big.head(australia)
 }
 
 \seealso{\code{\link{head}}, \code{\link{tail}}}

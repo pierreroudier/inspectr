@@ -25,19 +25,23 @@ The philosophy of this plotting routine is to provide a "quick'n'dirty" way to p
 
 
 \examples{
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
 # Default plotting method
-#plot(foo)
+plot(australia)
 
 # Default plot using ggplot2
-#plot(foo, gg = TRUE)
+plot(australia, gg = TRUE)
 
 # Managing gaps in the spectra
-#bar <- cut(foo, c(-1*450:500, -1*1800:2050))
-#plot(foo, gg = TRUE, gaps = TRUE)
-#plot(foo, gg = TRUE, gaps = FALSE)
+s <- cut(australia, wl =c(-1*450:500, -1*1800:2050))
+plot(s, gaps = TRUE)
+plot(s, gaps = FALSE)
 
 # Using an attribute to group spectra
-#bar <- aggregate_spectra(foo, fun = mean, id = 'someFactor')
-#plot(bar, gg = TRUE, attr = 'someFactor')
-
+australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE) # Generate some kind of factor
+s <- aggregate_spectra(australia, fun = mean, id = 'fact')
+plot(s, gg = TRUE, attr = 'fact')
 }

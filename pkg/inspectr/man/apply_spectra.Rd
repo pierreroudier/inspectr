@@ -24,18 +24,23 @@ The philosophy of this function is to let the user free to use any function to p
 \seealso{\code{\link{aggregate_spectra}}, \code{\link{snv}}, \code{\link{rnv}}}
 
 \examples{
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
 # Second derivative
-#r <- apply_spectra(foo, diff, 2)
-#plot(r)
+r <- apply_spectra(australia, diff, 2)
+plot(r)
 
 # Smoothing kernel
-#k <- kernel("daniell", 20) # define a kernel
-#plot(k)
-#r <- apply_spectra(foo, kernapply, k)
-#plot(r)
+k <- kernel("daniell", 20) # define a kernel
+r <- apply_spectra(australia, kernapply, k)
+plot(r)
 
+\dontrun{
 # Savitzky-Golay filter (from the signal package)
-#library(signal)
-#r <- apply_spectra(foo, sgolayfilt, n = 33, p = 4)
-#plot(r)
+library(signal)
+r <- apply_spectra(australia, sgolayfilt, n = 33, p = 4)
+plot(r)
+}
 }

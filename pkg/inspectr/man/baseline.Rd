@@ -45,29 +45,34 @@ Kristian Hovde Liland and Bjrn-Helge Mevik (2011). baseline: Baseline Correction
 \seealso{\code{\link{continuum_removal}}, \code{\link{snv}}, \code{\link{rnv}}}
 
 \examples{
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
 # Correction using the default method (irls)
-#plot(foo)
-#bar <- base_line(foo)
-#plot(bar)
+bl <- base_line(australia)
+plot(bl)
 
 # Specifying another method for baseline calculation
-#plot(foo)
-#bar <- base_line(foo, method = "rfbaseline")
-#plot(bar)
+bl2 <- base_line(australia, method = "modpolyfit")
+plot(bl2)
 
 # Using the baseline package independently (useful to plot the corrections)
-#plot(foo)
-#bl <- baseline(spectra(foo), method = 'irls')
-#class(bl) # this is a baseline object
-#plot(bl)
-#spectra(foo) <- getCorrected(bl)
-#plot(foo)
+\dontrun{
+library(baseline)
+bl3 <- baseline(spectra(australia), method = 'irls')
+class(bl3) # this is a baseline object
+plot(bl3)
+# Affecting the baseline-corrected spectra back
+# to the SpectraDataFrame object
+spectra(australia) <- getCorrected(bl3)
+plot(australia)
 
 # Using the baselineGUI with inspectr
-# plot(df)
-# baselineGUI(spectra(df))
+baselineGUI(spectra(australia))
 ## When happy with a configuration, clik "Apply to all" and 
 ## save the results under a name, e.g. "corrected.spectra"
-# spectra(df) <- getCorrected(corrected.spectra)
-# plot(df)
+spectra(australia) <- getCorrected(corrected.spectra)
+plot(australia)
+}
 }

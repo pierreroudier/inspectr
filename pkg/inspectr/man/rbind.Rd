@@ -24,6 +24,14 @@ This method stacks two or more \code{Spectra*} objects together.
 }
 
 \examples{
-#bar <- rbind(foo, foo, create_new_ids = TRUE)
-#summary(bar)
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
+s <- rbind(australia, australia, create_new_ids = TRUE)
+summary(s)
+
+l <- separate(australia, calibration = 0.6)
+s <- rbind(l$validation, l$calibration)
+summary(s)
 }

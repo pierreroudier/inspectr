@@ -40,9 +40,12 @@
 \arguments{
   \item{x}{an object inheriting from class \code{Spectra}}
   \item{value}{a vector of values to be added to the object data slot}
+  \item{name}{name of the attribute to create or to query}
   \item{i}{row index, to be used for selecting individuals in the collection}
   \item{j}{selected wavelengths}
   \item{k}{selected data columns}
+  \item{drop}{ignored}
+  \item{...}{ignored}
 }
 
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
@@ -50,20 +53,27 @@
 \seealso{\code{\link{subset}}, \code{\link{aggregate_spectra}}}
 
 \examples{
-# Getting featrues information from SpectraDataFrame
-#foo$bar
-#foo[['bar']]
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
+# Getting features information from SpectraDataFrame
+australia$carbon
+australia[['carbon']]
+
+# Creating new features
+australia$foo <- runif(nrow(australia))
+australia[['bar']] <- runif(nrow(australia))
+summary(australia)
 
 # Replacing values
-#foo$bar <- runif(nrow(foo))
-#foo[['bar']] <- runif(nrow(foo))
+australia$foo <- sample(LETTERS[1:5], size = nrow(australia), replace = TRUE)
+australia[['bar']] <- sample(c(TRUE, FALSE), size = nrow(australia), replace = TRUE)
+summary(australia)
 
 # Promote Spectra to SpectraDataFrame
-#foo <- as(foo, 'Spectra')
-#foo$bar <- runif(nrow(foo))
-#summary(foo)
-
-#foo[['bar']] <- runif(nrow(foo))
-#foo[['bar']] <- runif(nrow(foo))
-#summary(foo)
+s <- as(australia, 'Spectra')
+class(s)
+s$foo <- runif(nrow(s))
+summary(s)
 }

@@ -40,12 +40,16 @@ Either the spectra, and/or the attributes (if the \code{.data} inherits from the
 }
 
 \examples{
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+
 # Modifying spectra
-#m <- mutate(foo, nir = log1p(1/nir))
-#plot(m)
+m <- mutate(australia, nir = log1p(1/nir))
+plot(m)
 
 # Modifying and creating attributes
-#m <- mutate(foo, octane = sqrt(octane), foo = octane + 1000, nir = log1p(1/nir))
-#summary(m)
-#plot(m)
+m <- mutate(australia, sqrt_carbon = sqrt(carbon), foo = clay + ph, nir = log1p(1/nir))
+summary(m)
+plot(m)
 }

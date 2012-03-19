@@ -29,17 +29,21 @@ The wavelengths are extracted if \code{wl > 0}, or removed if \code{wl < 0}. You
 \seealso{\code{\link{[}}}
 
 \examples{
-# Extracting a specific wavelengths range
-#bar <- cut(foo, wl = 450:550)
-#plot(bar)
+# Loading example data
+data(australia)
+spectra(australia) <- sr_no ~ ... ~ 350:2500
 
-#bar <- cut(foo, wl = c(450:550, 1850:2050))
-#plot(bar)
+# Extracting a specific wavelengths range
+s <- cut(australia, wl = 450:550)
+plot(s)
+
+s <- cut(australia, wl = c(450:550, 1850:2050))
+plot(s)
 
 # Removing a specific wavelengths range
-#bar <- cut(foo, wl = -1*450:550)
-#plot(bar)
+s <- cut(australia, wl = -1*450:550)
+plot(s)
 
-#bar <- cut(foo, wl = -1*c(450:550, 1850:2050))
-#plot(bar)
+s <- cut(australia, wl = -1*c(450:550, 1850:2050))
+plot(s)
 }
