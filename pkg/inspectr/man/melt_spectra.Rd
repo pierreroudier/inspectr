@@ -1,5 +1,6 @@
 \name{melt_spectra}
 \docType{methods}
+\alias{melt_spectra}
 \alias{melt_spectra-methods}
 \alias{melt_spectra,Spectra-method}
 \alias{melt_spectra,SpectraDataFrame-method}

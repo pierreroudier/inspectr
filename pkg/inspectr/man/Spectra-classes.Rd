@@ -5,13 +5,19 @@
 \alias{inspectr}
 \alias{Spectra-class}
 \alias{SpectraDataFrame-class}
+
+\alias{SpatialSpectra-class}
+\alias{SpatialSpectraDataFrame-class}
+
 \alias{as.data.frame.Spectra}
 \alias{as.data.frame.SpectraDataFrame}
+\alias{as.data.frame.SpatialSpectra}
+
 \alias{names.SpectraDataFrame}
 \alias{names<-.SpectraDataFrame}
 
-\alias{print, Spectra-method}
-\alias{show, Spectra-method}
+\alias{print,Spectra-method}
+\alias{show,Spectra-method}
 
 \title{Spectra* classes}
 
@@ -20,11 +26,15 @@ The inspectr package provides the user with S4 classes that have been developped
 
 The \code{Spectra} class is storing the spectra matrix, along with the wavelengths at which those have been measured, the units in whioch those wavelengths are expressed, and a unique id for each sample in the collection.
 
-The \code{SpectraDataFrame} classe is extending the \code{Spectra} class by giving the opportunity to store attribute data along with the spectra - this is mostly the case when we want to predict physical or chemical properties from the spectra set.
+The \code{SpectraDataFrame} class is extending the \code{Spectra} class by giving the opportunity to store attribute data along with the spectra - this is mostly the case when we want to predict physical or chemical properties from the spectra set.
+
+The \code{SpatialSpectra} and \code{SpatialSpectraDataFrame} classes are extending the \code{Spectra} and \code{SpectraDataFrame} classes using the \code{SpatialPoints} class from package sp. This allows to store spatial information on the dataset: coordinates, coordinate reference system, bounding box, etc.
 
 Common generic methods implemented for these classes include: 
  
 \code{summary}, \code{show}, \code{nrow}, \code{length}, \code{plot}, \code{[}, \code{[[}, \code{$}. 
+
+\code{SpatialPoints} methods from the sp package can be applied to \code{SpatialSpectra} and \code{SpatialSpectraDataFrame} objects are they inherit from this class. 
 }
 
 
@@ -33,14 +43,28 @@ Objects can be created by calls of the form \code{new("Spectra", ...)}, with the
 }
 
 \section{Slots}{
-Slots for Spectra* objects
-  \describe{
-    \item{\code{wl}:}{object of class \code{"numeric"}; the wavelengths at which the spectra has been measured}
-    \item{\code{nir}:}{object of class \code{"matrix"}; the spectra, with as many columns as wavelengths, and as many rows as samples}
-    \item{\code{id}:}{object of class \code{"data.frame"} with one attribute; the identification strings for each sample in the collection}
-    \item{\code{units}:}{object of class \code{"character"}; units in which the wavelengths are expressed}
-    \item{\code{data}:}{object of class \code{"data.frame"} containing the attribute data}
+\itemize{
+
+  \item{Slots for the Spectra class
+    \describe{
+      \item{\code{wl}:}{object of class \code{"numeric"}; the wavelengths at which the spectra has been measured}
+      \item{\code{nir}:}{object of class \code{"matrix"}; the spectra, with as many columns as wavelengths, and as many rows as samples}
+      \item{\code{id}:}{object of class \code{"data.frame"} with one attribute; the identification strings for each sample in the collection}
+      \item{\code{units}:}{object of class \code{"character"}; units in which the wavelengths are expressed}
+    }
   }
+
+    \item{Slots for the SpectraDataFrame class
+    \describe{
+      \item{\code{wl}:}{object of class \code{"numeric"}; the wavelengths at which the spectra has been measured}
+      \item{\code{nir}:}{object of class \code{"matrix"}; the spectra, with as many columns as wavelengths, and as many rows as samples}
+      \item{\code{id}:}{object of class \code{"data.frame"} with one attribute; the identification strings for each sample in the collection}
+      \item{\code{units}:}{object of class \code{"character"}; units in which the wavelengths are expressed}
+      \item{\code{data}:}{object of class \code{"data.frame"} containing the attribute data}
+    }
+  }
+
+}
 }
 
 \author{Pierre Roudier \email{pierre.roudier@gmail.com}}

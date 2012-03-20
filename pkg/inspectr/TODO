@@ -8,6 +8,7 @@
 - Binning
 - Matrix operations (maybe this could just be done by using spectra(foo)?)
 - sweep() would be good as well
+- splice correction using signal::interp(1)
 
 - Documentation, documentation
 - Begin to work on vignettes:

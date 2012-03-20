@@ -39,6 +39,8 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
   }
   else {
     .try_require("lattice")
+    # initiate dummy vars to pas R CMD check
+    wl <- nir <- id <- NULL
     p <- xyplot(nir ~ wl, groups = id, data = s.melt, type = 'l', col.line = 'black', ...)
   }
   p
@@ -77,7 +79,9 @@ plot_summary.Spectra <- function(x, fun = mean, se = FALSE, ...) {
   names(s.summary)[2] <- 'nir'
 
   if (plot.se) {
-#     s.se <- ddply(s.melt, 'wl', fun.se, ...)
+    # initiate dummy vars to pas R CMD check
+    wl <- nir <- nir_se <- NULL
+
     s.se <- ddply(s.melt, 'wl', function(x) {do.call(fun.se, list(x$nir))})
     names(s.se)[2] <- 'nir_se'
     

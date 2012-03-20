@@ -41,6 +41,7 @@ plot(s, gaps = TRUE)
 plot(s, gaps = FALSE)
 
 # Using an attribute to group spectra
+
 australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE) # Generate some kind of factor
 s <- aggregate_spectra(australia, fun = mean, id = 'fact')
 plot(s, gg = TRUE, attr = 'fact')

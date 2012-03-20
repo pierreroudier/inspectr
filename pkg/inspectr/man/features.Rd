@@ -1,7 +1,8 @@
 \name{features}
 \docType{methods}
 
-% \alias{features}
+\alias{features}
+\alias{features<-}
 \alias{features-methods}
 \alias{features,SpectraDataFrame-method}
 \alias{features<-,Spectra-method}

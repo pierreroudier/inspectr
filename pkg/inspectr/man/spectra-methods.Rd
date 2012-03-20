@@ -80,19 +80,72 @@ You can also combine the placeholders:
 \examples{
 # Loading example data
 data(australia)
-spectra_wide(australia) <- sr_no ~ ... ~ 350:2500
+class(australia) # this is a simple data.frame
+# structure of the data.frame: it is wide-formatted
+big.head(australia) 
+
+## CREATING Spectra OBJECTS
+##
+
+# Using spectra_wide() to initiate a Spectra from 
+# the data.frame
+spectra_wide(australia) <- sr_no ~ 350:2500
+summary(australia)
 
 # spectra is a short-hand for spectra_wide
 data(australia)
+spectra(australia) <- sr_no ~ 350:2500
+
+# It is possible to select wavelengths using the formula interface
+data(australia)
+spectra(australia) <- sr_no ~ 350:5:2500
+summary(australia)
+
+data(australia)
+spectra(australia) <- sr_no ~ 500:1800
+summary(australia)
+
+## CREATING SpectraDataFrame OBJECTS
+##
+
+# Using spectra()/spectra_wide() to initiate a SpectraDataFrame from 
+# the data.frame
+data(australia)
+spectra(australia) <- sr_no ~ carbon + ph + clay ~ 350:2500
+summary(australia)
+
+# Selecting data to be included in the SpectradataFrame object
+data(australia)
+spectra(australia) <- sr_no ~ carbon ~ 350:2500
+summary(australia)
+
+# Forcing the creation of new ids using the id keyword in the 
+# formula interface
+data(australia)
+spectra(australia) <- id ~ carbon ~ 350:2500
+summary(australia)
+ids(australia, as.vector = TRUE)
+
+# Using the "..." short-hand to select all the remaining columns
+data(australia)
 spectra(australia) <- sr_no ~ ... ~ 350:2500
+summary(australia)
+
+## CREATING Spectra OBJECTS FROM
+## LONG-FORMATTED DATA
+##
 
 # For data formatted in the long format, 
 # use the spectra_long() constructor
 
-# Simulating data provided in long format
+# Transforming data into long format
+# for demonstration's sake
+#
 m <- melt_spectra(australia)
 dl <- reshape2::acast(m, ... ~ sr_no)
 dl <- data.frame(wl = rownames(dl), dl, check.names = FALSE)
+
+# Here's long-formatted data 
 big.head(dl)
 
 # Convert it into Spectra object

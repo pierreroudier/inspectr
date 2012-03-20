@@ -7,23 +7,26 @@
 \alias{[[<-}
 \alias{$}
 \alias{$<-}
+
+\alias{'[',Spectra,ANY,ANY,missing-method}
+\alias{'[',SpectraDataFrame,ANY,ANY,missing-method}
+\alias{'[[',SpectraDataFrame,ANY,missing-method}
+\alias{'[[<-',Spectra,ANY,missing-method}
 \alias{[<-,Spectra-method}
-\alias{[,Spectra-method}
 \alias{[<-,SpectraDataFrame-method}
-\alias{[,SpectraDataFrame-method}
-\alias{[[<-,Spectra-method}
-\alias{[[,SpectraDataFrame-method}
+
+
 \alias{$<-,Spectra-method}
 \alias{$,SpectraDataFrame-method}
 
 \title{Extracting and replacing parts of Spectra* objects}
 
 \usage{
-  \S4method{[}{Spectra}(x, i, j, ..., drop = FALSE)
-  \S4method{[}{SpectraDataFrame}(x, i, j, ..., k, drop = FALSE)
+  \S4method{[}{Spectra,ANY,ANY,missing}(x, i, j, ..., drop = FALSE)
+  \S4method{[}{SpectraDataFrame,ANY,ANY,missing}(x, i, j, ..., k, drop = FALSE)
 
-  \S4method{[[}{SpectraDataFrame}(x, i, j, k, ..., drop = FALSE)
-  \S4method{[[}{Spectra}(x, i, j, ...) <- value
+  \S4method{[[}{SpectraDataFrame,ANY,missing}(x, i, j, k, ..., drop = FALSE)
+  \S4method{[[}{Spectra,ANY,missing}(x, i, j, ...) <- value
   
   \S4method{$}{SpectraDataFrame}(x, name)
   \S4method{$}{Spectra}(x, name) <- value  

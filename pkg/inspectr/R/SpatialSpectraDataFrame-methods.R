@@ -71,18 +71,22 @@ setReplaceMethod("coordinates", signature(object = "SpectraDataFrame", value = "
 
 ## coercition methods
 
-as.data.frame.SpatialSpectraDataFrame = function(x, ...)  {
-  coords <- as.data.frame(as(x, 'SpatialPoints'))
-  nir <- as.data.frame(spectra(x))
-  data <- features(x)
-  id <- ids(x)
-  df <- data.frame(id, coords, data, nir)
-  names(df) <- c('id', coordnames(x), names(data), wl(x))
+as.data.frame.SpatialSpectra = function(x, ...)  {
+  coords <- as.data.frame(as(x, 'SpatialPoints'), check.names = FALSE)
+  nir <- as.data.frame(spectra(x), check.names = FALSE)
+  id <- ids(x, as.vector = FALSE)
+  
+  if ('data' %in% slotNames(x)) {
+    df <- data.frame(id, coords, features(x), nir)
+  }
+  else {
+    df <- data.frame(id, coords, nir)
+  }
   df
 }
 
-setAs("SpatialSpectraDataFrame", "data.frame", function(from)
-	as.data.frame.SpatialSpectraDataFrame(from))
+setAs("SpatialSpectra", "data.frame", function(from)
+	as.data.frame.SpatialSpectra(from))
 
 ## data manipulation
 # subset.SpatialSpectraDataFrame <- function(x, subset, select, drop = FALSE, ...) {

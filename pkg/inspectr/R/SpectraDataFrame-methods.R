@@ -144,6 +144,12 @@ setReplaceMethod("features", signature("SpectraDataFrame", "ANY"),
         # Using the "key" name for ids
         names(d) <- key
       }
+
+      # Safety: to avoid headaches with factors,
+      # Both id columns are forced to be characters
+      d[[key]] <- as.character(d[[key]])
+      value[[key]] <- as.character(value[[key]])
+
       # Put data together
       data <- join(d, value,  by = key, type = "left", match = "first")
       # removing the id column      
