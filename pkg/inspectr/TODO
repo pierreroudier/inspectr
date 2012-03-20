@@ -1,7 +1,7 @@
 -------------- Short term --------------------
 
 - Re-write DESCRIPTION file, esp. Imports/Suggests part
-- implement "[<-" (??)
+- implement "[<-" (like australia[,'PC1',] <- NULL) 
 - implement how to delete features from @data slot
 - moving average/moving window stuff?
 - how to reduce number of WLs by interpolation?
