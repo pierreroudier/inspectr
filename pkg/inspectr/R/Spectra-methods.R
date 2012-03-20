@@ -617,7 +617,7 @@ setMethod("mutate", "Spectra", function (.data, ...){
   # transformations on the data - only for classes inheriting from SpectraDataFrame
   if (("data" %in% slotNames(.data)) & (length(cols) > 0)) { # testing if theres transformations left
     d <- sapply(cols, function(x) eval(x, features(.data), parent.frame()))
-    r <- SpectraDataFrame(r, data = as.data.frame(d))
+    r <- SpectraDataFrame(r, data = data.frame(features(.data), d))
   }
 
   r
