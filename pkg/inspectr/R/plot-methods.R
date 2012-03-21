@@ -1,3 +1,15 @@
+# Default colour scheme for plot
+#
+# It's from colorbrewer. I use this fixed thing so I
+# do not need to add a dep on RColorBrewer, but users are
+# encouraged to make use of it in the doc.
+#
+# Currently teh default scheme is defined by:
+# library(RcolorBrewer)
+# brewer.pal(n=5, name ="Set1")
+#
+.defaultSpectraColours <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00")
+
 #' Plots an object inheriting  from the Spectra class
 #'
 #' @param x an object of class Spectra or inheriting from this class
@@ -48,13 +60,13 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
     if (!("ylab" %in% nm_dts)) dots$ylab <- "Reflectance"
     if (!("xlab" %in% nm_dts)) dots$xlab <- paste("Wavelength (", wl_units(x), ")", sep = "")
     if (!("ylim" %in% nm_dts)) dots$ylim <- c(0, 1)
+    if (!("col" %in% nm_dts)) dots$col <- .defaultSpectraColours
     
     # insert x and y values 
     dots$x <- wl(x)
     dots$y <- t(spectra(x))
     
     do.call("matplot", dots)
-#     matplot(wl(x), t(spectra(x)), dots)
   }
 }
 

@@ -2,6 +2,7 @@
 * various small bugfixes
 * new default plot() method using base graphics and matplot - much faster
 * as a consequence, lattice is not required anymore
+* added a default colour scheme
 
 -------------------------- inspectr 0.3-5 (2012-03-19) --------------------------
 * more bugfixes
