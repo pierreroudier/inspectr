@@ -121,7 +121,7 @@ plot_summary.Spectra <- function(x, fun = mean, se = FALSE, ...) {
 # ref reference wavelengths
 # fill value to fill missing WLs with
 #
-fill_spectra <- function(obj, ref = NULL, fill = NA) {
+fill_spectra <- function(obj, ref = NULL, fill = NA, ...) {
   
   if (is.null(ref)) {
     # Trying to get the most common resolution values

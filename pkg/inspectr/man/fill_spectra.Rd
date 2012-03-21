@@ -3,7 +3,7 @@
 
 \title{Fill missing wavelengths of a Spectra* object with a given value}
 
-\usage{fill_spectra(obj, ref=NULL, fill=NA)}
+\usage{fill_spectra(obj, ref=NULL, fill=NA, ...)}
 
 \description{Fill missing wavelengths of a Spectra* object with a given value. This is mostly usefull to include NA values in the spectra in order to show missing bits in plots.}
 
@@ -13,6 +13,7 @@
   \item{obj}{an object inheriting from class \code{Spectra}}
   \item{ref}{a numeric vector, giving the reference wavelengths (ie the entire range of wavelengths expected to be in the spectra before some waveleng5ths have been cut out). If NULL, the function is trying to guess it.}
   \item{fill}{values to fill gaps in the data with}
+  \item{...}{ignored}
 }
 
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
