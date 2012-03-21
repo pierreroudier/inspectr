@@ -59,7 +59,8 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
     if (!("lty" %in% nm_dts)) dots$lty <- 1
     if (!("ylab" %in% nm_dts)) dots$ylab <- "Reflectance"
     if (!("xlab" %in% nm_dts)) dots$xlab <- paste("Wavelength (", wl_units(x), ")", sep = "")
-    if (!("ylim" %in% nm_dts)) dots$ylim <- c(0, 1)
+    if (!("xlim" %in% nm_dts)) dots$xlim <- range(wl(x))
+    if (!("ylim" %in% nm_dts)) dots$ylim <- range(spectra(x), na.rm = TRUE, finite = TRUE)
     if (!("col" %in% nm_dts)) dots$col <- .defaultSpectraColours
     
     # insert x and y values 
