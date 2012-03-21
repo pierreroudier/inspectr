@@ -8,9 +8,9 @@ importFrom(baseline,
   getCorrected
 )
 
-importFrom(lattice,
-  xyplot
-)
+#importFrom(lattice,
+#  xyplot
+#)
 
 importFrom(reshape2,
   acast,

@@ -17,10 +17,10 @@ The philosophy of this plotting routine is to provide a "quick'n'dirty" way to p
 
 \arguments{
   \item{x}{an object of class \code{"Spectra"} or inheriting from this class}
-  \item{gg}{if TRUE, uses the \code{ggplot2} package to plot the data, if FALSE uses \code{lattice} (experimental)}
+  \item{gg}{if TRUE, uses the \code{ggplot2} package to plot the data, if FALSE uses \code{matplot} from base graphics (much faster)}
   \item{gaps}{if TRUE, gaps in the spectra are not plotted}
-  \item{attr}{attribute against which lines are coloured}
-  \item{...}{options to be passed to xyplot}
+  \item{attr}{attribute against which lines are coloured (only for \code{gg = TRUE}}
+  \item{...}{options to be passed to \code{matplot}}
 }
 
 
@@ -39,6 +39,18 @@ plot(australia, gg = TRUE)
 s <- cut(australia, wl =c(-1*450:500, -1*1800:2050))
 plot(s, gaps = TRUE)
 plot(s, gaps = FALSE)
+
+# passing various options to matplot
+plot(australia, lty = 1:5, col = 'blue', xlab = 'foo', ylab = 'bar', ylim = c(0.4,0.6), main = 'my plot')
+
+# Using colour ramps
+plot(australia, lty = 1, col = rainbow(10), main = "It is possible to create really ugly visualisations")
+
+\dontrun{
+# Example using colours given by ColorBrewer (http://colorbrewer2.org/)
+library(RColorBrewer)
+plot(australia, lty = 1, col = brewer.pal(n = 8, name = "Set2"))
+}
 
 # Using an attribute to group spectra
 

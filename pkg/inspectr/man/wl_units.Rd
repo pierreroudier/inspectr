@@ -22,7 +22,7 @@ res(x)
 
 \description{Retrieves the wavelengths units and the spectral resolution from \code{Spectra*} objects.}
 
-\value{A vector.}
+\value{A vector. \code{res} is giving NULL for irregularly spaced wavelengths (eg when there is parts of the spectra data have been removed).}
 
 \arguments{
   \item{object, x}{an object inheriting from class \code{Spectra}, or a \code{"numeric"} vector for \code{resolution}}

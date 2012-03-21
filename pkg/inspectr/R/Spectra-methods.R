@@ -134,7 +134,7 @@ setMethod(
     if (nrow(object@id) > 0){
       cat("Wavelength range: ", min(object@wl, na.rm=TRUE),"-",max(object@wl, na.rm=TRUE)," ", object@units, "\n", sep="")
       SpectralResolution <- res(object)
-      if (length(SpectralResolution) > 1)
+      if (is.null(SpectralResolution) > 1)
         cat("Spectral resolution: irregular wavelength spacing\n")
       else {
         if (length(SpectralResolution) == 0)
@@ -337,7 +337,9 @@ res.numeric <- function(x){
 #' @method resolution Spectra
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 res.Spectra <- function(x){
-  unique( round( diff(wl(x)), digits = 10) )
+  r <- unique( round( diff(wl(x)), digits = 10) )
+  if (length(r) > 1) r <- NULL # if resolution is not regular
+  r
 }
 
 setMethod("res", "numeric", res.numeric)
