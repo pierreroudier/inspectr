@@ -30,7 +30,9 @@
   * KS
   * OptiSim
   * K-means
-  * DB
+  * DBSCAN
+  * ref: http://dx.doi.org/10.1016/S0003-2670(02)00651-7
+
 - Push the Kennard-Stone and OptiSim algorithms for sampling
 
 - outlier analysis methods (Mahalonobis?) --> Just an illustration in the vignette, use package:chemometrics

@@ -10,7 +10,7 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
 
   # Show gaps in the data?
   if (gaps) {
-    x <- .fillSpectra(x)
+    x <- fill_spectra(x, fill = NA, ...)
   }
 
   if (gg) {
@@ -118,16 +118,22 @@ plot_summary.Spectra <- function(x, fun = mean, se = FALSE, ...) {
 
 ## Code for adding NAs to potentially removed WLs
 ##
-.fillSpectra <- function(obj) {
+# ref reference wavelengths
+# fill value to fill missing WLs with
+#
+fill_spectra <- function(obj, ref = NULL, fill = NA) {
   
-  # Trying to get the most common resolution values
-  r <- as.numeric(names(which.max(table(diff(wl(obj))))))
-
+  if (is.null(ref)) {
+    # Trying to get the most common resolution values
+    r <- as.numeric(names(which.max(table(diff(wl(obj))))))
+    ref <- seq(from = min(wl(obj)), to = max(wl(obj)), by = r)
+  }
+  
   # Detect missing WLs
-  missing_wl <- setdiff(seq(from = min(wl(obj)), to = max(wl(obj)), by = r), wl(obj))
-  
+  missing_wl <- setdiff(ref, wl(obj))
+    
   # Create matrix of NAs for the missing WLs
-  new_nir <- matrix(NA, ncol = length(missing_wl), nrow = nrow(obj))
+  new_nir <- matrix(fill, ncol = length(missing_wl), nrow = nrow(obj))
   colnames(new_nir) <- missing_wl
   
   # Collate the NA matrix with the rest of the spectra
