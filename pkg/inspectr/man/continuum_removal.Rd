@@ -3,7 +3,7 @@
 
 \title{Continuum removal}
 
-\usage{continuum_removal(x)}
+\usage{continuum_removal(x, wl=as.numeric(names(x)), upper=TRUE)}
 
 \description{Operates a continuum removal on a vector.}
 
@@ -17,6 +17,8 @@ This function is working on vectors. It may applied on matrix or data.frames usi
 
 \arguments{
   \item{x}{a numeric vector}
+  \item{wl}{the wavelengths of the spectra}
+  \item{upper}{if TRUE, removes the upper convex hull from the spectra, if FALSE, takes the lower convex hull}
 }
 
 \references{
@@ -33,5 +35,8 @@ data(australia)
 spectra(australia) <- sr_no ~ ... ~ 350:2500
 
 s <- apply_spectra(australia, continuum_removal)
+plot(s)
+
+s <- apply_spectra(australia, continuum_removal, upper = FALSE)
 plot(s)
 }

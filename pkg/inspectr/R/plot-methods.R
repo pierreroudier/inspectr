@@ -74,6 +74,8 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
 ## TODO: plot_summary() plotting mean spectra +- sd
 plot_summary.Spectra <- function(x, fun = mean, se = FALSE, ...) {
 
+  .try_require("ggplot2")
+
   # If sd is given as TRUE or FALSE
   if (is.logical(se)) {
     if (se) {
@@ -129,33 +131,51 @@ plot_summary.Spectra <- function(x, fun = mean, se = FALSE, ...) {
   p
 }
 
+plot_stack.Spectra <- function(obj, col = NULL){
+  .try_require("ggplot2")
+  m <- melt_spectra(obj)
+  idnm <- names(m)[1]
+  m[[idnm]] <- as.factor(m[[idnm]])
+  form_grid <- as.formula(paste(idnm, '~.'))
+  ggplot(m) + 
+    geom_line(aes_string(x = 'wl', y = 'nir', colour = idnm)) + 
+    facet_grid(form_grid) + 
+    theme_bw()
+}
+
 ## Code for adding NAs to potentially removed WLs
 ##
 # ref reference wavelengths
 # fill value to fill missing WLs with
 #
 fill_spectra <- function(obj, ref = NULL, fill = NA, ...) {
-  
+
   if (is.null(ref)) {
     # Trying to get the most common resolution values
     r <- as.numeric(names(which.max(table(diff(wl(obj))))))
+    nb_gaps <- length(table(diff(wl(obj))))
+    if (nb_gaps > 2)
+      warning("Sorry, at this stage removing gaps does not work well with irreguarly spaced wavelengths. Results might be odd.")
     ref <- seq(from = min(wl(obj)), to = max(wl(obj)), by = r)
   }
   
   # Detect missing WLs
   missing_wl <- setdiff(ref, wl(obj))
+
+  # If tehre is gaps in the data, we add these as NAs values
+  if (length(missing_wl) > 0) {
+    # Create matrix of NAs for the missing WLs
+    new_nir <- matrix(fill, ncol = length(missing_wl), nrow = nrow(obj))
+    colnames(new_nir) <- missing_wl
     
-  # Create matrix of NAs for the missing WLs
-  new_nir <- matrix(fill, ncol = length(missing_wl), nrow = nrow(obj))
-  colnames(new_nir) <- missing_wl
-  
-  # Collate the NA matrix with the rest of the spectra
-  new_nir <- cbind(spectra(obj), new_nir)
-  # Re-order the spectra matrix
-  idx <- order(as.numeric(colnames(new_nir)))
-  new_nir <- new_nir[, idx, drop = FALSE]
-  
-  spectra(obj) <- new_nir
+    # Collate the NA matrix with the rest of the spectra
+    new_nir <- cbind(spectra(obj), new_nir)
+    # Re-order the spectra matrix
+    idx <- order(as.numeric(colnames(new_nir)))
+    new_nir <- new_nir[, idx, drop = FALSE]
+    
+    spectra(obj) <- new_nir
+  }
 
   obj
 }

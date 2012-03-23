@@ -4,15 +4,17 @@
 - implement "[<-" (like australia[,'PC1',] <- NULL) 
 - order of rows, cols, spectra in `[` --> use rows, spectra, cols
 - implement how to delete features from @data slot
-- moving average/moving window stuff?
+- moving average/moving window stuff? --> linear interpolation?
 - how to reduce number of WLs by interpolation?
 - Binning
 - Matrix operations (maybe this could just be done by using spectra(foo)?)
 - sweep() would be good as well
-- splice correction using signal::interp(1)
 - plot(foo, attr = 'bar') for base graphics. -- (well maybe not after all, that's what the gg mode is for. ltraeillis graphics are just better at this IMHO)
 - implement parallel option
 - implement "staggered/stacked" plots --> plot(foo, add =T); plot(bar + 1, add = TRUE); plot(baz + 2, add = TRUE); ...
+--> ggplot(m) + geom_line(aes(x=wl,y=nir,colour=factor(sr_no))) + facet_grid(sr_no~.) + theme_bw()
+- rename continuum_removal to something shorter? cont_rm?
+- improve fill_spectra
 
 - Documentation, documentation
 - Begin to work on vignettes:

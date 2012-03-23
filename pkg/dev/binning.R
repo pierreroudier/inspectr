@@ -9,7 +9,7 @@ bin_spectra <- function(object, bins = NULL, reduction = NULL, intervals = NULL,
     stop("Please provide EITHER wavelength intervals, compression factor or number of bins")
 
   if (!is.null(reduction))
-    bins <- ceiling(length(object)/reduction)
+    bins <- length(object)/reduction
   
   # Create bins based on a number of bins (regular binning)
   bins <- cut(wl(object), breaks = bins, labels = FALSE)
@@ -18,7 +18,7 @@ bin_spectra <- function(object, bins = NULL, reduction = NULL, intervals = NULL,
   mat <- data.frame(wl = wl(object), bins = bins, t(spectra(object)), check.names = FALSE)
   mat$bins <- factor(mat$bins)
   
-  levels(mat$bins) <- daply(mat, .(bins), function(x) ceiling(mean(x$wl)), .parallel = parallel)
+  levels(mat$bins) <- daply(mat, .(bins), function(x) mean(x$wl), .parallel = parallel)
 
   mat$bins <- as.numeric(as.character(mat$bins))
 

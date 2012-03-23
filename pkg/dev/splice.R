@@ -13,23 +13,18 @@
 #
 # http://support.asdi.com/Document/Documents.aspx
 #
-splice.numeric <- function(x, y, wl = list(725:1020, 1801:1950)) {
+splice.numeric <- function(x, y, wl = c(725:1020, 1801:1950), method = "spline") {
+  # Getting index of WLs to be interpolated
+  idx <- which(x %in% wl)
+  y_cutted <- y[-1*idx]
+  x_cutted <- x[-1*idx]
+  # Interpolation
+  r <- signal::interp1(x = x_cutted, y = y_cutted, xi = x, method = method)
+  r
+}
 
-  # for each splice to operate
-  # the current part is interpolated from a 
-  # part of the spectra, defined by the size s
-  corec <- lapply(wl, function(w) {
-    idx <- which(x %in% w)
-    signal::interp1(x[-1*idx], y[-1*idx], x, method = 'spline')
-  })
-  
-  y.cor <- y
-
-  for (w in 1:length(corec)) {
-    cur.wls <- wl[[w]]
-    cur.spec <- corec[[w]]
-    idx <- which(x %in% cur.wls) 
-    y.cor[idx] <- cur.spec[idx]
-  }
-  y.cor
+splice.Spectra <- function(object, wl = c(725:1020, 1801:1950), method = "spline") {
+  nir <- apply_spectra(object, function(x) 
+    splice.numeric(x = wl(object), y = as.vector(x), wl = wl, method = method)
+  )
 }

@@ -5,7 +5,10 @@
 
 \usage{fill_spectra(obj, ref=NULL, fill=NA, ...)}
 
-\description{Fill missing wavelengths of a Spectra* object with a given value. This is mostly usefull to include NA values in the spectra in order to show missing bits in plots.}
+\description{Fill missing wavelengths of a Spectra* object with a given value. This is mostly usefull to include NA values in the spectra in order to show missing bits in plots.
+
+At this stage removing gaps does not work well with irreguarly spaced wavelengths. Results might be odd for binned spectra.
+}
 
 \value{An object of the same class as \code{obj}}
 

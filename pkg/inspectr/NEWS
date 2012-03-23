@@ -1,5 +1,8 @@
 -------------------------- inspectr 0.3-7 (2012-03-23) --------------------------
 * Corrected CITATION, DESCRIPTION and NAMESPACE
+* added "upper=" option in continuum_removal
+* plot made faster by removing unecessary stuff in fill_spectra when there's no gaps
+* added plot_stack.Spectra (still in dev though)
 
 -------------------------- inspectr 0.3-6 (2012-03-21) --------------------------
 * various small bugfixes

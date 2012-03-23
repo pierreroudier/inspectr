@@ -88,7 +88,10 @@ setMethod('base_line', 'Spectra', function(object, ...) {
 #' common baseline. The removal is based on the upper convex hull of
 #' the spectra.
 #'
-continuum_removal <- function(x, wl = as.numeric(names(x))){
+continuum_removal <- function(x, wl = as.numeric(names(x)), upper = TRUE){
+    
+  if (!upper) x <- -1*x
+
   ch.index <- sort(chull(x = wl, y = x))
   ch <- data.frame(wl = wl[ch.index], nir = x[ch.index])
   res <- approx(x = ch$wl, y = ch$nir, xout = wl)
