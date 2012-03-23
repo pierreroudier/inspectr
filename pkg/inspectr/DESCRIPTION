@@ -1,6 +1,6 @@
 Package: inspectr
 Type: Package
-Title: Stores and eases the manipulation of spectra and associated data
+Title: Storing and manipulating spectra and associated data in R
 Version: 0.3-7
 Date: 2012-03-23
 Author: Pierre Roudier <pierre.roudier@gmail.com>
