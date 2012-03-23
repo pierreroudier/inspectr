@@ -1,3 +1,6 @@
+-------------------------- inspectr 0.3-7 (2012-03-23) --------------------------
+* Corrected CITATION, DESCRIPTION and NAMESPACE
+
 -------------------------- inspectr 0.3-6 (2012-03-21) --------------------------
 * various small bugfixes
 * new default plot() method using base graphics and matplot - much faster

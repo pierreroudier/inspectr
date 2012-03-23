@@ -1,7 +1,7 @@
-citHeader("To cite reshape in publications, please use:")
+citHeader("To cite inspectr in publications, please use:")
 
 if(!exists("meta") || is.null(meta)) meta <- packageDescription("inspectr")
-year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date)
+year <- sub("-.*", "", meta$Date)
 vers <- paste("R package version", meta$Version)
 
 citEntry(entry = "Manual",

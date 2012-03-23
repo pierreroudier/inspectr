@@ -11,6 +11,8 @@
 - sweep() would be good as well
 - splice correction using signal::interp(1)
 - plot(foo, attr = 'bar') for base graphics. -- (well maybe not after all, that's what the gg mode is for. ltraeillis graphics are just better at this IMHO)
+- implement parallel option
+- implement "staggered/stacked" plots --> plot(foo, add =T); plot(bar + 1, add = TRUE); plot(baz + 2, add = TRUE); ...
 
 - Documentation, documentation
 - Begin to work on vignettes:
