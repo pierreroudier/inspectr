@@ -11,7 +11,7 @@
 
 \usage{
 spectra(object, ...)
-spectra(object, mode="by_row") <- value
+spectra(object, mode="rowwise") <- value
 }
 
 \description{Either retrieves the spectra matrix from a \code{Spectra*} object, or creates a \code{Spectra*} object from a \code{"data.frame"} object different interfaces detailed below.}
@@ -55,8 +55,12 @@ You can also combine the placeholders:
 }
 }
 
-\section{About long and wide formats}{
-...
+\section{About rowwise and colwise formats}{
+Generally, data used in spectroscopy can be represented into two formats:
+\describe{
+  \item{\code{rowwise}}{Each row represents a sample, each columns being the attributes that have been measured for this sample (reflectance in each wavelength, but also physical or chemical attributes)}
+  \item{\code{colwise}}{Each row represents the reflectance for a given wavelength, each column being a sample. In this configuration, no attribute data can be added}
+}
 }
 
 \value{If applied on a \code{"data.frame"}, either a \code{Spectra} or a \code{SpectraDataFrame} object. If applied on a \code{Spectra*} object, a vector.}
@@ -75,7 +79,7 @@ You can also combine the placeholders:
 # Loading example data
 data(australia)
 class(australia) # this is a simple data.frame
-# structure of the data.frame: it is wide-formatted
+# structure of the data.frame: it is rowwise-formatted
 big.head(australia) 
 
 ## CREATING Spectra OBJECTS
@@ -125,21 +129,21 @@ summary(australia)
 ## BY-COLS-FORMATTED DATA
 ##
 
-# For data formatted in the by-cols format, 
-# use the "by_col" mode
+# For data formatted in the colwise format, 
+# use the "colwise" mode
 
-# Transforming data into by-cols format
+# Transforming data into colwise format
 # for demonstration's sake
 #
 m <- melt_spectra(australia)
 australia_by_col <- reshape2::acast(m, ... ~ sr_no)
 australia_by_col <- data.frame(wl = rownames(australia_by_col), australia_by_col, check.names = FALSE)
 
-# Here's by-col-formatted data 
+# Here's colwise-formatted data 
 big.head(australia_by_col)
 
 # Convert it into Spectra object
-spectra(australia_by_col, mode = "by_col") <- wl ~ ...
+spectra(australia_by_col, mode = "colwise") <- wl ~ ...
 summary(australia_by_col)
 
 # Then data can be added to promote it as a SpectraDataFrame

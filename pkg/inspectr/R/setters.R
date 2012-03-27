@@ -322,13 +322,13 @@ setReplaceMethod("spectra", "data.frame",
     
     # If no mode is being given, default to "by_row"
     dots <- list(...)
-    ifelse('mode' %in% names(dots), mode <- dots$mode, mode <- "by_row")
+    ifelse('mode' %in% names(dots), mode <- dots$mode, mode <- "rowwise")
 
-    if (mode == "by_row") {
+    if (mode == "rowwise") {
       r <- .set_spectra_by_row.data.frame(object, value)
     } 
     else {
-      if (mode == "by_col") {
+      if (mode == "colwise") {
         r <- .set_spectra_by_col.data.frame(object, value)
       }
       else {
