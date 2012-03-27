@@ -15,6 +15,7 @@
 --> ggplot(m) + geom_line(aes(x=wl,y=nir,colour=factor(sr_no))) + facet_grid(sr_no~.) + theme_bw()
 - rename continuum_removal to something shorter? cont_rm?
 - improve fill_spectra
+- rename spectra_wide/spectra_long into something else: this is no long/wide
 
 - Documentation, documentation
 - Begin to work on vignettes:

@@ -396,7 +396,7 @@ setMethod("[", c("Spectra", "ANY", "ANY", "missing"),
 ## Promote a Spectra object to a SpectraDataFrame
 
 if (!isGeneric('features<-'))
-  setGeneric('features<-', function(object, value, ...)
+  setGeneric('features<-', function(object, ..., value)
     standardGeneric('features<-')
 )
 
@@ -404,8 +404,16 @@ if (!isGeneric('features<-'))
 setReplaceMethod("features", signature("Spectra", "ANY"),
   # safe enables id check
   # key gives the column name of the ids in the data.frame
-  function(object, value, safe = TRUE, key = NULL, remove_id = TRUE) {
-    
+  function(object, ..., value) {
+     
+#     safe = TRUE, key = NULL, remove_id = TRUE
+
+    # hack to avoid the 'value' must be on the right side' thing at R CMD check
+    dots <- list(...)
+    ifelse('safe' %in% names(dots), safe <- dots$safe, safe <- TRUE)
+    ifelse('key' %in% names(dots), key <- dots$key, key <- NULL)
+    ifelse('remove_id' %in% names(dots), remove_id <- dots$remove_id, remove_id <- TRUE)
+
     if (!inherits(value, "data.frame"))
       stop('invalid initialization for SpectraDataFrame object')
 

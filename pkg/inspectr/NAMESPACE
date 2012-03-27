@@ -76,8 +76,6 @@ S3method("names<-", SpectraDataFrame)
 exportMethods(
   spectra,
   "spectra<-",
-  "spectra_long<-",
-  "spectra_wide<-",
   wl,
   "wl<-",
   ids,

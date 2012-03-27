@@ -47,6 +47,11 @@ spectra(australia) <- sr_no ~ ... ~ 350:2500
 s <- apply_spectra(australia, snv)
 plot(s)
 
+# The scale function in the base package is actually doing
+# the same thing!
+s <- apply_spectra(australia, scale, center = TRUE, scale = TRUE)
+plot(s)
+
 # Robust Normal Variate transform
 s <- apply_spectra(australia, rnv, r = 0.25)
 plot(s)

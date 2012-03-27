@@ -2,12 +2,8 @@
 \docType{methods}
 \alias{spectra}
 \alias{spectra<-}
-\alias{spectra_wide<-}
-\alias{spectra_long<-}
 \alias{spectra,Spectra-method}
 \alias{spectra<-,data.frame-method}
-\alias{spectra_wide<-,data.frame-method}
-\alias{spectra_long<-,data.frame-method}
 \alias{spectra<-,Spectra-method}
 \alias{spectra<-,SpectraDataFrame-method}
 
@@ -15,9 +11,7 @@
 
 \usage{
 spectra(object, ...)
-spectra(object) <- value
-spectra_wide(object) <- value
-spectra_long(object) <- value
+spectra(object, mode="by_row") <- value
 }
 
 \description{Either retrieves the spectra matrix from a \code{Spectra*} object, or creates a \code{Spectra*} object from a \code{"data.frame"} object different interfaces detailed below.}
@@ -87,14 +81,10 @@ big.head(australia)
 ## CREATING Spectra OBJECTS
 ##
 
-# Using spectra_wide() to initiate a Spectra from 
+# Using spectra() to initiate a Spectra from 
 # the data.frame
-spectra_wide(australia) <- sr_no ~ 350:2500
-summary(australia)
-
-# spectra is a short-hand for spectra_wide
-data(australia)
 spectra(australia) <- sr_no ~ 350:2500
+summary(australia)
 
 # It is possible to select wavelengths using the formula interface
 data(australia)
@@ -108,7 +98,7 @@ summary(australia)
 ## CREATING SpectraDataFrame OBJECTS
 ##
 
-# Using spectra()/spectra_wide() to initiate a SpectraDataFrame from 
+# Using spectra() to initiate a SpectraDataFrame from 
 # the data.frame
 data(australia)
 spectra(australia) <- sr_no ~ carbon + ph + clay ~ 350:2500
@@ -132,27 +122,27 @@ spectra(australia) <- sr_no ~ ... ~ 350:2500
 summary(australia)
 
 ## CREATING Spectra OBJECTS FROM
-## LONG-FORMATTED DATA
+## BY-COLS-FORMATTED DATA
 ##
 
-# For data formatted in the long format, 
-# use the spectra_long() constructor
+# For data formatted in the by-cols format, 
+# use the "by_col" mode
 
-# Transforming data into long format
+# Transforming data into by-cols format
 # for demonstration's sake
 #
 m <- melt_spectra(australia)
-dl <- reshape2::acast(m, ... ~ sr_no)
-dl <- data.frame(wl = rownames(dl), dl, check.names = FALSE)
+australia_by_col <- reshape2::acast(m, ... ~ sr_no)
+australia_by_col <- data.frame(wl = rownames(australia_by_col), australia_by_col, check.names = FALSE)
 
-# Here's long-formatted data 
-big.head(dl)
+# Here's by-col-formatted data 
+big.head(australia_by_col)
 
 # Convert it into Spectra object
-spectra_long(dl) <- wl ~ ...
-summary(dl)
+spectra(australia_by_col, mode = "by_col") <- wl ~ ...
+summary(australia_by_col)
 
 # Then data can be added to promote it as a SpectraDataFrame
-features(dl, key = 'sr_no') <- features(australia, include_id = TRUE)
-summary(dl)
+features(australia_by_col, key = 'sr_no') <- features(australia, include_id = TRUE)
+summary(australia_by_col)
 }

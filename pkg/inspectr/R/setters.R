@@ -219,80 +219,126 @@ setReplaceMethod("wl", "Spectra",
 ## method for long-formated data
 ##
 if (!isGeneric('spectra<-')) {
-  setGeneric('spectra<-', function(object, value)
+  setGeneric('spectra<-', function(object, ..., value)
     standardGeneric('spectra<-'))
 }
 
 ## for a data.frame
-.spectra_replace.data.frame <-  function(object, value) {
 
-    # if given a formula
-    if (is(value, 'formula')) {
-      # parsing the formula to retrieve the different slots (id, data, nir)
-      ind.vars <- lapply(.parse_formula(value, object), function(x) which(names(object) %in% x))
+## samples by row
+.set_spectra_by_row.data.frame <-  function(object, value) {
 
-      if (length(ind.vars$nir) == 0) {
-        ind.vars$nir <- .findSpectraCols(object, .parse_formula(value, object)$nir)
-      }
-      nir <- object[, ind.vars$nir, drop = FALSE]
+  # if given a formula
+  if (is(value, 'formula')) {
+    # parsing the formula to retrieve the different slots (id, data, nir)
+    ind.vars <- lapply(.parse_formula(value, object), function(x) which(names(object) %in% x))
 
-      if (length(ind.vars$id) == 0) {
-        ids <- as.character(NA)
-      }
-      else {
-        ids <- object[, ind.vars$id, drop = FALSE]
-      }
-
-      wl <- .guessWl(names(nir))
-      res <- Spectra(id = ids, wl = wl, nir = nir)
-
-      cat("Wavelength range: ")
-      cat(min(wl(res), na.rm=TRUE), " to ", max(wl(res), na.rm = TRUE)," ", wl_units(res), "\n", sep="")
-      cat("Spectral resolution: ", res(wl(res)) , " ",  wl_units(res), "\n", sep="")
-
-      if (length(ind.vars$data != 0)) {
-        res <- SpectraDataFrame(res, data=object[, ind.vars$data, drop = FALSE])
-      }
+    if (length(ind.vars$nir) == 0) {
+      ind.vars$nir <- .findSpectraCols(object, .parse_formula(value, object)$nir)
     }
+    nir <- object[, ind.vars$nir, drop = FALSE]
 
-    # if given a numeric vector (interpreted as the index of the cols)
-    # eg spectra(df) <- 11:2161
-    else if (is(value, 'numeric')) {
-      nir <- object[, value, drop = FALSE]
-      wl <- .guessWl(names(nir))
-      res <- Spectra(wl=wl, nir=nir)
-
-      # if there's some cols left, we create a SpectraDataFrame
-      if (length(value) < ncol(object)) {
-        data <- object[, setdiff(1:ncol(object), value), drop = FALSE]
-        res <- SpectraDataFrame(res, data=data)
-      }
+    if (length(ind.vars$id) == 0) {
+      ids <- as.character(NA)
     }
-
-    # if given a character vector (interpreted as the names of the cols)
-    # eg spectra(df) <- c('X450', 'X451', 'X452')
-    else if (is(value, 'character')) {
-      ind.nir <- which(names(object) %in% value)
-      nir <- object[, ind.nir, drop = FALSE]
-
-      wl <- .guessWl(names(nir))
-      res <- Spectra(wl=wl, nir=nir)
-
-      # if there's some cols left, we create a SpectraDataFrame
-      if (length(value) < ncol(object)) {
-        data <- object[, setdiff(1:ncol(object), ind.nir), drop = FALSE]
-        res <- SpectraDataFrame(res, data=data)
-      }
-    }
-
     else {
-      stop('Wrong Spectra initialisation.')
+      ids <- object[, ind.vars$id, drop = FALSE]
     }
-  
-    res
+
+    wl <- .guessWl(names(nir))
+    res <- Spectra(id = ids, wl = wl, nir = nir)
+
+    cat("Wavelength range: ")
+    cat(min(wl(res), na.rm=TRUE), " to ", max(wl(res), na.rm = TRUE)," ", wl_units(res), "\n", sep="")
+    cat("Spectral resolution: ", res(wl(res)) , " ",  wl_units(res), "\n", sep="")
+
+    if (length(ind.vars$data != 0)) {
+      res <- SpectraDataFrame(res, data=object[, ind.vars$data, drop = FALSE])
+    }
   }
 
-setReplaceMethod("spectra", "data.frame", .spectra_replace.data.frame)
+  # if given a numeric vector (interpreted as the index of the cols)
+  # eg spectra(df) <- 11:2161
+  else if (is(value, 'numeric')) {
+    nir <- object[, value, drop = FALSE]
+    wl <- .guessWl(names(nir))
+    res <- Spectra(wl=wl, nir=nir)
+
+    # if there's some cols left, we create a SpectraDataFrame
+    if (length(value) < ncol(object)) {
+      data <- object[, setdiff(1:ncol(object), value), drop = FALSE]
+      res <- SpectraDataFrame(res, data=data)
+    }
+  }
+
+  # if given a character vector (interpreted as the names of the cols)
+  # eg spectra(df) <- c('X450', 'X451', 'X452')
+  else if (is(value, 'character')) {
+    ind.nir <- which(names(object) %in% value)
+    nir <- object[, ind.nir, drop = FALSE]
+
+    wl <- .guessWl(names(nir))
+    res <- Spectra(wl=wl, nir=nir)
+
+    # if there's some cols left, we create a SpectraDataFrame
+    if (length(value) < ncol(object)) {
+      data <- object[, setdiff(1:ncol(object), ind.nir), drop = FALSE]
+      res <- SpectraDataFrame(res, data=data)
+    }
+  }
+
+  else {
+    stop('Wrong Spectra initialisation.')
+  }
+
+  res
+}
+
+## samples by cols
+.set_spectra_by_col.data.frame <- function(object, value) {
+  if (is(value, 'formula')) {
+    ind.vars <- lapply(.parse_formula(value, object), function(x) which(names(object) %in% x))
+    
+    # In that case, id = names(nir), wl = id
+    wl <- as.numeric(as.character(object[, ind.vars$id]))
+    nir_mat <- object[, ind.vars$nir, drop = FALSE]
+    nir <- t(nir_mat)
+    ids <- rownames(nir)
+  }
+  else {
+    stop("Only the formula interface is supported by 'by_col' mode for the time being. Refer to the man page for help using it.")
+  }
+
+  r <- Spectra(id = ids, wl = wl, nir = nir)
+  cat("Wavelength range: ")
+  cat(min(wl(r), na.rm = TRUE), " to ", max(wl(r), na.rm = TRUE)," ", wl_units(r), "\n", sep = "")
+  cat("Spectral resolution: ", res(wl(r)) , " ",  wl_units(r), "\n", sep = "")
+
+  r
+}
+
+setReplaceMethod("spectra", "data.frame", 
+  function(object, ..., value) {
+    
+    # If no mode is being given, default to "by_row"
+    dots <- list(...)
+    ifelse('mode' %in% names(dots), mode <- dots$mode, mode <- "by_row")
+
+    if (mode == "by_row") {
+      r <- .set_spectra_by_row.data.frame(object, value)
+    } 
+    else {
+      if (mode == "by_col") {
+        r <- .set_spectra_by_col.data.frame(object, value)
+      }
+      else {
+        stop("Wrong mode.")
+      }
+    }
+
+    r
+  }
+)
 
 ## for a Spectra* object
 setReplaceMethod("spectra", "Spectra",
@@ -320,44 +366,19 @@ setReplaceMethod("spectra", "Spectra",
   }
 )
 
-## 
-if (!isGeneric('spectra_wide<-')) {
-  setGeneric('spectra_wide<-', function(object, value)
-    standardGeneric('spectra_wide<-'))
-}
+# ## 
+# if (!isGeneric('spectra_wide<-')) {
+#   setGeneric('spectra_wide<-', function(object, value)
+#     standardGeneric('spectra_wide<-'))
+# }
+# 
+# setReplaceMethod("spectra_wide", "data.frame", .spectra_replace.data.frame)
 
-setReplaceMethod("spectra_wide", "data.frame", .spectra_replace.data.frame)
-
-## Spectra setter for long-formatted (col-based) dataset
-if (!isGeneric('spectra_long<-')) {
-  setGeneric('spectra_long<-', function(object, value)
-    standardGeneric('spectra_long<-'))
-}
-
-## for a data.frame
-setReplaceMethod("spectra_long", "data.frame",
-  function(object, value) {
-    if (is(value, 'formula')) {
-      ind.vars <- lapply(.parse_formula(value, object), function(x) which(names(object) %in% x))
-      
-      # In that case, id = names(nir), wl = id
-      wl <- as.numeric(as.character(object[, ind.vars$id]))
-      nir_mat <- object[, ind.vars$nir, drop = FALSE]
-      nir <- t(nir_mat)
-      ids <- rownames(nir)
-    }
-    else {
-      stop("Only the formula interface is supported by spectra_long() for the time being. Refer to the man page for help using it.")
-    }
-
-    r <- Spectra(id = ids, wl = wl, nir = nir)
-    cat("Wavelength range: ")
-    cat(min(wl(r), na.rm = TRUE), " to ", max(wl(r), na.rm = TRUE)," ", wl_units(r), "\n", sep = "")
-    cat("Spectral resolution: ", res(wl(r)) , " ",  wl_units(r), "\n", sep = "")
-
-    r
-  }
-)
+# ## Spectra setter for long-formatted (col-based) dataset
+# if (!isGeneric('spectra_long<-')) {
+#   setGeneric('spectra_long<-', function(object, value)
+#     standardGeneric('spectra_long<-'))
+# }
 
 
 ## id
