@@ -68,6 +68,7 @@ Generally, data used in spectroscopy can be represented into two formats:
 \arguments{
   \item{object}{a \code{"data.frame"} or an object inheriting from class \code{Spectra}}
   \item{value}{the wavelengths of the \code{Spectra*} object to create}
+  \item{mode}{a character describing the data representation of \code{object} ; it can be either \code{'rowwise'} (default value) or \code{'colwise'}.}
   \item{...}{Ignored}
 }
 

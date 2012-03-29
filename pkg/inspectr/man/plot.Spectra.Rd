@@ -1,11 +1,20 @@
 \name{plot.Spectra}
 
 \alias{plot.Spectra}
-\alias{plot_summary.Spectra}
+
+\alias{plot_summary}
+\alias{plot_stack}
+
+\alias{plot_summary,Spectra-method}
+\alias{plot_stack,Spectra-method}
 
 \title{Plots an object inheriting  from the Spectra class}
 
-\usage{\method{plot}{Spectra} (x, gg=FALSE, gaps=TRUE, attr=NULL, ...)}
+\usage{
+\method{plot}{Spectra} (x, gg=FALSE, gaps=TRUE, attr=NULL, ...)
+\S4method{plot_summary}{Spectra} (x, fun=mean, se=TRUE, ...)
+\S4method{plot_stack}{Spectra} (x)
+}
 
 \description{Plots an object inheriting  from the Spectra class}
 
@@ -20,6 +29,8 @@ The philosophy of this plotting routine is to provide a "quick'n'dirty" way to p
   \item{gg}{if TRUE, uses the \code{ggplot2} package to plot the data, if FALSE uses \code{matplot} from base graphics (much faster)}
   \item{gaps}{if TRUE, gaps in the spectra are not plotted}
   \item{attr}{attribute against which lines are coloured (only for \code{gg = TRUE}}
+  \item{fun}{an aggregation function}
+  \item{se}{if TRUE, plots the standard deviation around the summary spectra (computed by function as given by \code{fun}). If FALSE, does not plot dispersion information. If a function, uses this function instead of \code{sd}.}
   \item{...}{options to be passed to \code{matplot}}
 }
 

@@ -386,6 +386,16 @@ setMethod("[", c("Spectra", "ANY", "ANY", "missing"),
         j <- setdiff(as.numeric(wl(x)), abs(j))
       }
       j <- which(as.numeric(wl(x)) %in% j)
+
+      # If some of teh WL that have been asked for are not in
+      # the wl range, these are removed from j and a warning is produced
+      if (any(!(j %in% wl(x)))) {
+        j.in.wl <- which(j %in% wl(x))
+        j <- j[j.in.wl]
+      }
+      
+      if (length(j) == 0)
+        stop("Wrong wavelengths selection. Your wavelength selection is not available.")
     }
 
     Spectra(wl = x@wl[j], nir=x@nir[i, j, drop = FALSE], id = x@id[i, , drop = FALSE]) 

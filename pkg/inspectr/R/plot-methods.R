@@ -72,76 +72,91 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
 }
 
 ## TODO: plot_summary() plotting mean spectra +- sd
-plot_summary.Spectra <- function(x, fun = mean, se = FALSE, ...) {
 
-  .try_require("ggplot2")
-
-  # If sd is given as TRUE or FALSE
-  if (is.logical(se)) {
-    if (se) {
-      plot.se <- TRUE
-      fun.se <- sd
-    }
-    else {
-      plot.se <- FALSE
-    }
-  }
-  # If sd is being given a function
-  else {
-    # If the function is valid
-    if (is.function(se)) {
-      plot.se <- TRUE
-      fun.se <- se
-    }
-    # Else stop
-    else {
-      stop('The se = ... option must evaluate to either logical or function.')
-    }
-  }
-
-  s.melt <- melt_spectra(x)
-
-#   s.summary <- ddply(s.melt, 'wl', fun, ...)
-  s.summary <- ddply(s.melt, 'wl', function(x) {do.call(fun, list(x$nir))})
-  names(s.summary)[2] <- 'nir'
-
-  if (plot.se) {
-    # initiate dummy vars to pas R CMD check
-    wl <- nir <- nir_se <- NULL
-
-    s.se <- ddply(s.melt, 'wl', function(x) {do.call(fun.se, list(x$nir))})
-    names(s.se)[2] <- 'nir_se'
-    
-    s <- join(s.summary, s.se, by = 'wl')
-
-    p <- ggplot() + 
-      geom_line(data = s, aes(x = wl, y = nir - nir_se), linetype = 2) +
-      geom_line(data = s, aes(x = wl, y = nir + nir_se), linetype = 2) +
-      geom_line(data = s, aes(x = wl, y = nir)) +
-      labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Reflectance") +
-      theme_bw()
-  } 
-  else {
-    p <- ggplot() + 
-      geom_line(data = s.summary, aes(x = wl, y = nir)) +
-      labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Reflectance") +
-      theme_bw()
-  }
-
-  p
+if (!isGeneric("plot_summary")) {
+    setGeneric("plot_summary", function(x, ...)
+        standardGeneric("plot_summary"))
 }
 
-plot_stack.Spectra <- function(obj, col = NULL){
-  .try_require("ggplot2")
-  m <- melt_spectra(obj)
-  idnm <- names(m)[1]
-  m[[idnm]] <- as.factor(m[[idnm]])
-  form_grid <- as.formula(paste(idnm, '~.'))
-  ggplot(m) + 
-    geom_line(aes_string(x = 'wl', y = 'nir', colour = idnm)) + 
-    facet_grid(form_grid) + 
-    theme_bw()
+setMethod("plot", signature('Spectra'), 
+  function(x, fun = mean, se = TRUE, ...) {
+
+    .try_require("ggplot2")
+
+    # If sd is given as TRUE or FALSE
+    if (is.logical(se)) {
+      if (se) {
+        plot.se <- TRUE
+        fun.se <- sd
+      }
+      else {
+        plot.se <- FALSE
+      }
+    }
+    # If sd is being given a function
+    else {
+      # If the function is valid
+      if (is.function(se)) {
+        plot.se <- TRUE
+        fun.se <- se
+      }
+      # Else stop
+      else {
+        stop('The se = ... option must evaluate to either logical or function.')
+      }
+    }
+
+    s.melt <- melt_spectra(x)
+
+  #   s.summary <- ddply(s.melt, 'wl', fun, ...)
+    s.summary <- ddply(s.melt, 'wl', function(x) {do.call(fun, list(x$nir))})
+    names(s.summary)[2] <- 'nir'
+
+    if (plot.se) {
+      # initiate dummy vars to pas R CMD check
+      wl <- nir <- nir_se <- NULL
+
+      s.se <- ddply(s.melt, 'wl', function(x) {do.call(fun.se, list(x$nir))})
+      names(s.se)[2] <- 'nir_se'
+      
+      s <- join(s.summary, s.se, by = 'wl')
+
+      p <- ggplot() + 
+        geom_line(data = s, aes(x = wl, y = nir - nir_se), linetype = 2) +
+        geom_line(data = s, aes(x = wl, y = nir + nir_se), linetype = 2) +
+        geom_line(data = s, aes(x = wl, y = nir)) +
+        labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Reflectance") +
+        theme_bw()
+    } 
+    else {
+      p <- ggplot() + 
+        geom_line(data = s.summary, aes(x = wl, y = nir)) +
+        labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Reflectance") +
+        theme_bw()
+    }
+
+    p
+  }
+)
+
+if (!isGeneric("plot_stack")) {
+    setGeneric("plot_stack", function(x, ...)
+        standardGeneric("plot_stack"))
 }
+
+setMethod("plot_stack", signature('Spectra'), 
+  function(x){
+    .try_require("ggplot2")
+    m <- melt_spectra(x)
+    idnm <- names(m)[1]
+    m[[idnm]] <- as.factor(m[[idnm]])
+    form_grid <- as.formula(paste(idnm, '~.'))
+    ggplot(m) + 
+      geom_line(aes_string(x = 'wl', y = 'nir', colour = idnm)) + 
+      facet_grid(form_grid) + 
+      theme_bw()
+  }
+)
 
 ## Code for adding NAs to potentially removed WLs
 ##

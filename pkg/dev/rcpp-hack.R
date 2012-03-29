@@ -17,23 +17,43 @@ require(inline)
 # fun <- cxxfunction(signature(beta_ ="matrix"),
 #                        code, plugin="RcppArmadillo")
 
-m <- matrix(1:9,3)
-# fun(m)
+# m <- matrix(1:9,3)
+# # fun(m)
+# 
+# ## distances between a matrix x and a row of values y
+# code_dist <- '
+#   arma::mat x = Rcpp::as<arma::mat>(x_);
+#   arma::rowvec y = Rcpp::as<arma::rowvec>(y_);
+#   int n = x.n_rows;
+#   arma::rowvec res(n);
+#   int i;
+#   for (i=0; i<n, i++) {
+#     res.col(i) = i;
+#   }
+#   return Rcpp::wrap(res);
+# '
+# 
+# fun2 <- cxxfunction(signature(x_ ="matrix", y_ = "vector"),
+#                        code_dist, plugin="RcppArmadillo")
+# 
+# fun2(x = m, y = 1:4)
 
-## distances between a matrix x and a row of values y
-code_dist <- '
-  arma::mat x = Rcpp::as<arma::mat>(x_);
-  arma::rowvec y = Rcpp::as<arma::rowvec>(y_);
-  int n = x.n_rows;
-  arma::rowvec res(n);
-  int i;
-  for (i=0; i<n, i++) {
-    res.col(i) = i;
-  }
-  return Rcpp::wrap(res);
-'
+code_solve <- "
+  // copy the data to armadillo structures
+  arma::mat Y = Rcpp::as<arma::mat>( Y_ );
+  
+  // calculate the result
+  arma::mat result = arma::inv(Y);
 
-fun2 <- cxxfunction(signature(x_ ="matrix", y_ = "vector"),
-                       code_dist, plugin="RcppArmadillo")
+  // return it to R
+  return Rcpp::wrap( result );
+"
 
-fun2(x = m, y = 1:4)
+fx <- cxxfunction(
+  signature(Y_ = "matrix"),
+  code_solve,
+  plugin = "RcppArmadillo"
+)
+
+# fx( 1:4, diag( 4 ), 1:4 )
+# fx(diag(4))

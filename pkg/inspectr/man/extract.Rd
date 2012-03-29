@@ -21,21 +21,31 @@
 
 \title{Extracting and replacing parts of Spectra* objects}
 
-\usage{
-  \S4method{[}{Spectra,ANY,ANY,missing}(x, i, j, ..., drop = FALSE)
-  \S4method{[}{SpectraDataFrame,ANY,ANY,missing}(x, i, j, ..., k, drop = FALSE)
-
-  \S4method{[[}{SpectraDataFrame,ANY,missing}(x, i, j, k, ..., drop = FALSE)
-  \S4method{[[}{Spectra,ANY,missing}(x, i, j, ...) <- value
-  
-  \S4method{$}{SpectraDataFrame}(x, name)
-  \S4method{$}{Spectra}(x, name) <- value  
-}
-
 \description{These methods emulates classic base methods '[', '[[' and '$' to extract or replace parts of Spectra* objects.}
 
-\details{
-...
+\section{Methods}{
+\describe{
+
+\bold{x=Spectra}
+
+\code{x[x, i, j, ..., drop = FALSE]}
+
+\tabular{rll}{
+\tab \code{x}  \tab A \code{Spectra} object \cr
+\tab \code{i} \tab Row index of the selected individuals \cr 
+\tab \code{j} \tab Selected wavelengths \cr 
+\tab \code{...} \tab Ignored \cr 
+\tab \code{drop} \tab Ignored \cr
+}
+
+\code{x[[x, i, j, ...]] <- value}
+\code{x$name <- value}
+}
+
+\bold{x=SpectraDataFrame}  
+\S4method{[}{SpectraDataFrame,ANY,ANY,missing}(x, i, j, ..., k, drop = FALSE)
+\S4method{[[}{SpectraDataFrame,ANY,missing}(x, i, j, k, ..., drop = FALSE)
+\S4method{$}{SpectraDataFrame}(x, name)
 }
 
 \value{An object inheriting from \code{Spectra}.}

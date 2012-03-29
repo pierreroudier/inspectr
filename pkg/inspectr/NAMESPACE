@@ -98,7 +98,9 @@ exportMethods(
   aggregate_spectra,
   subset,
   mutate,
-  split
+  split,
+  plot_summary,
+  plot_stack
 )
 
 exportPattern("^[^\\.]")

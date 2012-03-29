@@ -8,7 +8,7 @@
 
 \description{Constructor for the SpectraDataFrame class. Creates a SpectraDataFrame object, either from scratch, or from an existing Spectra object.}
 
-\value{a new \code{"Spectra"} object}
+\value{a new \code{"SpectraDataFrame"} object}
 
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
 

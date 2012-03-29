@@ -1,3 +1,7 @@
+-------------------------- inspectr 0.3-9 (2012-03-28) --------------------------
+* turned plot_summary and plot_stack into S4 methods (that are now properly exported)
+* corrected stuff in [, now more clear for the waevlengths indexing (if index niot in WL range, throws a warning)
+
 -------------------------- inspectr 0.3-8 (2012-03-27) --------------------------
 * removed spectra_long() and spectra_wide(), replace by a mode=... option in spectra<-
 * now spectra<- and features<- should pass R CMD check without any NOTE
