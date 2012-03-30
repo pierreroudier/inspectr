@@ -38,14 +38,22 @@
 \tab \code{drop} \tab Ignored \cr
 }
 
-\code{x[[x, i, j, ...]] <- value}
+\code{x[[i, j, ...]] <- value}
 \code{x$name <- value}
 }
 
 \bold{x=SpectraDataFrame}  
-\S4method{[}{SpectraDataFrame,ANY,ANY,missing}(x, i, j, ..., k, drop = FALSE)
-\S4method{[[}{SpectraDataFrame,ANY,missing}(x, i, j, k, ..., drop = FALSE)
-\S4method{$}{SpectraDataFrame}(x, name)
+
+\code{x[i, j, k, ..., drop = FALSE]}
+\code{x$k}
+
+\tabular{rll}{
+\tab \code{x}  \tab A \code{Spectra} object \cr
+\tab \code{i} \tab Row index of the selected individuals \cr 
+\tab \code{j} \tab Selected wavelengths \cr 
+\tab \code{k} \tab Selected columns in the @data slot\cr 
+\tab \code{...} \tab Ignored \cr 
+\tab \code{drop} \tab Ignored \cr
 }
 
 \value{An object inheriting from \code{Spectra}.}
