@@ -10,29 +10,41 @@
 
 \title{Retrieves or sets the data slot of a SpectraDataFrame object.}
 
-\usage{
-  \S4method{features}{SpectraDataFrame}(object,...,include_id=FALSE)
-  \S4method{"features<-"}{Spectra}(object,safe=TRUE,key=NULL,remove_id=TRUE) <- value
-  \S4method{"features<-"}{SpectraDataFrame}(object,safe=TRUE,key=NULL,remove_id=TRUE,append=TRUE) <- value
-}
-
 \description{Either retrieves the attributes values from the data slot of a SpectraDataFrame object, or upgrades a Spectra object to a SpectraDataFrame object by initialising its data slot by a suitable \code{"data.frame"} object.}
 
-\value{
-If applied on a \code{"data.frame"}, either a \code{Spectra} or a \code{SpectraDataFrame} object. 
+\section{Methods}{
+\describe{
 
-If applied on a \code{Spectra*} object, a data.frame.
+\bold{x=Spectra}
+
+\code{features(obj, safe=TRUE, key=NULL, remove_id=TRUE) <- value}
+
+\tabular{rll}{
+\tab \code{obj}  \tab A \code{Spectra} object \cr
+\tab \code{safe} \tab Logical. If TRUE, data is being added to the object using a SQL join (using a key field given by the \code{key} option), otherwise it is assumed the order of the rows is consitent with the order of the rows in \code{obj} \cr
+\tab \code{key} \tab Character, name of the column of the data.frame storing the ids for the SQL join. Ignored if \code{safe} is \code{FALSE}. \cr 
+ \tab \code{remove_id} \tab Logical, if \code{TRUE}, ids used for the SQL join are removed from the data slot after the join. \cr 
 }
 
-\arguments{
-  \item{object}{an object inheriting from class \code{Spectra}}
-  \item{value}{a \code{"data.frame"} object}
-  \item{safe}{if TRUE, data is being added to the object using a SQL join, otherwise it is assumed the order of the rows is consitent with the order of the rows in \code{object}}
-  \item{key}{name of the column of the data.frame storing the ids for the SQL join.}
-  \item{remove_id}{if TRUE, ids used for the SQL join are removed from the data slot after the join.}
-  \item{include_id}{if TRUE, the ids of the spectra are added in a field of the data.frame}
-  \item{append}{if TRUE, the data is appended to any existing data. if FALSE, the data provided is erasing any existing data.}
-  \item{...}{ignored}
+\bold{x=SpectraDataFrame}  
+
+\code{features(obj, remove_id=TRUE)}
+
+\code{features(obj, safe=TRUE, key=NULL, remove_id=TRUE, append=TRUE) <- value}
+
+\tabular{rll}{
+\tab \code{obj}  \tab A \code{SpectraDataFrame} object \cr
+\tab \code{safe} \tab Logical. If TRUE, data is being added to the object using a SQL join (using a key field given by the \code{key} option), otherwise it is assumed the order of the rows is consitent with the order of the rows in \code{obj} \cr
+\tab \code{key} \tab Character, name of the column of the data.frame storing the ids for the SQL join. Ignored if \code{safe} is \code{FALSE}. \cr 
+ \tab \code{remove_id} \tab Logical. For the \code{features} method, if \code{TRUE}, the spectra ids are added to the \code{data.frame} that is returned. For the \code{"features<-"} method, If \code{TRUE}, ids used for the SQL join are removed from the data slot after the join. \cr 
+\tab \code{append} \tab Logical, if \code{TRUE}, the data is appended to any existing data. if FALSE, the data provided is erasing any existing data. \cr
+}
+
+}
+}
+
+\value{
+The \code{features} methods return a \code{data.frame} object, while the \code{"features<-"} methods return a \code{SpectraDataFrame} object. 
 }
 
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}

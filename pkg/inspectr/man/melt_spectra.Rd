@@ -6,17 +6,32 @@
 \alias{melt_spectra,SpectraDataFrame-method}
 
 \title{melt_spectra}
+
 \description{Melts the spectra data of a Spectra object and returns it as wide format.}
 
-\usage{
-melt_spectra(obj, ...)
-melt_spectra(obj, attr = NULL, ...)
+\section{Methods}{
+\describe{
+
+\bold{x=Spectra}
+
+\code{melt_spectra(obj, ...)}
+
+\tabular{rll}{
+\tab \code{obj}  \tab A \code{Spectra} object \cr
+\tab \code{...} \tab Ignored \cr 
 }
 
-\arguments{
-  \item{obj}{an object inheriting from the \code{Spectra} class}
-  \item{attr}{for the \code{SpectraDataFrame} class, the name of an attribute in the object data to split the spectra against.}
-  \item{...}{any option evaluated in the context of plyr::melt}
+\bold{x=SpectraDataFrame}  
+
+\code{melt_spectra(obj, attr=NULL, ...)}
+
+\tabular{rll}{
+\tab \code{obj}  \tab A \code{SpectraDataFrame} object \cr
+\tab \code{attr} \tab Character, the name of an attribute in the object data to split the spectra against. \cr 
+\tab \code{...} \tab Ignored \cr 
+}
+
+}
 }
 
 \details{

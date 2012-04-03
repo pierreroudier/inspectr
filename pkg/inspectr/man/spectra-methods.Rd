@@ -9,12 +9,33 @@
 
 \title{Retrieves or sets the spectra of a \code{Spectra*} objects.}
 
-\usage{
-spectra(object, ...)
-spectra(object, mode="rowwise") <- value
+\description{Either retrieves the spectra matrix from a \code{Spectra*} object, or creates a \code{Spectra*} object from a \code{"data.frame"} object different interfaces detailed below.}
+
+\section{Methods}{
+\describe{
+
+\bold{obj=data.frame}
+
+\code{spectra(obj, ..., mode="rowwise") <- value}
+
+\tabular{rll}{
+\tab \code{obj}  \tab A \code{"data.frame"} object \cr
+\tab \code{mode} \tab A character describing the data representation of \code{object} ; it can be either \code{'rowwise'} (default value) or \code{'colwise'}. See Details section. \cr 
+\tab \code{...} \tab Ignored \cr 
+\tab \code{value} \tab A representation of the wavelengths of the \code{Spectra*} object to create. See details section. \cr
 }
 
-\description{Either retrieves the spectra matrix from a \code{Spectra*} object, or creates a \code{Spectra*} object from a \code{"data.frame"} object different interfaces detailed below.}
+\bold{obj=Spectra}
+
+\code{spectra(obj)}
+
+\tabular{rll}{
+\tab \code{obj}  \tab A \code{Spectra} object \cr
+\tab \code{...} \tab Ignored \cr 
+}
+
+}
+}
 
 \details{
 When applied to a \code{Spectra*} object, this functions simply returns the spectra it is storing.
@@ -63,14 +84,7 @@ Generally, data used in spectroscopy can be represented into two formats:
 }
 }
 
-\value{If applied on a \code{"data.frame"}, either a \code{Spectra} or a \code{SpectraDataFrame} object. If applied on a \code{Spectra*} object, a vector.}
-
-\arguments{
-  \item{object}{a \code{"data.frame"} or an object inheriting from class \code{Spectra}}
-  \item{value}{the wavelengths of the \code{Spectra*} object to create}
-  \item{mode}{a character describing the data representation of \code{object} ; it can be either \code{'rowwise'} (default value) or \code{'colwise'}.}
-  \item{...}{Ignored}
-}
+\value{If applied on a \code{"data.frame"}, either a \code{Spectra} or a \code{SpectraDataFrame} object. If applied on a \code{Spectra*} object, a matrix.}
 
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
 
@@ -148,6 +162,7 @@ spectra(australia_by_col, mode = "colwise") <- wl ~ ...
 summary(australia_by_col)
 
 # Then data can be added to promote it as a SpectraDataFrame
-features(australia_by_col, key = 'sr_no') <- features(australia, include_id = TRUE)
+my.data <- features(australia, remove_id = FALSE)
+features(australia_by_col, key = 'sr_no') <- my.data
 summary(australia_by_col)
 }

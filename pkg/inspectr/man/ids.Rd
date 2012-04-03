@@ -8,29 +8,46 @@
 
 \title{Retrieves or sets the ids of a \code{Spectra*} object.}
 
-\usage{
-ids(object, ..., as.vector = FALSE)
-ids(object) <- value
-}
-
 \description{Either retrieves the wavelengths from a \code{Spectra*} object, or creates a \code{Spectra*} object from a \code{"data.frame"} object by setting some of its columns as the wavelengths.}
 
+\section{Methods}{
+\describe{
+
+\bold{x=Spectra}
+
+\code{ids(obj, ..., as.vector = FALSE)}
+
+\code{ids(obj) <- value}
+
+\tabular{rll}{
+\tab \code{obj}  \tab A \code{Spectra} object \cr
+\tab \code{...} \tab Ignored \cr
+\tab \code{as.vector} \tab Logical, returns the IDs as a character vector rather than a 1-column \code{data.frame}. \cr 
+\tab \code{value} A vector giving new IDs for \code{obj}. These IDs must be unique. \tab \cr
+}
+
+\bold{x=SpectraDataFrame}  
+
+\code{ids(obj, ..., as.vector = FALSE)}
+
+\code{ids(obj) <- value}
+
+\tabular{rll}{
+\tab \code{obj}  \tab A \code{Spectra} object \cr
+\tab \code{...} \tab Ignored \cr
+\tab \code{as.vector} \tab Logical, returns the IDs as a character vector rather than a 1-column \code{data.frame}. \cr 
+\tab \code{value}  \tab Either a formula or a vector of new IDs (see the Details section). \cr
+}
+
+}
+}
+
 \details{
-When applied to a \code{Spectra*} object, this functions simply returns the wavelengths of the spectra it is storing.
-
-If applied on a \code{"data.frame"} object, it is an helper function to create a \code{Spectra*} object. It then needs to be indicated the wavelengths at which the spectra values are measured. The assumption is that each row of the \code{"data.frame"} is a spectra, and the column names of the \code{"data.frame"} contain the wavelengths values.
-
-If all the columns are used to create the \code{Spectra*} object, a \code{Spectra} object is created. If some attributes are left, they will be used to generate a \code{SpectraDataFrame} object.
+The \code{"ids<-"} method for \code{SpectraDataFrame} objects allows to use a formula interface to use a column in its \code{data} slot as the object IDs (see the last example provided in the Examples section).
 }
 
-\value{If \code{as.vector} is TRUE, returns a vector, otherwise, returns a \code{data.frame}.}
+\value{The \code{ids} methods return a vector if \code{as.vector} is TRUE, a \code{data.frame} otherwise. The \code{"ids<-"} method return a \code{SpectraDataFrame} object (or a \code{Spectra} object if the column in the data slot that has been used to initiate the IDs was the only attribute).}
 
-\arguments{
-  \item{object}{a \code{"data.frame"} or an object inheriting from class \code{Spectra}}
-  \item{value}{the wavelengths of the \code{Spectra*} object to create}
-  \item{...}{Ignored}
-  \item{as.vector}{if set to TRUE, returns a vector, otherwise, returns a \code{data.frame}}
-}
 
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}
 

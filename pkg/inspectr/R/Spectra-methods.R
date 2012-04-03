@@ -156,10 +156,10 @@ setMethod(
 #' @param ... Ignored
 #' @return a \code{data.frame} object
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-as.data.frame.Spectra <- function(x, ..., include_id = TRUE)  {
+as.data.frame.Spectra <- function(x, ..., exclude_id = FALSE)  {
   df <- as.data.frame(spectra(x))
   names(df) <- wl(x)
-  if (include_id) {
+  if (!exclude_id) {
     df <- data.frame(ids(x), df)
   }
   df
@@ -570,7 +570,7 @@ rbind.Spectra <- function(..., create_new_ids = FALSE, new_ids = NULL) {
   test_data <- laply(dots, function(x) "data" %in% slotNames(x))
   if (all(test_data)) {
     # Unify id colname for join
-    data <- llply(dots, features, include_id = TRUE)
+    data <- llply(dots, features, exclude_id = FALSE)
     data <- llply(data, function(x) {names(x)[1] <- 'id'; x})
     data <- do.call("rbind", data)
     res <- SpectraDataFrame(res, data = data)
@@ -622,9 +622,9 @@ setMethod("mutate", "Spectra", function (.data, ...){
 
   # transformations on the spectra
   if (any(names(cols) == 'nir')) {
-    nir <- reshape2::melt(spectra(.data), varnames=c('id', 'wl'), value.name = "nir")
+    nir <- melt(spectra(.data), varnames=c('id', 'wl'), value.name = "nir")
     nir[["nir"]] <- eval(cols[["nir"]], nir, parent.frame())
-    nir <- reshape2::acast(nir, id ~ wl)
+    nir <- acast(nir, id ~ wl)
     # remove it from the cols list
     cols[['nir']] <- NULL
   }
@@ -673,7 +673,7 @@ setMethod("melt_spectra", "Spectra", function(obj, ...){
   id.nm <- names(ids(obj))
   x <- data.frame(ids(obj), spectra(obj))
   names(x) <- c(id.nm, wl(obj))
-  res <- reshape2:::melt.data.frame(x, id.vars = id.nm, variable.name = 'wl', value.name="nir")
+  res <- melt(x, id.vars = id.nm, variable.name = 'wl', value.name="nir") 
   res$wl <- as.numeric(as.character(res$wl))
   res
 })

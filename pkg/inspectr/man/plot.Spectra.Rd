@@ -5,6 +5,7 @@
 \alias{plot_summary}
 \alias{plot_stack}
 
+\alias{plot,Spectra,ANY-method}
 \alias{plot_summary,Spectra-method}
 \alias{plot_stack,Spectra-method}
 

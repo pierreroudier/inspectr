@@ -72,9 +72,9 @@
 
 ## coercition methods
 
-as.data.frame.SpectraDataFrame = function(x, ..., expand = TRUE, include_id = TRUE)  {
+as.data.frame.SpectraDataFrame = function(x, ..., expand = TRUE, exclude_id = FALSE)  {
   
-  data <- features(x, include_id = include_id)
+  data <- features(x, exclude_id = exclude_id)
 
   if (expand) {
     df <- data.frame(data, spectra(x))
@@ -98,8 +98,8 @@ if (!isGeneric("features"))
     standardGeneric("features"))
 
 setMethod("features", "SpectraDataFrame",
-  function(obj, ..., include_id = FALSE) {
-    if (include_id) {
+  function(obj, ..., remove_id = TRUE) {
+    if (!remove_id) {
       res <- data.frame(ids(obj), obj@data) 
     } else {
       res <- obj@data

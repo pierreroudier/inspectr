@@ -8,11 +8,10 @@
 \alias{$}
 \alias{$<-}
 
-\alias{'[',Spectra,ANY,ANY,missing-method}
-\alias{'[',SpectraDataFrame,ANY,ANY,missing-method}
-\alias{'[[',SpectraDataFrame,ANY,missing-method}
-\alias{'[[<-',Spectra,ANY,missing-method}
-\alias{[<-,Spectra-method}
+\alias{[,Spectra,ANY,ANY,missing-method}
+\alias{[,SpectraDataFrame,ANY,ANY,missing-method}
+\alias{[[,SpectraDataFrame,ANY,missing-method}
+\alias{[[<-,Spectra,ANY,missing-method}
 \alias{[<-,SpectraDataFrame-method}
 
 
@@ -28,45 +27,47 @@
 
 \bold{x=Spectra}
 
-\code{x[x, i, j, ..., drop = FALSE]}
+\code{x[i, j, ..., drop = FALSE]}
+
+\code{x$name <- value} 
+
+\code{x[[name]] <- value} 
 
 \tabular{rll}{
 \tab \code{x}  \tab A \code{Spectra} object \cr
 \tab \code{i} \tab Row index of the selected individuals \cr 
 \tab \code{j} \tab Selected wavelengths \cr 
+\tab \code{name} \tab A literal character string or a name \cr 
 \tab \code{...} \tab Ignored \cr 
 \tab \code{drop} \tab Ignored \cr
-}
-
-\code{x[[i, j, ...]] <- value}
-\code{x$name <- value}
 }
 
 \bold{x=SpectraDataFrame}  
 
 \code{x[i, j, k, ..., drop = FALSE]}
-\code{x$k}
+
+\code{x[[name]]}
+
+\code{x[[name]] <- value} 
+
+\code{x$name}
+
+\code{x$name <- value} 
 
 \tabular{rll}{
-\tab \code{x}  \tab A \code{Spectra} object \cr
+\tab \code{x}  \tab A \code{SpectraDataFrame} object \cr
 \tab \code{i} \tab Row index of the selected individuals \cr 
 \tab \code{j} \tab Selected wavelengths \cr 
 \tab \code{k} \tab Selected columns in the @data slot\cr 
+\tab \code{name} \tab A literal character string or a name \cr 
 \tab \code{...} \tab Ignored \cr 
 \tab \code{drop} \tab Ignored \cr
 }
+}
+}
 
-\value{An object inheriting from \code{Spectra}.}
-
-\arguments{
-  \item{x}{an object inheriting from class \code{Spectra}}
-  \item{value}{a vector of values to be added to the object data slot}
-  \item{name}{name of the attribute to create or to query}
-  \item{i}{row index, to be used for selecting individuals in the collection}
-  \item{j}{selected wavelengths}
-  \item{k}{selected data columns}
-  \item{drop}{ignored}
-  \item{...}{ignored}
+\value{
+These methods either return an object of the same clss as \code{x}, or can promote a \code{Spectra} object to a \code{SpectraDataFrame} object by adding data ("[[<-" and "$<-" methods).
 }
 
 \author{Pierre Roudier \url{pierre.roudier@gmail.com}}

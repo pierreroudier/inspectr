@@ -1,6 +1,6 @@
 ## Binning of the spectra
 
-bin_spectra <- function(object, bins = NULL, reduction = NULL, intervals = NULL, fun = mean, parallel = FALSE, ...) {
+bin_spectra <- function(object, bins = NULL, reduction = NULL, intervals = NULL, fun = mean, fun.bins= mean, parallel = FALSE, ...) {
   
   if (is.null(intervals) & is.null(bins) & is.null(reduction))
     stop("Please provide either wavelength intervals, compression factor or number of bins")
@@ -18,7 +18,7 @@ bin_spectra <- function(object, bins = NULL, reduction = NULL, intervals = NULL,
   mat <- data.frame(wl = wl(object), bins = bins, t(spectra(object)), check.names = FALSE)
   mat$bins <- factor(mat$bins)
   
-  levels(mat$bins) <- daply(mat, .(bins), function(x) mean(x$wl), .parallel = parallel)
+  levels(mat$bins) <- daply(mat, .(bins), function(x) do.call(fun.bins, list(x$wl, ...)))
 
   mat$bins <- as.numeric(as.character(mat$bins))
 

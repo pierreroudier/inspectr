@@ -86,8 +86,7 @@ kenstone.matrix <- function(x, size, progress = TRUE, ...){
     x <- x[-1*idx,]
 
     if (progress) {
-      setTxtProgressBar(pb, i_pb)
-      i_pb <- i_pb + 1
+      setTxtProgressBar(pb, k)
     }
   }
 
@@ -131,7 +130,9 @@ optisim.matrix <- function(x, size, B = round(0.10*nrow(x)), progress = TRUE, ..
   range <- max_x - min_x
   V <- cumprod(range)[length(range)]
   Vs <- (1/size)*V
-  R <- (Vs/(sqrt(pi^m)/gamma(m/2 + 1)))^(1/m)
+  # to avoid warning on +Inf values of Gamma
+  ifelse(m > 100, G <- Inf, G <- gamma(m/2 + 1)) 
+  R <- (Vs/(sqrt(pi^m)/G))^(1/m)
 
   mean_x <- colMeans(x)
   d <- colSums((x - matrix(rep(mean_x, n), nrow = n, byrow = TRUE))^2)
@@ -145,11 +146,8 @@ optisim.matrix <- function(x, size, B = round(0.10*nrow(x)), progress = TRUE, ..
   mS <- 1
   ma <- length(A)
 
-  if (progress) {
-    i_pb <- 1
+  if (progress) 
     pb <- txtProgressBar(min = 1, max = size, style = 3)
-  }      
-
 
   while(mS < size) {
 
@@ -180,10 +178,8 @@ optisim.matrix <- function(x, size, B = round(0.10*nrow(x)), progress = TRUE, ..
     ma <- length(A)
     mS <- length(model)
 
-    if (progress) {
-      setTxtProgressBar(pb, i_pb)
-      i_pb <- i_pb + 1
-    }
+    if (progress)
+      setTxtProgressBar(pb, mS)
   }
 
   if (progress)
