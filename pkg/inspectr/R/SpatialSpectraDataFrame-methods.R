@@ -18,10 +18,7 @@
 ##
 ## Adapted from sp package code
 ##
-if (!isGeneric('coordinates<-')) {
-  setGeneric('coordinates<-', function(object, value)
-    standardGeneric('coordinates<-'))
-}
+setGeneric('coordinates<-', function(object, value) standardGeneric('coordinates<-'))
 
 setReplaceMethod("coordinates", signature(object = "SpectraDataFrame", value = "ANY"),
   function(object, value) {
