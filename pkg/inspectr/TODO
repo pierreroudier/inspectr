@@ -2,6 +2,7 @@
 
 - Re-write DESCRIPTION file, esp. Imports/Suggests part
 - implement "[<-" (like australia[,'PC1',] <- NULL) 
+- make as.vector=TRUE default in ids(foo)
 - order of rows, cols, spectra in `[` --> use rows, spectra, cols
 - implement how to delete features from @data slot
 - moving average/moving window stuff? --> linear interpolation?

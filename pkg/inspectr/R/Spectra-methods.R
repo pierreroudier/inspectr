@@ -421,7 +421,7 @@ setReplaceMethod("features", signature("Spectra", "ANY"),
     # hack to avoid the 'value' must be on the right side' thing at R CMD check
     dots <- list(...)
     ifelse('safe' %in% names(dots), safe <- dots$safe, safe <- TRUE)
-    ifelse('key' %in% names(dots), key <- dots$key, key <- NULL)
+    key <- dots$key # NULL if key is not in dots
     ifelse('remove_id' %in% names(dots), remove_id <- dots$remove_id, remove_id <- TRUE)
 
     if (!inherits(value, "data.frame"))
