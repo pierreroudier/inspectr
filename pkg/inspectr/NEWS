@@ -1,6 +1,7 @@
 -------------------------- inspectr 0.3-10 (2012-04-03) --------------------------
 * Fix doco
 * renamed option include_id in features(obj) to remove_id for consistance with features<-
+* Now can use spectra(foo, "rowwise") <- ~ A + B + C (not specifying column for WLs range)
 
 -------------------------- inspectr 0.3-9 (2012-03-28) --------------------------
 * turned plot_summary and plot_stack into S4 methods (that are now properly exported)

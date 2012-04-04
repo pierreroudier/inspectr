@@ -300,15 +300,18 @@ if (!isGeneric('spectra<-')) {
     ind.vars <- lapply(.parse_formula(value, object), function(x) which(names(object) %in% x))
     
     # In that case, id = names(nir), wl = id
-    wl <- as.numeric(as.character(object[, ind.vars$id]))
     nir_mat <- object[, ind.vars$nir, drop = FALSE]
     nir <- t(nir_mat)
     ids <- rownames(nir)
+    wl <- as.numeric(as.character(object[, ind.vars$id]))
+    # If wavelengths are not given, using 1:N.
+    if (length(wl) == 0)
+      wl <- 1:ncol(nir)
   }
   else {
     stop("Only the formula interface is supported by 'by_col' mode for the time being. Refer to the man page for help using it.")
   }
-
+  
   r <- Spectra(id = ids, wl = wl, nir = nir)
   cat("Wavelength range: ")
   cat(min(wl(r), na.rm = TRUE), " to ", max(wl(r), na.rm = TRUE)," ", wl_units(r), "\n", sep = "")

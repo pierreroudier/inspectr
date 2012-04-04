@@ -78,7 +78,7 @@ if (!isGeneric("plot_summary")) {
         standardGeneric("plot_summary"))
 }
 
-setMethod("plot", signature('Spectra'), 
+setMethod("plot_summary", signature('Spectra'), 
   function(x, fun = mean, se = TRUE, ...) {
 
     .try_require("ggplot2")
