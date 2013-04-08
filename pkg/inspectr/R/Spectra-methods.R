@@ -8,6 +8,7 @@
 #' @export
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 "Spectra" <- function(wl=numeric(), nir=matrix(), id=as.character(NA), units="nm") {
+  
   # if the wl are given as an integer vector they are translated into a numeric vector
   # for clarity (only one type to manage)
   if (is(wl, "integer"))
@@ -15,7 +16,7 @@
 
   if (is(nir, 'data.frame'))
     nir <- as.matrix(nir)
-
+  
   if (!is(id, "data.frame"))
     id <- data.frame(id = id)
 
@@ -55,8 +56,19 @@
   # consistency nimber of wl/number of cols in the NIR matrix
   if ((length(wl) > 1) & (ncol(nir) != length(wl)))
     stop("number of columns in the spectra matrix and number of observed wavelengths don't match")
+  
+  # Making sure wavelengths are increasing
+  if (!identical(wl, sort(wl))) {
+    order_wl <- order(wl)
+    # Re-order wavelengths
+    wl <- wl[order_wl]
+    # Re-order NIR matrix
+    nir <- nir[, order_wl]    
+  }
+  
   rownames(nir) <- as.vector(do.call('rbind', id))
   colnames(nir) <- wl
+  
   new("Spectra", wl = wl, nir = nir, id = id, units = units)
 }
 
@@ -160,7 +172,7 @@ as.data.frame.Spectra <- function(x, ..., exclude_id = FALSE)  {
   df <- as.data.frame(spectra(x))
   names(df) <- wl(x)
   if (!exclude_id) {
-    df <- data.frame(ids(x), df)
+    df <- data.frame(ids(x, as.vector = FALSE), df)
   }
   df
 }
@@ -220,7 +232,7 @@ if (!isGeneric("ids"))
 #' @export
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 setMethod("ids", "Spectra",
-  function(object, ..., as.vector = FALSE) {
+  function(object, ..., as.vector = TRUE) {
     if (as.vector) {
       res <- object@id[[1]]
     } else {
@@ -282,7 +294,7 @@ length.Spectra <- function(x)
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 setMethod(f='nrow', signature='Spectra',
 definition = function(x)
-  nrow(ids(x))
+  nrow(ids(x, as.vector = FALSE))
 )
 
 ' Returns the number of data cols in the object
@@ -416,13 +428,11 @@ setReplaceMethod("features", signature("Spectra", "ANY"),
   # key gives the column name of the ids in the data.frame
   function(object, ..., value) {
      
-#     safe = TRUE, key = NULL, remove_id = TRUE
-
     # hack to avoid the 'value' must be on the right side' thing at R CMD check
     dots <- list(...)
     ifelse('safe' %in% names(dots), safe <- dots$safe, safe <- TRUE)
     key <- dots$key # NULL if key is not in dots
-    ifelse('remove_id' %in% names(dots), remove_id <- dots$remove_id, remove_id <- TRUE)
+    ifelse('exclude_id' %in% names(dots), exclude_id <- dots$exclude_id, exclude_id <- TRUE)
 
     if (!inherits(value, "data.frame"))
       stop('invalid initialization for SpectraDataFrame object')
@@ -434,7 +444,7 @@ setReplaceMethod("features", signature("Spectra", "ANY"),
         stop("Please provide only ONE id column.")
 
       # Actual ID sanity check
-      spectra_ids <- ids(object)
+      spectra_ids <- ids(object, as.vector = FALSE)
       if (is.numeric(key)) {
         key <- names(value)[key]
       }
@@ -446,7 +456,7 @@ setReplaceMethod("features", signature("Spectra", "ANY"),
       data <- join(spectra_ids, value,  by = key, type = "left", match = "first")
       
       # removing the id column      
-      if (remove_id)
+      if (exclude_id)
         data <- data[, -1*which(names(data) == key)]
     }
     else {
@@ -615,7 +625,7 @@ setMethod("mutate", "Spectra", function (.data, ...){
 
   wls <- wl(.data)
   uns <- wl_units(.data)
-  ids <- ids(.data)
+  ids <- ids(.data, as.vector = FALSE)
 
   cols <- as.list(substitute(list(...))[-1])
   cols <- cols[names(cols) != ""]
@@ -670,8 +680,8 @@ if (!isGeneric('melt_spectra'))
 
 setMethod("melt_spectra", "Spectra", function(obj, ...){
 
-  id.nm <- names(ids(obj))
-  x <- data.frame(ids(obj), spectra(obj))
+  id.nm <- names(ids(obj, as.vector = FALSE))
+  x <- data.frame(ids(obj, as.vector = FALSE), spectra(obj))
   names(x) <- c(id.nm, wl(obj))
   res <- melt(x, id.vars = id.nm, variable.name = 'wl', value.name="nir") 
   res$wl <- as.numeric(as.character(res$wl))
@@ -707,7 +717,7 @@ setMethod("cut", "Spectra", function(x, ..., wl) {
   # Subsetting spectra matrix
   nir <- spectra(x)[, idx]
   
-  res <- Spectra(wl = wl, nir = nir, id = ids(x), units = wl_units(x))
+  res <- Spectra(wl = wl, nir = nir, id = ids(x, as.vector = FALSE), units = wl_units(x))
 
   if ("data" %in% slotNames(x)) {
     res <- SpectraDataFrame(res, data = features(x))

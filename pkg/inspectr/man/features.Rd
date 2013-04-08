@@ -17,26 +17,26 @@
 
 \bold{x=Spectra}
 
-\code{features(obj, safe=TRUE, key=NULL, remove_id=TRUE) <- value}
+\code{features(obj, safe=TRUE, key=NULL, exclude_id=TRUE) <- value}
 
 \tabular{rll}{
 \tab \code{obj}  \tab A \code{Spectra} object \cr
 \tab \code{safe} \tab Logical. If TRUE, data is being added to the object using a SQL join (using a key field given by the \code{key} option), otherwise it is assumed the order of the rows is consitent with the order of the rows in \code{obj} \cr
 \tab \code{key} \tab Character, name of the column of the data.frame storing the ids for the SQL join. Ignored if \code{safe} is \code{FALSE}. \cr 
- \tab \code{remove_id} \tab Logical, if \code{TRUE}, ids used for the SQL join are removed from the data slot after the join. \cr 
+ \tab \code{exclude_id} \tab Logical, if \code{TRUE}, ids used for the SQL join are removed from the data slot after the join. \cr 
 }
 
 \bold{x=SpectraDataFrame}  
 
-\code{features(obj, remove_id=TRUE)}
+\code{features(obj, exclude_id=TRUE)}
 
-\code{features(obj, safe=TRUE, key=NULL, remove_id=TRUE, append=TRUE) <- value}
+\code{features(obj, safe=TRUE, key=NULL, exclude_id=TRUE, append=TRUE) <- value}
 
 \tabular{rll}{
 \tab \code{obj}  \tab A \code{SpectraDataFrame} object \cr
 \tab \code{safe} \tab Logical. If TRUE, data is being added to the object using a SQL join (using a key field given by the \code{key} option), otherwise it is assumed the order of the rows is consitent with the order of the rows in \code{obj} \cr
 \tab \code{key} \tab Character, name of the column of the data.frame storing the ids for the SQL join. Ignored if \code{safe} is \code{FALSE}. \cr 
- \tab \code{remove_id} \tab Logical. For the \code{features} method, if \code{TRUE}, the spectra ids are added to the \code{data.frame} that is returned. For the \code{"features<-"} method, If \code{TRUE}, ids used for the SQL join are removed from the data slot after the join. \cr 
+ \tab \code{exclude_id} \tab Logical. For the \code{features} method, if \code{TRUE}, the spectra ids are added to the \code{data.frame} that is returned. For the \code{"features<-"} method, If \code{TRUE}, ids used for the SQL join are removed from the data slot after the join. \cr 
 \tab \code{append} \tab Logical, if \code{TRUE}, the data is appended to any existing data. if FALSE, the data provided is erasing any existing data. \cr
 }
 
@@ -62,7 +62,7 @@ features(australia)
 # Promoting a Spectra to a SpectraDataFrame object
 s <- as(australia, "Spectra")
 # Generating dummy data
-d <- data.frame(id = ids(australia)[,1], foo = runif(nrow(australia)), bar = sample(LETTERS[1:5], size = nrow(australia), replace = TRUE))
+d <- data.frame(id = ids(australia), foo = runif(nrow(australia)), bar = sample(LETTERS[1:5], size = nrow(australia), replace = TRUE))
 head(d)
 # Affecting data to Spectra object
 features(s, key = 'id') <- d

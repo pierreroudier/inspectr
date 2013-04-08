@@ -97,7 +97,7 @@ setReplaceMethod("wl", "Spectra",
         if (length(value) < length(object)) {
           ind.wl <- which(wl(d) %in% value)
           nir <- spectra(object)[, ind.wl, drop = FALSE]
-          res <- Spectra(id = ids(object), wl = value, nir = nir, units = units(object))
+          res <- Spectra(id = ids(object, as.vector = FALSE), wl = value, nir = nir, units = units(object))
           if ("data" %in% slotNames(object))
             res <- SpectraDataFrame(res, data = features(object))
           }

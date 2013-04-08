@@ -158,6 +158,31 @@ setMethod("plot_stack", signature('Spectra'),
   }
 )
 
+if (!isGeneric("plot_offset")) {
+    setGeneric("plot_offset", function(x, offset, ...)
+        standardGeneric("plot_offset"))
+}
+
+setMethod("plot_offset", signature('Spectra', 'ANY'), 
+  function(x, offset = 1){
+    .try_require("ggplot2")
+    # offsets values
+    offsets <- (seq_len(nrow(x)) - 1)*offset
+    # affect spectra with offset values
+    spectra(x) <- aaply(offsets, 1, function(offsets) spectra(x[offsets + 1,]) + offsets)
+    m <- melt_spectra(x)
+    
+    idnm <- names(m)[1]
+    m[[idnm]] <- as.factor(m[[idnm]])
+    
+    ggplot(m) + 
+      geom_line(aes_string(x = 'wl', y = 'nir', colour = idnm, group = idnm)) +
+      labs(y = NULL) +
+      theme_bw()
+
+  }
+)
+
 ## Code for adding NAs to potentially removed WLs
 ##
 # ref reference wavelengths

@@ -13,22 +13,22 @@
 \section{Methods}{
 \describe{
 
-\bold{x=Spectra}
+%\bold{x=Spectra}
+%
+%\code{ids(obj, ..., as.vector = TRUE)}
+%
+%\code{ids(obj) <- value}
+%
+%\tabular{rll}{
+%\tab \code{obj}  \tab A \code{Spectra} object \cr
+%\tab \code{...} \tab Ignored \cr
+%\tab \code{as.vector} \tab Logical, returns the IDs as a character vector rather than a 1-column \code{data.frame}. \cr 
+%\tab \code{value} A vector giving new IDs for \code{obj}. These IDs must be unique. \cr
+%}
 
-\code{ids(obj, ..., as.vector = FALSE)}
+%\bold{x=SpectraDataFrame}  
 
-\code{ids(obj) <- value}
-
-\tabular{rll}{
-\tab \code{obj}  \tab A \code{Spectra} object \cr
-\tab \code{...} \tab Ignored \cr
-\tab \code{as.vector} \tab Logical, returns the IDs as a character vector rather than a 1-column \code{data.frame}. \cr 
-\tab \code{value} A vector giving new IDs for \code{obj}. These IDs must be unique. \tab \cr
-}
-
-\bold{x=SpectraDataFrame}  
-
-\code{ids(obj, ..., as.vector = FALSE)}
+\code{ids(obj, ..., as.vector = TRUE)}
 
 \code{ids(obj) <- value}
 

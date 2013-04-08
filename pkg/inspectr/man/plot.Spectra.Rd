@@ -4,10 +4,12 @@
 
 \alias{plot_summary}
 \alias{plot_stack}
+\alias{plot_offset}
 
 \alias{plot,Spectra,ANY-method}
 \alias{plot_summary,Spectra-method}
 \alias{plot_stack,Spectra-method}
+\alias{plot_offset,Spectra-method}
 
 \title{Plots an object inheriting  from the Spectra class}
 
@@ -15,6 +17,7 @@
 \method{plot}{Spectra} (x, gg=FALSE, gaps=TRUE, attr=NULL, ...)
 \S4method{plot_summary}{Spectra} (x, fun=mean, se=TRUE, ...)
 \S4method{plot_stack}{Spectra} (x)
+\S4method{plot_offset}{Spectra} (x, offset=1)
 }
 
 \description{Plots an object inheriting  from the Spectra class}
@@ -32,6 +35,7 @@ The philosophy of this plotting routine is to provide a "quick'n'dirty" way to p
   \item{attr}{attribute against which lines are coloured (only for \code{gg = TRUE}}
   \item{fun}{an aggregation function}
   \item{se}{if TRUE, plots the standard deviation around the summary spectra (computed by function as given by \code{fun}). If FALSE, does not plot dispersion information. If a function, uses this function instead of \code{sd}.}
+  \item{offset}{Offset between spectra}
   \item{...}{options to be passed to \code{matplot}}
 }
 

@@ -13,6 +13,10 @@ importFrom(reshape2,
   melt
 )
 
+importFrom(signal,
+  interp1
+)
+
 importFrom(stringr,
   fixed,
   str_c,
@@ -101,7 +105,9 @@ exportMethods(
   mutate,
   split,
   plot_summary,
-  plot_stack
+  plot_stack,
+  kenstone,
+  splice
 )
 
 exportPattern("^[^\\.]")

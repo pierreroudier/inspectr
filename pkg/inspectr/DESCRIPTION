@@ -1,14 +1,14 @@
 Package: inspectr
 Type: Package
-Title: Storing and manipulating spectra and associated data in R
-Version: 0.3-10
-Date: 2012-04-03
+Title: Storing, manipulating and analysis spectroscopy and associated data in R.
+Version: 0.3-14
+Date: 2013-02-25
 Author: Pierre Roudier <pierre.roudier@gmail.com>
 Maintainer: Pierre Roudier <pierre.roudier@gmail.com>
-Description: Stores and eases the manipulation of spectra and associated data.
+Description: Stores and eases the manipulation of spectra and associated data, with dedicated classes for spatial and soil-related datasets.
 URL: http://inspectr.r-forge.r-project.org/
-Depends: R (>= 2.12)
-Imports: methods, plyr, reshape2, stringr, sp, baseline
-Suggests: ggplot2, pls, RColorBrewer, chemometrics
+Depends: R (>= 2.14)
+Imports: methods, plyr, reshape2, stringr, sp, baseline, signal
+Suggests: ggplot2, pls, RColorBrewer, chemometrics, aqp
 License: GPL
 LazyData: true

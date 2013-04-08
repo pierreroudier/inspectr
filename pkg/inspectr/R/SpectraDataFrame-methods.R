@@ -18,7 +18,7 @@
 
     wl <- wl(s)
     nir <- spectra(s)
-    id <- ids(s)
+    id <- ids(s, as.vector = FALSE)
     units <- wl_units(s)
   }
 
@@ -98,9 +98,9 @@ if (!isGeneric("features"))
     standardGeneric("features"))
 
 setMethod("features", "SpectraDataFrame",
-  function(obj, ..., remove_id = TRUE) {
-    if (!remove_id) {
-      res <- data.frame(ids(obj), obj@data) 
+  function(obj, ..., exclude_id = TRUE) {
+    if (!exclude_id) {
+      res <- data.frame(ids(obj, as.vector = FALSE), obj@data) 
     } else {
       res <- obj@data
     }
@@ -118,7 +118,7 @@ if (!isGeneric('features<-'))
 setReplaceMethod("features", signature("SpectraDataFrame", "ANY"),
   # safe enables id check
   # key gives the column name of the ids in the data.frame
-  function(object, value, safe = TRUE, key = NULL, remove_id = TRUE, append = TRUE) {
+  function(object, value, safe = TRUE, key = NULL, exclude_id = TRUE, append = TRUE) {
     
     if (!inherits(value, "data.frame"))
       stop('data must be provided as a data.frame object')
@@ -135,12 +135,12 @@ setReplaceMethod("features", signature("SpectraDataFrame", "ANY"),
 
       if (append) {
         # Actual ID sanity check
-        d <- data.frame(ids(object), features(object))
+        d <- data.frame(ids(object, as.vector = FALSE), features(object))
         # Using the "key" name for ids
         names(d)[1] <- key
       }
       else {
-        d <- ids(object)
+        d <- ids(object, as.vector = FALSE)
         # Using the "key" name for ids
         names(d) <- key
       }
@@ -153,7 +153,7 @@ setReplaceMethod("features", signature("SpectraDataFrame", "ANY"),
       # Put data together
       data <- join(d, value,  by = key, type = "left", match = "first")
       # removing the id column      
-      if (remove_id)
+      if (exclude_id)
         data <- data[, -1*which(names(data) == key), drop = FALSE]
     }
     else {
@@ -213,7 +213,7 @@ setReplaceMethod("[[", c("Spectra", "ANY", "missing", "ANY"),
 
 setMethod("[", c("SpectraDataFrame", "ANY", "ANY", "missing"),
   function(x, i, j, ..., k, drop = FALSE) {
-
+    
     .bracket <- function(x, i, j, k, ..., drop = FALSE) {
 
       missing.i <- missing(i)
@@ -281,15 +281,15 @@ names.SpectraDataFrame <- function(x) names(x@data)
 #'
 setMethod("melt_spectra", "SpectraDataFrame", function(obj, attr = NULL, ...){
   
-  id.nm <- names(ids(obj))
+  id.nm <- names(ids(obj, as.vector = FALSE))
 
   if (!is.null(attr)) {
     data <- subset(features(obj), select = attr)
-    x <- data.frame(ids(obj), data, spectra(obj))
+    x <- data.frame(ids(obj, as.vector = FALSE), data, spectra(obj))
     names(x) <- c(id.nm, attr, wl(obj))
   }
   else {
-    x <- data.frame(ids(obj), spectra(obj))
+    x <- data.frame(ids(obj, as.vector = FALSE), spectra(obj))
     names(x) <- c(id.nm, wl(obj))
   }
   
@@ -323,7 +323,7 @@ subset.SpectraDataFrame <- function(x, subset, select, drop = FALSE, ...) {
   # remove unused factors
   df_sub <- droplevels(df_sub)
   id_selected <- which(rownames(df) %in% rownames(df_sub))
-  SpectraDataFrame(wl = wl(x), nir = spectra(x)[id_selected, , drop = FALSE], id = ids(x)[id_selected, 1, drop = FALSE], units = wl_units(x), data = df_sub)
+  SpectraDataFrame(wl = wl(x), nir = spectra(x)[id_selected, , drop = FALSE], id = ids(x, as.vector = FALSE)[id_selected, 1, drop = FALSE], units = wl_units(x), data = df_sub)
 }
 
 setMethod("subset", "SpectraDataFrame", subset.SpectraDataFrame)

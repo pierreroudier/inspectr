@@ -162,7 +162,7 @@ spectra(australia_by_col, mode = "colwise") <- wl ~ ...
 summary(australia_by_col)
 
 # Then data can be added to promote it as a SpectraDataFrame
-my.data <- features(australia, remove_id = FALSE)
+my.data <- features(australia, exclude_id = FALSE)
 features(australia_by_col, key = 'sr_no') <- my.data
 summary(australia_by_col)
 }

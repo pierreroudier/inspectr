@@ -1,0 +1,591 @@
+\documentclass{article}
+% \VignetteIndexEntry{Graphics in inspectr: Representing Spectra objects}
+
+\usepackage{graphicx}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\usepackage{color}
+\usepackage{subfig}
+\usepackage{multirow}
+\usepackage{Sweave}
+
+\newcommand{\strong}[1]{{\normalfont\fontseries{b}\selectfont #1}}
+\let\pkg=\strong
+
+% \SweaveOpts{prefix.string=<directory>/<filename-prefix>}
+
+% \VignetteDepends{sp}
+% \SweaveOpts{dev=png}
+
+\setkeys{Gin}{width=0.5\textwidth}
+
+\title{A Gentle Introduction to {\tt inspectr}:\\Manipulation of Spectroscopy Data in {\tt R}}
+
+\author{
+Pierre Roudier\footnote{Landcare Research -- Manaaki Whenua, Private Bag 11052, Manawatu Mail Centre, Palmerston North 4442, New Zealand.
+{\tt roudierp@landcareresearch.co.nz}}
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{Philosophy of the package}
+
+The {\bf inspectr} package is aimed at the scientist that needs to work with spectroscopy data. It has originally been developed with Vis-NIR spectroscopy in mind, but can surely have some wider applications.
+
+The philosophy of this package is:
+\begin{enumerate}
+  \item to provide its user a complete suite of classes to represent and store spectra and associated data into a single object,
+  \item to allow a great liberty to hack around the package. This is not a one-stop shop for spectra processing, and users are encouraged to make use of other {\tt R} packages for data visualisation, analysis or modeling. Be creative!
+\end{enumerate}
+
+\section{S4 classes for spectroscopy data}
+
+\subsection{A short word on classes}
+\textit{Class} is a computer science concept. A class is a way to represent information. It can be pictured as a chest of drawers, with each drawer containing a characteristic of the type of information it describes. The {\bf inspectr} package provides a set of S4 classes to represent the information that are handled by scientists using spectroscopy, and are described in the following sections. 
+
+\subsection{The {\tt Spectra} class}
+The {\tt Spectra} class is the simplest class provided by {\bf inspectr}: it is simply describing a set of spectra. It has the following fields (or ``slots'' in the S4 jargon):
+\begin{description}
+  \item[{\tt id}] the unique identifiers of each spectra in the collection. It is represented as a {\tt data.frame} with one column, and as many rows as there are spectra in the collection.
+  \item[{\tt wl}] the wavelengths at which the spectra in the collection have been measured. It is represented as a vector of {\tt numeric} values.
+  \item[{\tt units}] the units in which these wavelengths are expressed. It is represented as a {\tt character} vector of length $1$.
+  \item[{\tt nir}] the reflectance values for each spectra in the collection. It is represented as a {\t numeric matrix} with as many rows as there are spectra in the collection, and as many columns as there are wavelengths.
+\end{description}
+
+\subsection{The {\tt SpectraDataFrame} class}
+
+The {\tt SpectraDataFrame} class is representing the spectra information \textit{plus} the associated data  that might come with it, e.g. lab measurements of given physical or chemical properties you might want to model. The {\tt SpectraDataFrame} class \textit{inherits} from the {\tt Spectra} class, which means that is is buildt upon the {\tt Spectra} class. It has the following fields:
+\begin{description}
+  \item[{\tt id}] the unique identifiers of each spectra in the collection,
+  \item[{\tt wl}] the wavelengths at which the spectra in the collection have been measured,
+  \item[{\tt units}] the units in which these wavelengths are expressed,
+  \item[{\tt nir}] the reflectance values for each spectra in the collection,
+  \item[{\tt data}] the data that is associated with the set of spectra in the collection. It is represented as a {\tt data.frame} with as many rows as there are spectra in the collection. The number of columns, and therefore of attributes, is not limited. 
+\end{description}
+
+\subsection{The {\tt SpatialSpectra} class}
+The {\tt SpatialSpectra} class is representing the spectra information \textit{plus} the spatial support of these. The {\tt SpatialSpectra} class inherits from both the {\tt Spectra} class provided by the {\bf inspectr} package and the {\tt SpatialPoints} class provided by the {\bf sp} package. It has the following fields:
+\begin{description}
+  \item[{\tt id}] the unique identifiers of each spectra in the collection,
+  \item[{\tt wl}] the wavelengths at which the spectra in the collection have been measured,
+  \item[{\tt units}] the units in which these wavelengths are expressed,
+  \item[{\tt nir}] the reflectance values for each spectra in the collection,
+  \item[{\tt bbox}] 
+  \item[{\tt proj4string}] 
+  \item[{\tt coords}] 
+  \item[{\tt coords.nrs}] 
+\end{description}
+
+\subsection{The {\tt SpatialSpectraDataFrame} class}
+The {\tt SpectraDataFrame} class is representing the spectra information, the associated data, \textit{plus} the spatial support of these. The {\tt SpectraDataFrame} class inherits from both the {\tt SpectraDataFrame} class provided by the {\bf inspectr} package and the {\tt SpatialPointsDataFrame} class provided by the {\bf sp} package. It has the following fields:
+\begin{description}
+  \item[{\tt id}] the unique identifiers of each spectra in the collection,
+  \item[{\tt wl}] the wavelengths at which the spectra in the collection have been measured,
+  \item[{\tt units}] the units in which these wavelengths are expressed,
+  \item[{\tt nir}] the reflectance values for each spectra in the collection,
+  \item[{\tt data}] the data that is associated with the set of spectra in the collection,
+  \item[{\tt bbox}] 
+  \item[{\tt proj4string}] 
+  \item[{\tt coords}] 
+  \item[{\tt coords.nrs}]
+\end{description}
+
+\section{Creating {\tt Spectra*} objects}
+
+% \subsection{Classic workflow in {\tt R}}
+This section will demonstrate how to get started with the {\bf inspectr} package and how to us the classes presented previously. The first thing to do once in a {\tt R} session is of course to load the package:
+
+<<load, echo=TRUE, eval=TRUE, results=hide>>=
+library(inspectr)
+@
+
+\subsection{Data}
+
+\subsubsection{Data formats supported}
+
+The {\bf inspectr} package does not provide any binary format reader: it only handles {\tt data.frame}s. This means that to make use of this package, the user likely needs to provide data as an ASCII-formatted data, and read this data into {\tt R} usiing the classic readers {\tt read.csv}, {\tt read.table}, etc. In a classic workflow, data would then be read from, for example, a CSV file, and a variable {\tt df} would be a {\tt data.frame}:
+
+<<read_csv, echo=TRUE, eval=FALSE>>=
+df <- read.csv("path/to/my/data.csv")
+class(df)
+# [1] data.frame
+@
+
+\subsubsection{The {\tt australia} dataset}
+
+In this vignette, we are using a dataset contained in the package, to provide the user with reproducible code. This dataset is called {\tt australia} and has been collected by CSIRO. It gathers 100 soil spectra, along side with their organic carbon, pH and clay content values (more information about this dataset can be accessed in the help: {\tt ?australia} or {\tt help('australia')}.):
+
+<<load_australia, echo=TRUE, eval=TRUE>>=
+data(australia)
+dim(australia)
+@
+
+<<echo=FALSE, eval=TRUE>>=
+australia.bak <- australia
+@
+
+As you can see, the {\tt australia} dataset has \Sexpr{nrow(australia)} rows and \Sexpr{ncol(australia)} attributes. This huge number of attributes makes this object quite hard to explore with classic tools like {\tt head}, {\tt tail} or {\tt summary}. {\bf inspectr} is providing the {\tt big.head} and {\tt big.tail} commands to address this problem:
+
+<<big_head, echo=TRUE, eval=TRUE>>=
+big.head(australia)
+@
+The number of rows, columns printed, and columns ommited can be specified to {\tt big.head} and {\tt big.tail}. See the help: {\tt ?big.head} or {\tt help('big.head')}.
+
+% \subsection{From {\tt data.frame} to {\tt Spectra} objects}
+
+\subsubsection{Representations of spectroscopy data}
+
+Generally, data used in spectroscopy can be represented into two modes, depending on how samples are represented (Figure \ref{fig:data_formats}):
+\begin{description}
+  \item[{\tt rowwise} mode] Each row represents a sample, each columns being the attributes that have been measured for this sample (reflectance in each wavelength, but also physical or chemical attributes, Figure \ref{fig:data_format_samples_vs_wl}),
+  \item[{\tt colwise} mode] Each row represents the reflectance for a given wavelength, each column being a sample. In this configuration, no attribute data can be added (Figure \ref{fig:data_format_wl_vs_samples}).
+\end{description}
+
+\begin{figure}[ht]
+\centering
+\subfloat[Each row represents a sample]{
+  \label{fig:data_format_samples_vs_wl}
+  {\tt
+  \begin{tabular}{|c|cc|ccccc|}
+  \multicolumn{1}{c}{ $\overbrace{ \rule{1.0cm}{0pt} }^{samples}$ } & \multicolumn{2}{c}{ $\overbrace{ \rule{2.0cm}{0pt} }^{attributes}$ } & \multicolumn{5}{c}{ $\overbrace{ \rule{5.0cm}{0pt} }^{wavelengths}$ }\\
+  \hline
+  id & carbon & ph & 350 & 351 & $\dots$ & 2499 & 2500\\
+  \hline
+  A & 0.63 & 9.1 & \Sexpr{round(runif(1), digits = 2)} & \Sexpr{round(runif(1), digits = 2)} & $\dots$ & \Sexpr{round(runif(1), digits = 2)} & \Sexpr{round(runif(1), digits = 2)}\\
+  % \hline
+  B & 0.93 & 7.6 & \Sexpr{round(runif(1), digits = 2)} & \Sexpr{round(runif(1), digits = 2)} & $\dots$ & \Sexpr{round(runif(1), digits = 2)} & \Sexpr{round(runif(1), digits = 2)}\\
+  % \hline
+  $\dots$ & $\dots$ & $\dots$ & $\dots$ & $\dots$ & $\dots$ & $\dots$ & $\dots$\\
+  % \hline
+  Z & 3.64 & 8.3 & \Sexpr{round(runif(1), digits = 2)} & \Sexpr{round(runif(1), digits = 2)} & $\dots$ & \Sexpr{round(runif(1), digits = 2)} & \Sexpr{round(runif(1), digits = 2)}\\
+  \hline
+  \end{tabular}
+  }
+}
+
+\vfill
+
+\subfloat[Each column represents a sample]{
+  \label{fig:data_format_wl_vs_samples}
+  {\tt
+  \begin{tabular}{|c|cccc|}
+  \multicolumn{1}{c}{ $\overbrace{ \rule{1.5cm}{0pt} }^{wavelengths}$ } & \multicolumn{4}{c}{ $\overbrace{ \rule{4.0cm}{0pt} }^{samples}$ }\\
+  \hline
+  wl & A & B & $\dots$ & Z\\
+  \hline
+  350 & \Sexpr{round(runif(1), digits = 2)} & \Sexpr{round(runif(1), digits = 2)} & $\dots$ & \Sexpr{round(runif(1), digits = 2)}\\
+  % \hline
+  351 & \Sexpr{round(runif(1), digits = 2)} & \Sexpr{round(runif(1), digits = 2)} & $\dots$ & \Sexpr{round(runif(1), digits = 2)}\\
+  % \hline
+  $\dots$ & $\dots$ & $\dots$ & $\dots$ & $\dots$\\
+  % \hline
+  2500 & \Sexpr{round(runif(1), digits = 2)} & \Sexpr{round(runif(1), digits = 2)} & $\dots$ & \Sexpr{round(runif(1), digits = 2)}\\
+  \hline
+  \end{tabular}
+  }
+}
+\caption{Rowwise and colwise representations of spectral data.}
+\label{fig:data_formats}
+\end{figure}
+
+Both data representations can be handled by {\bf inspectr}. The demo dataset, {\tt australia}, is in the rowwise format. However, it can be described in the colwise format as well. Let \verb|australia_colwise| be this representation for the example's sake:
+
+<<australia_colwise_compute, eval=TRUE, echo=FALSE, results=hide>>=
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+m <- melt_spectra(australia)
+australia_colwise <- reshape2::acast(m, ... ~ sr_no)
+australia_colwise <- data.frame(wl = rownames(australia_colwise), australia_colwise, check.names = FALSE)
+names(australia_colwise) <- c('wl', ids(australia, as.vector = TRUE))
+australia_colwise.bak <- australia_colwise
+data(australia)
+@
+
+% Just some code to revert to the original data.frame, as it will be used throughout the doco
+<<revert_australia_colwise, echo=FALSE, eval=TRUE>>=
+australia_colwise <- australia_colwise.bak
+@
+
+<<australia_colwise_display, eval=TRUE, echo=TRUE>>=
+big.head(australia_colwise)
+@
+
+\subsection{Creation of {\tt Spectra*} objects from scratch}
+\label{sec:constructors-scratch}
+The {\bf inspectr} packages comes with constructor functions that allow to build {\tt Spectra*} objects ``from scratch''. These functions are named after the object they are building: {\tt Spectra()}, {\tt SpectraDataFrame()}, {\tt SpatialSpectra()} and {\tt SpatialSpectraDataFrame()}.
+
+\subsubsection{Creation of {\tt Spectra} objects}
+\label{sec:constructors-s}
+First, let's create each part of the object to build. Note that the {\tt nir} slot requires a matrix:
+<<build_spectra_1, echo=TRUE, eval=TRUE>>=
+australia_ids <- australia$sr_no # The IDs
+australia_wls <- 350:2500 # The wavelengths
+australia_nir <- as.matrix(australia[, 5:2155]) # The matrix of spectra
+@
+
+Then, the {\tt Spectra} function can be used to create the object {\tt s} (note that by default, the {\tt units} slot is initiated to {\tt 'nm'}):
+<<build_spectra_2, echo=TRUE, eval=TRUE>>= 
+s <- Spectra(id = australia_ids, wl = australia_wls, nir = australia_nir, 
+units = 'nm')
+summary(s)
+@
+
+\subsubsection{Creation of {\tt SpectraDataFrame} objects}
+\label{sec:constructors-sdf}
+If some attribute data is available for the samples in this collection, you might want to create a {\tt SpectraDataFrame} object:
+<<build_spectradataframe_1, echo=TRUE, eval=TRUE>>=
+australia_data <- australia[, c('carbon', 'ph', 'clay')]
+sdf <- SpectraDataFrame(id = australia_ids, wl = australia_wls, nir = australia_nir, 
+data=australia_data)
+summary(sdf)
+@
+
+\subsection{The {\tt spectra} constructor and its mini-language}
+
+To facilitate the promotion of {\tt data.frame} objects to {\tt Spectr*} objects, a suite of constructors are available in {\bf inspectr}. These constructors are filling the same role as the {\tt Spectra()} and {\tt SpectraDataFrame()} functions that have been presented, but are trying to make the workflow a little bit more intuitive and natural for the user.
+
+Two constructors are available: {\tt "spectra<-"} and {\tt "wl<-"}. The first one can address colwise and rowwise formatted datasets, while the latter can only handle rowwise datasets. To facilitate the manipulation of datasets with a lot of variables (which is often the case in spectroscopy), a mini-language is associated to these constructors and will be presented in this section.
+
+\subsubsection{Colwise-formatted data}
+In a colwise-formatted datatset, each row is representing a given wavelength at which spectral information is collected. Each column is representing a given sample for which reflectance at a set of wavelengths has been collected. A column can additionally give the wavelengths values:
+<<inspect_australia_colwise, echo=TRUE, eval=TRUE>>=
+big.head(australia_colwise, 4, 3, 2)
+@
+
+By default, the {\tt "spectra<-"} constructor is working with rowwise-formatted data, so the {\tt mode} option must be set to {\tt "colwise"}. The constructor is using a formula interface, a well-known interface in many {\tt R} packages. A specific synthax 
+must be used with the colwise-formatted data, as follows:
+\begin{verbatim}
+spectra(foo, mode = "colwise") <- W ~ V1 + V2
+\end{verbatim}
+where {\tt foo} is a {\tt data.frame}, and \verb|W ~ V1 + V2| is the formula that has been given to the constructor function. On the left side of the tilde symbol, {\tt W} is the name of the column giving the wavelengths values. It is optional, and \verb|spectra(foo, mode = "colwise") <- ~ V1 + V2| would also work. On the right side of the tilde symbol, {\tt V1} and {\tt V2}, separated by the plus sign,  are the name of the columns of the spectral values for two samples. % Note that {\tt W} is optional, and \verb|spectra(foo, mode = "colwise") <- ~ V1 + V2| would also work.
+
+In our case, we consider promoting \verb|australia_colwise| into a {\tt SpectraDataFrame}: 
+<<convert_australia_colwise, echo=TRUE, eval=TRUE>>=
+spectra(australia_colwise, mode="colwise") <- wl ~ 28 + 36 + 136 + 194
+summary(australia_colwise)
+@
+
+As stated above, providing a column with the wavelengths is optional. If no variable is provided on the left side of the tilde, the object can still be generated, but you might need to update the wavelengths of the created object using {\tt "wl<-"}.
+<<echo=FALSE>>=
+<<revert_australia_colwise>>
+@
+<<convert_australia_colwise_2, echo=TRUE, eval=TRUE>>=
+spectra(australia_colwise, mode="colwise") <- ~ 28 + 36 + 136 + 194
+summary(australia_colwise) # See the wavelength range
+@
+
+On the right side of the tilde sign, while the {\tt +} interface is great to select individuals, it can get quickly very long to type when dealing with lots of scanned individuals. To overcome this, {\bf inspectr} is providing the {\tt "..."} operator, which is a short-hand for \textit{"any variable that has not been used in the constructor"}, thus:
+<<echo=FALSE>>=
+<<revert_australia_colwise>>
+@
+<<convert_australia_colwise_3, echo=TRUE, eval=TRUE>>=
+spectra(australia_colwise, mode="colwise") <- wl ~ ...
+summary(australia_colwise)
+@
+
+The {\tt "..."} short-hand must be used wisely, as {\bf all} the columns (including potentially data or id fields) can be read and transform into a spectra:
+<<echo=FALSE>>=
+<<revert_australia_colwise>>
+@
+<<convert_australia_colwise_3, echo=TRUE, eval=TRUE>>=
+spectra(australia_colwise, mode="colwise") <- ~ ...
+# The first column was the wavelengths values and
+# has been read as a sample
+range(spectra(australia_colwise)) 
+@
+
+\subsubsection{Rowwise-formatted data}
+
+%% Producing SpectraDataFrame objects
+Rowwise-formatted data is the default data representation in {\bf inspectr}. Each row is a sample, each column is a wavelength. Both {\tt Spectra} and {\tt SpectraDataFrame} objects can be initiated using the {\tt "spectra<-"} constructor.
+
+\paragraph{Initiating a {\tt Spectra} object}
+
+If the {\tt data.frame} you want to convert into an {\bf inspectr} object does not have associated data (other than an ID field), or if you want to intentionally drop these data fields, then you must create a {\tt Spectra} object. The formula interface used to do this follows the following synthax:
+
+\begin{verbatim}
+spectra(foo) <- id ~ wl1 + wl2 + wl3
+\end{verbatim}
+where {\tt foo} is a {\tt data.frame}, {\tt id} is an optional field giving unique IDs for the spectra that have been collected, an {\tt wl1, wl2, wl3} are the fields containing the spectral information. For example:
+
+<<convert_australia_spectra, echo=TRUE, eval=TRUE>>=
+names(australia)[1:8]
+spectra(australia) <- sr_no ~ X350 + X351 + X352 + X353
+@
+% % Just some code to revert to the original data.frame, as it will be used throughout the doco
+<<revert_australia, echo=FALSE, eval=TRUE>>=
+australia <- australia.bak
+@
+
+Again, typing all the wavelengths numbers could be a problem, because there would be so many of them. Hopefully, the formula interface of {\tt spectra} comes with a parser that allows to use an intuitive synthax. You can use intervals using the {\tt ":"} operator. Moreover, the parser is extracting numerical values out of the column names, so column names such as {\tt X456} would be read as the numeric $456$ value:
+
+<<convert_australia_spectra_2, echo=TRUE, eval=TRUE>>=
+spectra(australia) <- sr_no ~ 350:2500
+@
+<<echo=FALSE>>=
+<<revert_australia>>
+@
+
+By default, the spacing of the intervals is one, but you can specify another step:
+<<convert_australia_spectra_3, echo=TRUE, eval=TRUE>>=
+spectra(australia) <- sr_no ~ 350:5:2500
+@
+<<echo=FALSE>>=
+<<revert_australia>>
+@
+
+Again, the ID field is optional, and {\bf inspectr} will generate one automatically if it's not provided:
+<<convert_australia_spectra_4, echo=TRUE, eval=TRUE>>=
+spectra(australia) <- ~ 350:2500
+@
+<<echo=FALSE>>=
+<<revert_australia>>
+@
+
+The {\tt ...} short hand is also available:
+<<convert_australia_spectra_4, echo=TRUE, eval=TRUE>>=
+# removing any other data than the spectral measurements
+oz <- australia[, 5:ncol(australia)] 
+names(oz)[1:5]
+spectra(oz) <- ~ ...
+@
+
+\paragraph{Initiating a {\tt SpectraDataFrame} object}
+
+If you got associated data in the {\tt data.frame} you want to convert, then you want to create a {\tt SpectraDataFrame} object. This is still done using the {\tt spectra<-} constructor function, but the formula synthax is a little bit different, and is now in 3 parts:
+\begin{verbatim}
+spectra(foo) <- id ~ attr1 + attr2 ~ wl1 + wl2 + wl3
+\end{verbatim}
+where {\tt foo} is a {\tt data.frame}, {\tt id} is an optional field giving unique IDs for the spectra that have been collected, {\tt attr1} and {\tt attr2} are the fields conatining associated data, and {\tt wl1, wl2, wl3} are the fields containing the spectral information. For example:
+<<convert_australia, echo=TRUE, eval=TRUE>>=
+spectra(australia) <- sr_no ~ carbon + ph + clay ~ 350 + 351 + 352 + 353 
+@
+
+The parser is still supporting the shorthands {\tt "..."} and {\tt ":"} presented above. The {\tt "..."} shorthand is particularly handy to add data.
+<<echo=FALSE>>=
+<<revert_australia>>
+@
+<<convert_australia_4, echo=TRUE, eval=TRUE>>=
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+@
+
+If no ID field is available, or if you don't want to use it, the shorthand {\tt id} forces {\bf inspectr} to generate automatically a new one:
+<<echo=FALSE>>=
+<<revert_australia>>
+@
+<<convert_australia_5, echo=TRUE, eval=TRUE>>=
+spectra(australia) <- id ~ ph ~ 350:2500
+@
+
+\subsection{Promoting {\tt Spectra} objects to {\tt SpectraDataFrame} objects}
+
+\subsubsection{Using the {\tt SpectraDataFrame()} constructor function}
+
+The {\tt SpectraDataFrame} constructor function has been presented in section \ref{sec:constructors-sdf} to build up {\tt SpectraDataFrame} objects from scratch, by specifying values for the different slots of the object. This function can also be used on a {\tt Spectra} object to associate data to this object:
+
+<<promote_spectra, echo=TRUE, eval=TRUE>>=
+# Create Spectra object from australia
+s <- as(australia, "Spectra") 
+class(s)
+
+# Associated data 
+head(australia_data)
+
+# Promote s to a SpectraDataFrame
+sdf <- SpectraDataFrame(s, data = australia_data)
+summary(sdf)
+@
+
+Of course, the associated data should have the same number of rows than the number of spectra in the collection. Moreover, no sanity checking is done to verify that each row in the data is affected to the correct spectra in the collection. This means the order of the individuals in the {\tt data} should be the same as the order of the spectra of these individuals in the {\tt Spectra} object that is promoted. 
+
+This limitation, and potential source of errors, motivated the development of the {\tt features} function, that is presented below.
+
+\subsubsection{Using the {\tt features()} function}
+The {\tt features} function allows to specify an ID column in the data to associate to the {\tt Spectra} object. This ID column will be used to map attributes to the spectra in the coillection using a SQL-like join. The ID column is specified using the {\tt key} option:
+
+<<promote_spectra_2, echo=TRUE, eval=TRUE>>=
+# Here is some data with an associated ID field
+some_data <- data.frame(id = ids(s), australia_data)
+head(some_data)
+
+# The features function can use a safe, SQL-like join
+# to associate the data
+features(s, key="id") <- some_data
+summary(s)
+@
+
+The sanity check mechanism can be disabled by turning the {\tt safe} option to {\tt FALSE}. The function is then faster for the case when you're dead sure what you're doing.
+
+<<promote_spectra_3, echo=TRUE, eval=TRUE>>=
+s <- as(australia, "Spectra")
+features(s, safe=FALSE) <- some_data
+summary(s)
+@
+
+\subsection{Promoting {\tt Spectra*} objects to {\tt SpatialSpectra*} objects}
+
+% coordinates<-
+
+\section{Manipulating {\tt Spectra*} objects}
+
+\subsection{Getting basic information}
+<<echo=FALSE, results=hide>>=
+<<revert_australia>>
+spectra(australia) <- sr_no ~ ... ~ 350:2500
+@
+
+Basic information can be easily retrieved from the {\tt Spectra} objects using the usual {\tt R} functions {\tt nrow}, {\tt ncol}, {\tt length}, and {\tt dim}:
+\begin{description}
+\item[{\tt nrow}] returns the number of samples in the object,
+\item[{\tt ncol}] returns the number of attributes in the {\tt data} slot of the object, and returns {\tt NULL} if the object does not have associated data,
+\item[{\tt length}] returns the number of wavelengths in the object
+\item[{\tt dim}] returns a numeric vector of these three.
+\end{description}
+
+% nrow, ncol, length, dim
+% summary
+% str
+<<basic_stuff, eval=TRUE, echo=TRUE>>=
+nrow(australia)
+ncol(australia)
+length(australia)
+dim(australia)
+@
+
+%Additionally, the {\tt summary} function is returning main facts about the object:
+% <<basic_stuff_summary, eval=TRUE, echo=TRUE>>=
+% summary(australia)
+% @
+
+\subsection{Accessing properties of {\tt Spectra} objects}
+Specific functions are available to access the various properties of {\tt Spectra} objects:
+\begin{description}
+\item[{\tt ids}] is returning a vector containing the IDs of the object. It has a {\tt as.vector} option. When turned to {\tt FALSE}, the function returns a {\tt data.frame} instead of a {\tt vector}. This is particularly useful to retrieve the original column name of the IDs,
+\item[{\tt wl}] is returning the wavelengths of the object in a numeric vector,
+\item[{\tt spectra}]is returning the spectra matrix,
+\item[{\tt wl\_units}] is returning the wavelength units,
+\item[{\tt features}]is returning associated data into a {\tt data.frame}. Inclusion of the IDs can be forced by turning the {\tt remove\_id} option to {\tt FALSE}.
+\end{description}
+% ids
+% wl
+% spectra
+% wl_units
+% features
+<<access_slots_1, eval=TRUE, echo=TRUE>>=
+# Retrieving ID information
+head(ids(australia))
+head(ids(australia, as.vector = FALSE))
+
+# Retrieving wavelength information
+head(wl(australia))
+wl_units(australia)
+
+# Retrieving the spectra matrix
+big.head(spectra(australia))
+
+# Retrieving associated data
+head(features(australia))
+head(features(australia, remove_id = FALSE))
+@
+
+\subsection{Subsetting {\tt Spectra} objects}
+% subset
+<<subset_1, eval=TRUE, echo=TRUE>>=
+s1 <- subset(australia, subset = carbon < 5)
+s2 <- subset(australia, subset = carbon < 5, select = 1)
+@
+
+% $, [, [[
+<<subset_2, eval=TRUE, echo=TRUE>>=
+summary(australia[1:3,])
+summary(australia[1:3, 1:2, 450:550])
+@
+
+<<subset_3, eval=TRUE, echo=TRUE>>=
+mean(australia$carbon)
+mean(australia[['carbon']])
+@
+
+\subsection{Modifying {\tt Spectra} objects}
+% ids<-
+% wl<-
+% spectra<-
+% wl_units<-
+% features<- (including the append= option
+
+% $<-, [<-, [[<-
+% cut
+% aggregate_spectra
+% apply_spectra
+% mutate
+
+\section{Plotting {\tt Spectra*} objects}
+% quick overview pointing to the dedicated vignette
+% plot
+% plot_summary
+% plot_stack
+% plot_offset
+More advanced plotting options are explained in detail in a dedicated vignette.
+
+\section{Analysing {\tt Spectra*} objects}
+
+\subsection{Separating calibration and validation sets from a {\tt Spectra*} object}
+% separate
+<<separate, eval=TRUE, echo=TRUE>>=
+sl <- separate(australia, calibration = 0.7)
+@
+
+{\tt separate} is returning a list of {\tt Spectra*} objects, and is thus very well suited to be used in combination with {\tt lapply}:
+<<separate_2, eval=TRUE, echo=TRUE>>=
+class(sl)
+lapply(sl, class)
+lapply(sl, nrow)
+@
+
+\subsection{Spectral pre-processing}
+% apply_spectra, snv, rnv, base_line, continuum_removal
+
+\subsection{Clustering}
+% k-means, clust, diana & co
+
+\subsection{Principal Component Analysis}
+% PCA
+<<PCA, eval=TRUE, echo=TRUE>>=
+# Computing PCA on spectra
+pca_spectra <- prcomp(spectra(australia))
+
+# Adding the three first PCs to the attributes
+features(australia, safe = FALSE) <- data.frame(pca_spectra$x[, 1:3])
+summary(australia)
+@
+
+\subsection{Regression methods}
+%% PLS and other regressions maybe??
+% pls
+% chemometrics package
+
+\subsubsection{PLSR}
+
+
+\subsubsection{Random forest}
+% randomForest
+
+\subsubsection{Cubist regression trees}
+% Cubist
+
+
+% \section{More advanced stuff}
+% 
+% More topics are covered by the {\bf inspectr} package. These include:
+% \begin{itemize}
+%   \item Analysing and modeling
+%   \item Graphics
+%   \item Spatial
+%   \item Soil spectroscopy
+% \end{itemize}
+% These topics will be covered in dedicated vignettes.
+
+\end{document}

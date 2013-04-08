@@ -1,21 +1,19 @@
 -------------- Short term --------------------
 
+- bug on `[` for SDF. At the moment needs to specify k=350:500 (for example). We need to be able to do this without specifying the option name
+
 - Re-write DESCRIPTION file, esp. Imports/Suggests part
 - implement "[<-" (like australia[,'PC1',] <- NULL) 
-- make as.vector=TRUE default in ids(foo)
 - order of rows, cols, spectra in `[` --> use rows, spectra, cols
 - implement how to delete features from @data slot
 - moving average/moving window stuff? --> linear interpolation?
-- Binning
 - Matrix operations (maybe this could just be done by using spectra(foo)?)
 - sweep() would be good as well
-- plot(foo, attr = 'bar') for base graphics. -- (well maybe not after all, that's what the gg mode is for. ltraeillis graphics are just better at this IMHO)
 - implement parallel option throught something like `inspectr_options(...)`
 - rename continuum_removal to something shorter? cont_rm?
-- improve fill_spectra
-- implement overlay function
+- improve fill_spectra? Solution may as well be including a drop=... option in cut() and `[`. When TRUE, removes WL, when FALSE just puts NA values. Consequences for further modelling?
+- implement (spatial) overlay function
 
-- Documentation, documentation
 - Begin to work on vignettes:
   * introduction vignette --> Creation and maniuplation, basic stuff like PCA, k-means and hclust
   * analysis vignette
@@ -49,10 +47,21 @@
 - Implement the parameter orthogonalisation algorithm (Roger et al., 2003)
 - conversion to and from hyperSpec
 - Re-do Viscarra-Rossel & Behrens (2010) with inspectr
+- Showcase the use of Cubist models
+
+- Potential speed up for reading big files: sqldf::sqldf
+I could implement a file=... option in spectra() to create Spectra
+object directly from the file (provided there's a formula)
+Here's the relevant code snippet:
+rd_sqldf <- function(fn) {
+  con <- file(fn)
+  sqldf("select * from con", dbname = tempfile(), file.format = list(header = T, row.names = F))
+}
 
 ------------- Longer term --------------------
 
 - Identify slow stuff and see if they can be done in C++ (eg advanced sampling methods)
 - File-based storage of big collections
+- data.table?
 - Integration of a viewer, possibly using playwith, to
 manipulate (eg crop) the spectra in a collection.
