@@ -89,12 +89,32 @@ setMethod('base_line', 'Spectra', function(object, ...) {
 #' the spectra.
 #'
 continuum_removal <- function(x, wl = as.numeric(names(x)), upper = TRUE){
-    
+  
   if (!upper) x <- -1*x
-
-  ch.index <- sort(chull(x = wl, y = x))
-  ch <- data.frame(wl = wl[ch.index], nir = x[ch.index])
+  
+  # Compute convex hull
+  ch_idx <- chull(x = wl, y = x)
+  # Close the polygon
+  ch_idx <- c(ch_idx, ch_idx[1])
+  # Put in a data.frame
+  ch <- data.frame(wl = wl[ch_idx], nir = x[ch_idx])
+  
+  # We don't want the polygon, just the line above the spectra
+  # We will select only the bit that goes from wl min to wl max
+  
+  idx_min <- which(ch$wl == min(ch$wl))[1]
+  idx_max <- which(ch$wl == max(ch$wl))[1]
+  
+  if (idx_min > idx_max) {
+    idx_select <- c(idx_min:nrow(ch), 1:idx_max)
+  } else {
+    idx_select <- idx_min:idx_max
+  }
+  ch <- ch[idx_select,]
+  
+  # Linear interpolation
   res <- approx(x = ch$wl, y = ch$nir, xout = wl)
-#   res2 <- signal::interp1(ch$wl, ch$nir, wl, method = 'linear', extrap = TRUE)
+
+  # Remove continuum
   x - res$y
 }

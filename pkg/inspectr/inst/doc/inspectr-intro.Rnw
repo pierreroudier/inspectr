@@ -1,5 +1,5 @@
 \documentclass{article}
-% \VignetteIndexEntry{Graphics in inspectr: Representing Spectra objects}
+% \VignetteIndexEntry{A Gentle introduction to inspectr}
 
 \usepackage{graphicx}
 \usepackage[colorlinks=true,urlcolor=blue]{hyperref}
