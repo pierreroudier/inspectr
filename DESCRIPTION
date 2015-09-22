@@ -9,6 +9,6 @@ Description: Stores and eases the manipulation of spectra and associated data, w
 URL: http://inspectr.r-forge.r-project.org/
 Depends: R (>= 2.14)
 Imports: methods, plyr, reshape2, stringr, sp, baseline, signal
-Suggests: ggplot2, pls, RColorBrewer, chemometrics, aqp
+Suggests: ggplot2, pls, RColorBrewer, aqp
 License: GPL
 LazyData: true
