@@ -279,6 +279,10 @@ names.SpectraDataFrame <- function(x) names(x@data)
 
 #` Melting the spectra matrix
 #'
+if (!isGeneric("melt_spectra"))
+  setGeneric("melt_spectra", function(obj, attr, ...)
+    standardGeneric("melt_spectra"))
+
 setMethod("melt_spectra", "SpectraDataFrame", function(obj, attr = NULL, ...){
   
   id.nm <- names(ids(obj, as.vector = FALSE))

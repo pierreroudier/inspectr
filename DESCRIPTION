@@ -5,10 +5,38 @@ Version: 0.3-15
 Date: 2013-05-12
 Author: Pierre Roudier <pierre.roudier@gmail.com>
 Maintainer: Pierre Roudier <pierre.roudier@gmail.com>
-Description: Stores and eases the manipulation of spectra and associated data, with dedicated classes for spatial and soil-related datasets.
+Description: Stores and eases the manipulation of spectra and associated data,
+    with dedicated classes for spatial and soil-related datasets.
 URL: http://inspectr.r-forge.r-project.org/
-Depends: R (>= 2.14)
-Imports: methods, plyr, reshape2, stringr, sp, baseline, signal
-Suggests: ggplot2, pls, RColorBrewer, aqp
+Depends:
+    R (>= 2.14)
+Imports:
+    methods,
+    plyr,
+    reshape2,
+    stringr,
+    sp,
+    baseline,
+    signal
+Suggests:
+    ggplot2,
+    pls,
+    RColorBrewer,
+    aqp
 License: GPL
 LazyData: true
+Collate:
+    'AAA-Classes.R'
+    'Spectra-methods.R'
+    'SpectraDataFrame-methods.R'
+    'SpatialSpectraDataFrame-methods.R'
+    'aggregate_spectra.R'
+    'big_head.R'
+    'helpers.R'
+    'kenstone.R'
+    'performance.R'
+    'plot-methods.R'
+    'preprocessing.R'
+    'setters.R'
+    'splice.R'
+    'ZZZ.R'
