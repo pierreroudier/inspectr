@@ -234,7 +234,7 @@ if (!isGeneric("ids"))
 setMethod("ids", "Spectra",
   function(object, ..., as.vector = TRUE) {
     if (as.vector) {
-      res <- object@id[[1]]
+      as.character(res <- object@id[[1]])
     } else {
       res <- object@id
     }
