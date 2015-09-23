@@ -47,6 +47,10 @@ importFrom(sp,
   SpatialPoints
 )
 
+importFrom(epiR, 
+  epi.ccc
+)
+    
 exportClasses(
   Spectra,
   SpectraDataFrame,
