@@ -17,8 +17,10 @@ Imports:
     stringr,
     sp,
     baseline,
-    signal
+    signal,
+    epiR
 Suggests:
+    caret,
     ggplot2,
     pls,
     RColorBrewer,
@@ -27,6 +29,7 @@ Suggests:
 License: GPL
 LazyData: true
 Collate:
+    'inspectr-package.R'
     'AAA-Classes.R'
     'Spectra-methods.R'
     'SpectraDataFrame-methods.R'
