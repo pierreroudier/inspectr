@@ -22,7 +22,8 @@ Suggests:
     ggplot2,
     pls,
     RColorBrewer,
-    aqp
+    aqp,
+    waveslim
 License: GPL
 LazyData: true
 Collate:
