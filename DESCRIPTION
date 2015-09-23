@@ -1,6 +1,6 @@
 Package: inspectr
 Type: Package
-Title: Storing, manipulating and analysis spectroscopy and associated data in R.
+Title: Storing, manipulating and analysis spectroscopy and associated data in R
 Version: 0.3-15
 Date: 2013-05-12
 Author: Pierre Roudier <pierre.roudier@gmail.com>
