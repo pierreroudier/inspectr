@@ -11,6 +11,63 @@
 setClass(
   Class="Spectra",
   representation=representation(
+
+
+
+
+#' Retrieves or sets the wavelengths of a \code{Spectra*} object.
+#' 
+#' Either retrieves the wavelengths from a \code{Spectra*} object, or creates a
+#' \code{Spectra*} object from a \code{"data.frame"} object by setting some of
+#' its columns as the wavelengths.
+#' 
+#' When applied to a \code{Spectra*} object, this functions simply returns the
+#' wavelengths of the spectra it is storing.
+#' 
+#' If applied on a \code{"data.frame"} object, it is an helper function to
+#' create a \code{Spectra*} object. It then needs to be indicated the
+#' wavelengths at which the spectra values are measured. The assumption is that
+#' each row of the \code{"data.frame"} is a spectra, and the column names of
+#' the \code{"data.frame"} contain the wavelengths values.
+#' 
+#' If all the columns are used to create the \code{Spectra*} object, a
+#' \code{Spectra} object is created. If some attributes are left, they will be
+#' used to generate a \code{SpectraDataFrame} object.
+#' 
+#' @name wl
+#' @aliases wl wl<- wl,Spectra-method wl<-,Spectra-method
+#' wl<-,data.frame-method
+#' @docType methods
+#' @param object a \code{"data.frame"} or an object inheriting from class
+#' \code{Spectra}
+#' @param value the wavelengths of the \code{Spectra*} object to create
+#' @param ... Ignored
+#' @return If applied on a \code{"data.frame"}, either a \code{Spectra} or a
+#' \code{SpectraDataFrame} object. If applied on a \code{Spectra*} object, a
+#' vector.
+#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @seealso \code{\link{spectra}}, \code{\link{Spectra-class}},
+#' \code{\link{SpectraDataFrame-class}}
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Retrieving wavelengths from Spectra* object
+#' wl(australia)
+#' 
+#' # Replacing wavelength values - USE WITH CAUTION!
+#' wl(australia) <- 1:length(australia)
+#' wl(australia)
+#' 
+#' # Use to initiate a Spectra* object from a data.frame
+#' data(australia)
+#' wl(australia) <- 350:2500
+#' ids(australia) <- ~ sr_no
+#' summary(australia)
+#' 
+#' @export wl
     wl = 'numeric',
     nir = 'matrix',
     id = 'data.frame',

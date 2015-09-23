@@ -1,24 +1,31 @@
 #' Return the First or Last Part of an Object
 #' 
-#' Returns the first or last rows of a data frame like head() and tail(),
-#' but also only returns the first and last columns. This has been
-#' implemented to check big data frames.
-#'
-#' @param x a data.frame
-#' @param n a single, positive integer, number of rows for the object to return 
+#' Return the First or Last Part of an Object
+#' 
+#' Returns the first or last rows of a data frame like head() and tail(), but
+#' also only returns the first and last columns. This has been implemented to
+#' check big data frames.
+#' 
+#' @aliases big.head big.tail big.head big.tail
+#' @param x a \code{"data.frame"} or a \code{"matrix"} object
+#' @param n a single, positive integer, number of rows for the object to return
 #' @param s a single, positive integer
 #' @param f a single, positive integer
-#' @return An object (usually) like ‘x’ but generally smaller.
+#' @return An object (usually) like 'x' but generally smaller.
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-#' @aliases big.head big.tail
-#' @export
-#' @examples 
+#' @seealso \code{\link{head}}, \code{\link{tail}}
+#' @examples
+#' 
 #' big.head(mtcars)
 #' big.tail(mtcars)
 #' big.tail(mtcars, 10)
 #' big.head(mtcars, 10, 2, 4)
 #' big.head(mtcars, , , 1)
-#'
+#' 
+#' data(australia)
+#' big.head(australia)
+#' 
+#' @export big.head
 big.head <- function(x, n=5, s=5, f=5){
   
   stopifnot(length(s) == 1L)

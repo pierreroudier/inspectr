@@ -1,12 +1,28 @@
-#' Constructor for the Spectra class
-#'
-#' @param wl a numeric vector giving the wavelengths at with the spectra have been measured
-#' @param nir a \code{matrix} or a \code{data.frame} object giving the spectra values for each sample
+#' Constructor for the Spectra class.
+#' 
+#' Constructor for the Spectra class. Creates a Spectra object from scratch.
+#' 
+#' 
+#' @param wl a numeric vector giving the wavelengths at with the spectra have
+#' been measured
+#' @param nir a \code{"matrix"} or a \code{"data.frame"} object giving the
+#' spectra values for each sample
 #' @param id a vector giving the unique id of each sample in the collection
-#' @param units a character giving the unit in which the wavelengths values are expressed
-#' @return a new Spectra object
-#' @export
+#' @param units a character giving the unit in which the wavelengths values are
+#' expressed
+#' @return a new \code{"Spectra"} object
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @seealso \code{\link{spectra}}, \code{\link{wl}},
+#' \code{\link{Spectra-class}}, \code{\link{SpectraDataFrame}}
+#' @examples
+#' 
+#'   wls <- 350:2500
+#'   id <- c("A", "B")
+#'   nir <- matrix(runif(2*length(wls)), nrow = 2)
+#'   s <- Spectra(wl = wls, nir = nir, id = id, units = "nm")
+#'   summary(s)
+#' 
+#' @export Spectra
 "Spectra" <- function(wl=numeric(), nir=matrix(), id=as.character(NA), units="nm") {
   
   # if the wl are given as an integer vector they are translated into a numeric vector

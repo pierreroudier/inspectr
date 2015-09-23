@@ -10,14 +10,71 @@
 #
 .defaultSpectraColours <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00")
 
-#' Plots an object inheriting  from the Spectra class
-#'
-#' @param x an object of class Spectra or inheriting from this class
-#' @param gg if TRUE, usees the \code{ggplot2} package to plot the data, if FALSE uses \code{lattice}
-#' @param ... options to be passed to xyplot
-#' @method plot Spectra
+
+
+
+
+#' Plots an object inheriting from the Spectra class
+#' 
+#' Plots an object inheriting from the Spectra class
+#' 
+#' The philosophy of this plotting routine is to provide a "quick'n'dirty" way
+#' to plot your spectra collection. For advanced visualisations, the use of
+#' \code{\link{melt_spectra}} alongside with ggplot2 or lattice is encouraged.
+#' 
+#' @aliases plot.Spectra plot_summary plot_stack plot_offset
+#' plot,Spectra,ANY-method plot_summary,Spectra-method
+#' plot_stack,Spectra-method plot_offset,Spectra-method
+#' @param x an object of class \code{"Spectra"} or inheriting from this class
+#' @param gg if TRUE, uses the \code{ggplot2} package to plot the data, if
+#' FALSE uses \code{matplot} from base graphics (much faster)
+#' @param gaps if TRUE, gaps in the spectra are not plotted
+#' @param attr attribute against which lines are coloured (only for \code{gg =
+#' TRUE}
+#' @param fun an aggregation function
+#' @param se if TRUE, plots the standard deviation around the summary spectra
+#' (computed by function as given by \code{fun}). If FALSE, does not plot
+#' dispersion information. If a function, uses this function instead of
+#' \code{sd}.
+#' @param offset Offset between spectra
+#' @param ... options to be passed to \code{matplot}
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-#' @import ggplot2 lattice
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Default plotting method
+#' plot(australia)
+#' 
+#' # Default plot using ggplot2
+#' plot(australia, gg = TRUE)
+#' 
+#' # Managing gaps in the spectra
+#' s <- cut(australia, wl =c(-1*450:500, -1*1800:2050))
+#' plot(s, gaps = TRUE)
+#' plot(s, gaps = FALSE)
+#' 
+#' # passing various options to matplot
+#' plot(australia, lty = 1:5, col = 'blue', xlab = 'foo', ylab = 'bar', ylim = c(0.4,0.6), main = 'my plot')
+#' 
+#' # Using colour ramps
+#' plot(australia, lty = 1, col = rainbow(10), main = "It is possible to create really ugly visualisations")
+#' 
+#' \dontrun{
+#' # Example using colours given by ColorBrewer (http://colorbrewer2.org/)
+#' library(RColorBrewer)
+#' plot(australia, lty = 1, col = brewer.pal(n = 8, name = "Set2"))
+#' }
+#' 
+#' # Using an attribute to group spectra
+#' 
+#' australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE) # Generate some kind of factor
+#' s <- aggregate_spectra(australia, fun = mean, id = 'fact')
+#' plot(s, gg = TRUE, attr = 'fact')
+#' 
+#' @export plot.Spectra
 plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
 
   # Show gaps in the data?
@@ -188,6 +245,49 @@ setMethod("plot_offset", signature('Spectra', 'ANY'),
 # ref reference wavelengths
 # fill value to fill missing WLs with
 #
+
+
+
+
+#' Fill missing wavelengths of a Spectra* object with a given value
+#' 
+#' Fill missing wavelengths of a Spectra* object with a given value. This is
+#' mostly usefull to include NA values in the spectra in order to show missing
+#' bits in plots.
+#' 
+#' At this stage removing gaps does not work well with irreguarly spaced
+#' wavelengths. Results might be odd for binned spectra.
+#' 
+#' 
+#' @param obj an object inheriting from class \code{Spectra}
+#' @param ref a numeric vector, giving the reference wavelengths (ie the entire
+#' range of wavelengths expected to be in the spectra before some waveleng5ths
+#' have been cut out). If NULL, the function is trying to guess it.
+#' @param fill values to fill gaps in the data with
+#' @param ... ignored
+#' @return An object of the same class as \code{obj}
+#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Cut wavelengths out of the collection
+#' oz <- cut(australia, wl=-1*c(355:400, 2480:2499))
+#' big.head(spectra(oz), , 7)
+#' 
+#' # Giving the wavelengths at which I want data
+#' oz_filled <- fill_spectra(oz, ref = 350:2500, fill = NA)
+#' big.head(spectra(oz_filled), , 7)
+#' plot(oz_filled)
+#' 
+#' # Trying to guess ref values
+#' oz_filled <- fill_spectra(oz, fill = -999)
+#' big.head(spectra(oz_filled), , 7)
+#' plot(oz_filled)
+#' 
+#' @export fill_spectra
 fill_spectra <- function(obj, ref = NULL, fill = NA, ...) {
 
   if (is.null(ref)) {
