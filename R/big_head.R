@@ -9,8 +9,8 @@
 #' @aliases big.head big.tail big.head big.tail
 #' @param x a \code{"data.frame"} or a \code{"matrix"} object
 #' @param n a single, positive integer, number of rows for the object to return
-#' @param s a single, positive integer
-#' @param f a single, positive integer
+#' @param l a single, positive integer, the number of columns to include on the left
+#' @param r a single, positive integer, the number of columns to include on the right
 #' @return An object (usually) like 'x' but generally smaller.
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #' @seealso \code{\link{head}}, \code{\link{tail}}
@@ -26,30 +26,78 @@
 #' big.head(australia)
 #' 
 #' @export big.head
-big.head <- function(x, n=5, s=5, f=5){
+big.head <- function(x, n = 5, l = 5, r = 5){
   
-  stopifnot(length(s) == 1L)
-  stopifnot(length(f) == 1L)
+  # n, l, and r must be of length 1
   stopifnot(length(n) == 1L)
+  stopifnot(length(l) == 1L)
+  stopifnot(length(r) == 1L)
   
-  x1 <- x[seq_len(n), seq_len(s), drop=FALSE]
-  xdots <- rep('...', length.out = n)
-  x2 <- x[seq_len(n), seq(ncol(x) - f + 1, ncol(x)), drop=FALSE]
-  res <- data.frame(x1, xdots, x2)
-  names(res)[s + 1] <- "..."
+  # Correcting n, l, and r if they are bigger than the number of rows
+  # or columns
+  n <- min(nrow(x), n)
+  l <- min(ncol(x) - 1, l)
+  r <- min(ncol(x), r)
+  
+  # Get index of columns on left
+  idx_l <- seq_len(l)
+    
+  # Get index of columns on right
+  idx_r <- seq(ncol(x) - r + 1, ncol(x))
+  
+  # Get index of columns represented by dots
+  idx_dots <- setdiff(1:ncol(x), union(idx_l, idx_r))
+  
+  # if no dots, there might be an overlap between l and r
+  if (length(idx_dots) == 0) {
+    # No dots necessary, just return the cropped rows
+    res <- x[seq_len(n), , drop = FALSE]
+  } else {
+    # We need to include dots fill-up
+    x1 <- x[seq_len(n), seq_len(l), drop = FALSE]
+    xdots <- rep('...', length.out = n)
+    x2 <- x[seq_len(n), seq(ncol(x) - r + 1, ncol(x)), drop=FALSE]
+    res <- data.frame(x1, xdots, x2)
+    names(res)[l + 1] <- "..."
+  }
+  
   res
 }
 
-big.tail <- function(x, n=5, s=5, f=5){
+big.tail <- function(x, n = 5, l = 5, r = 5){
   
-  stopifnot(length(s) == 1L)
-  stopifnot(length(f) == 1L)
+  # n, l, and r must be of length 1
   stopifnot(length(n) == 1L)
+  stopifnot(length(l) == 1L)
+  stopifnot(length(r) == 1L)
   
-  x1 <- x[seq.int(to = nrow(x), length.out = n), seq_len(s), drop=FALSE]
-  xdots <- rep('...', length.out = n)
-  x2 <- x[seq.int(to=nrow(x), length.out = n), seq(ncol(x) - f + 1, ncol(x)), drop=FALSE]
-  res <- data.frame(x1, xdots, x2)
-  names(res)[s + 1] <- "..."
+  # Correcting n, l, and r if they are bigger than the number of rows
+  # or columns
+  n <- min(nrow(x), n)
+  l <- min(ncol(x) - 1, l)
+  r <- min(ncol(x), r)
+  
+  # Get index of columns on left
+  idx_l <- seq_len(l)
+  
+  # Get index of columns on right
+  idx_r <- seq(ncol(x) - r + 1, ncol(x))
+  
+  # Get index of columns represented by dots
+  idx_dots <- setdiff(1:ncol(x), union(idx_l, idx_r))
+  
+  # if no dots, there might be an overlap between l and r
+  if (length(idx_dots) == 0) {
+    # No dots necessary, just return the cropped rows
+    res <- x[seq.int(to = nrow(x), length.out = n), , drop = FALSE]
+  } else {
+    # We need to include dots fill-up
+    x1 <- x[seq.int(to = nrow(x), length.out = n), seq_len(l), drop = FALSE]
+    xdots <- rep('...', length.out = n)
+    x2 <- x[seq.int(to = nrow(x), length.out = n), seq(ncol(x) - r + 1, ncol(x)), drop=FALSE]
+    res <- data.frame(x1, xdots, x2)
+    names(res)[l + 1] <- "..."
+  }
+  
   res
 }
