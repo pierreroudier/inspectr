@@ -1,4 +1,21 @@
 if (!isGeneric("kenstone"))
+  #' Kennard-Stone algorithm for optimal calibration set selection.
+  #' 
+  #' %% ~~ A concise (1-5 lines) description of what the function does. ~~ An
+  #' implemnentation of the Kennard-Stone algorithm for calibration set
+  #' selection.
+  #' 
+  #' 
+  #' @aliases kenstone kenstone,Spectra-method
+  #' @param x a \code{Spectra} object
+  #' @param size a positive number, the number of items to choose from
+  #' @return %% ~Describe the value returned %% If it is a LIST, use %%
+  #' \item{comp1 }{Description of 'comp1'} %% \item{comp2 }{Description of
+  #' 'comp2'} A vector of length size giving the indices of the selected
+  #' individuals in x. %% ...
+  #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+  #' @references %% ~put references to the literature/web site here ~ R.W.
+  #' Kennard, L.A. Stone, Technometrics 11 (1969) 137.
   setGeneric("kenstone", function(x, size, ...)
     standardGeneric("kenstone"))
 

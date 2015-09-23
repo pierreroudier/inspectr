@@ -10,10 +10,6 @@
 #
 .defaultSpectraColours <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00")
 
-
-
-
-
 #' Plots an object inheriting from the Spectra class
 #' 
 #' Plots an object inheriting from the Spectra class

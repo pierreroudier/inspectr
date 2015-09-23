@@ -1,73 +1,56 @@
-#' Class for spectra collections
-#'
-#' @slot wl object of class "\code{numeric}"; the wavelengths at which the spectra has been measured
-#' @slot nir object of class "\code{matrix}"; the spectra, with as many columns as wavelengths, and as many rows as samples
-#' @slot id object of class "\code{data.frame}" with one attribute; the identification strings for each sample in the collection
-#' @slot units object of class "\code{character}"; units in which the wavelengths are expressed
-#' @seealso \code{\link{spectra}}, \code{\link{wl}}, \code{\link{SpectraDataFrame-class}}
+#' Spectra* classes
+#' 
+#' The inspectr package provides the user with S4 classes that have been
+#' developped to store and manipulate spectroscopy data.
+#' 
+#' The \code{Spectra} class is storing the spectra matrix, along with the
+#' wavelengths at which those have been measured, the units in whioch those
+#' wavelengths are expressed, and a unique id for each sample in the
+#' collection.
+#' 
+#' The \code{SpectraDataFrame} class is extending the \code{Spectra} class by
+#' giving the opportunity to store attribute data along with the spectra - this
+#' is mostly the case when we want to predict physical or chemical properties
+#' from the spectra set.
+#' 
+#' The \code{SpatialSpectra} and \code{SpatialSpectraDataFrame} classes are
+#' extending the \code{Spectra} and \code{SpectraDataFrame} classes using the
+#' \code{SpatialPoints} class from package sp. This allows to store spatial
+#' information on the dataset: coordinates, coordinate reference system,
+#' bounding box, etc.
+#' 
+#' Common generic methods implemented for these classes include:
+#' 
+#' \code{summary}, \code{show}, \code{nrow}, \code{length}, \code{plot},
+#' \code{[}, \code{[[}, \code{$}.
+#' 
+#' \code{SpatialPoints} methods from the sp package can be applied to
+#' \code{SpatialSpectra} and \code{SpatialSpectraDataFrame} objects are they
+#' inherit from this class.
+#' 
+#' 
+#' @name Spectra-class
+#' @aliases inspectr Spectra-class SpectraDataFrame-class SpatialSpectra-class
+#' SpatialSpectraDataFrame-class as.data.frame.Spectra
+#' as.data.frame.SpectraDataFrame as.data.frame.SpatialSpectra
+#' names.SpectraDataFrame names<-.SpectraDataFrame print,Spectra-method
+#' show,Spectra-method
+#' @docType class
+#' @section Objects from the Class: Objects can be created by calls of the form
+#' \code{new("Spectra", ...)}, with the constructor functions like
+#' \code{Spectra(...)}, or with the helper functions such as \code{wl} and
+#' \code{spectra}.
 #' @author Pierre Roudier \email{pierre.roudier@@gmail.com}
+#' @examples
+#' 
+#' showClass("Spectra")
+#' showClass("SpectraDataFrame")
+#' 
 #' @rdname Spectra-class
 #' @exportClass Spectra
 setClass(
   Class="Spectra",
   representation=representation(
-
-
-
-
-#' Retrieves or sets the wavelengths of a \code{Spectra*} object.
-#' 
-#' Either retrieves the wavelengths from a \code{Spectra*} object, or creates a
-#' \code{Spectra*} object from a \code{"data.frame"} object by setting some of
-#' its columns as the wavelengths.
-#' 
-#' When applied to a \code{Spectra*} object, this functions simply returns the
-#' wavelengths of the spectra it is storing.
-#' 
-#' If applied on a \code{"data.frame"} object, it is an helper function to
-#' create a \code{Spectra*} object. It then needs to be indicated the
-#' wavelengths at which the spectra values are measured. The assumption is that
-#' each row of the \code{"data.frame"} is a spectra, and the column names of
-#' the \code{"data.frame"} contain the wavelengths values.
-#' 
-#' If all the columns are used to create the \code{Spectra*} object, a
-#' \code{Spectra} object is created. If some attributes are left, they will be
-#' used to generate a \code{SpectraDataFrame} object.
-#' 
-#' @name wl
-#' @aliases wl wl<- wl,Spectra-method wl<-,Spectra-method
-#' wl<-,data.frame-method
-#' @docType methods
-#' @param object a \code{"data.frame"} or an object inheriting from class
-#' \code{Spectra}
-#' @param value the wavelengths of the \code{Spectra*} object to create
-#' @param ... Ignored
-#' @return If applied on a \code{"data.frame"}, either a \code{Spectra} or a
-#' \code{SpectraDataFrame} object. If applied on a \code{Spectra*} object, a
-#' vector.
-#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-#' @seealso \code{\link{spectra}}, \code{\link{Spectra-class}},
-#' \code{\link{SpectraDataFrame-class}}
-#' @examples
-#' 
-#' # Loading example data
-#' data(australia)
-#' spectra(australia) <- sr_no ~ ... ~ 350:2500
-#' 
-#' # Retrieving wavelengths from Spectra* object
-#' wl(australia)
-#' 
-#' # Replacing wavelength values - USE WITH CAUTION!
-#' wl(australia) <- 1:length(australia)
-#' wl(australia)
-#' 
-#' # Use to initiate a Spectra* object from a data.frame
-#' data(australia)
-#' wl(australia) <- 350:2500
-#' ids(australia) <- ~ sr_no
-#' summary(australia)
-#' 
-#' @export wl
     wl = 'numeric',
     nir = 'matrix',
     id = 'data.frame',

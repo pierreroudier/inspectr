@@ -1,13 +1,3 @@
-## preprocessing.R
-##
-## Pre-processing of Vis-NIR spectra
-##
-
-## Apply for spectra
-
-
-
-
 #' Apply a function on the spectra of a Spectra* object
 #' 
 #' Aggregates spectral and data information of a \code{Spectra} object using a
@@ -62,13 +52,6 @@ apply_spectra <- function(obj, fun, ...) {
   spectra(obj) <- nir
   obj
 }
-
-## SNV
-## Barnes et al., 1989
-##
-
-
-
 
 #' Standard and Robust Normal Variate transformations
 #' 
@@ -129,45 +112,91 @@ rnv <- function(x, r){
   (x - pct)/(sd(x[x <= pct]))
 }
 
-## Savitzky-Golay Filter
-#library(signal)
-#foo <- apply_spectra(s, sgolayfilt, p = 4, n = 33, m = 1)
-#
-# ---- Using custom Savitzky-Golay Filter (inspired by: http://tolstoy.newcastle.edu.au/R/help/04/02/0385.html)
-# sav.gol <- function(nir, fl = 33, forder=4, der=0){
-#                     ## -- nir: Spectral Data (matrix) [1 spectra per row]
-#                     ## -- fl: Filter length (must be odd)
-#                     ## -- forder: Filter order
-#                     ## -- dorder: Derivative Order
-#     # -- Outpout: Processed Spectra will be stored in res matrix
-#     res=NULL
-#     nir=as.matrix(nir)
-#     # -- Each Spectra is smoothed separatedly
-#     for (row in 1:nrow(nir)){
-#         T <- as.vector(nir[row,])
-#         m <- length(T)
-#         dorder <- der + 1
-#         # -- calculate filter coefficients --
-#         fc <- (fl-1)/2 # index: window left and right
-#         X <- outer(-fc:fc, 0:forder, FUN="^") # polynomial terms and coefficients
-#         # -- calculate X pseudoinverse
-#         s <- svd(X)
-#         Y <- s$v %*% diag(1/s$d) %*% t(s$u)
-#         # -- filter via convolution and take care of the end points --
-#         T2 <- convolve(T, rev(Y[dorder,]), type="o") # convolve(...)
-#         T2 <- T2[(fc+1):(length(T2)-fc)]  
-#         # -- Store smoothed spectra in res
-#         res=rbind(res,T2)
-#     }
-#     # -- Formatting Data
-#     rownames(res) <- NULL
-#     names(res) <- names(nir)
-#     res
-# }
 
 ## Baseline using the baseline package
 
 if (!isGeneric('base_line'))
+  #' Baseline correction using the baseline package
+  #' 
+  #' Estimates baselines for the spectra in the \code{obj} object, using the
+  #' algorithm named in 'method'.
+  #' 
+  #' The baseline package implements various algorithms for the baseline
+  #' correction. The following methods are available:
+  #' 
+  #' \itemize{ \item 'als': Baseline correction by 2nd derivative constrained
+  #' weighted regression \item 'fillPeaks': An iterative algorithm using
+  #' suppression of baseline by means in local windows \item 'irls' (default): An
+  #' algorithm with primary smoothing and repeated baseline suppressions and
+  #' regressions with 2nd derivative constraint \item 'lowpass': An algorithm for
+  #' removing baselines based on Fast Fourier Transform filtering \item
+  #' 'medianWindow': An implementation and extention of Mark S. Friedrichs'
+  #' model-free algorithm \item 'modpolyfit': An implementation of Chad A. Lieber
+  #' and Anita Mahadevan-Jansen's algorithm for polynomial fiting \item
+  #' 'peakDetection': A translation from Kevin R. Coombes et al.'s MATLAB code
+  #' for detecting peaks and removing baselines \item 'rfbaseline': Wrapper for
+  #' Andreas F. Ruckstuhl, Matthew P. Jacobson, Robert W. Field, James A. Dodd's
+  #' algorithm based on LOWESS and weighted regression \item 'rollingBall': Ideas
+  #' from Rolling Ball algorithm for X-ray spectra by M.A.Kneen and H.J.
+  #' Annegarn. Variable window width has been left out }
+  #' 
+  #' See baseline package documentation for more information and references.
+  #' 
+  #' Additionally, the baseline package provides a nice GUI that helps choosing
+  #' the good baseline method and the good parametrisation. This GUI can be used
+  #' with the \code{inspectr} package. This is demonstrate in the Examples
+  #' section.
+  #' 
+  #' @name base_line
+  #' @aliases base_line base_line,Spectra-method
+  #' @docType methods
+  #' @param object an object inheriting from class \code{Spectra}
+  #' @param ... additional arguments to be passed to the \code{baseline} function
+  #' in the baseline package. The main option would be \code{'method'}, to switch
+  #' between the several baseline methods presented in teh details section.
+  #' @return An object of the same class as \code{obj} with the continuum removed
+  #' from its spectra.
+  #' @author Interface to the baseline package by Pierre Roudier
+  #' \url{pierre.roudier@@gmail.com}, baseline package authored by Kristian Hovde
+  #' Liland and Bjorn-Helge Mevik
+  #' @seealso \code{\link{continuum_removal}}, \code{\link{snv}},
+  #' \code{\link{rnv}}
+  #' @references Kristian Hovde Liland and Bjrn-Helge Mevik (2011). baseline:
+  #' Baseline Correction of Spectra. R package version 1.0-1.
+  #' http://CRAN.R-project.org/package=baseline
+  #' @examples
+  #' 
+  #' # Loading example data
+  #' data(australia)
+  #' spectra(australia) <- sr_no ~ ... ~ 350:2500
+  #' 
+  #' # Correction using the default method (irls)
+  #' bl <- base_line(australia)
+  #' plot(bl)
+  #' 
+  #' # Specifying another method for baseline calculation
+  #' bl2 <- base_line(australia, method = "modpolyfit")
+  #' plot(bl2)
+  #' 
+  #' # Using the baseline package independently (useful to plot the corrections)
+  #' \dontrun{
+  #' library(baseline)
+  #' bl3 <- baseline(spectra(australia), method = 'irls')
+  #' class(bl3) # this is a baseline object
+  #' plot(bl3)
+  #' # Affecting the baseline-corrected spectra back
+  #' # to the SpectraDataFrame object
+  #' spectra(australia) <- getCorrected(bl3)
+  #' plot(australia)
+  #' 
+  #' # Using the baselineGUI with inspectr
+  #' baselineGUI(spectra(australia))
+  #' ## When happy with a configuration, clik "Apply to all" and 
+  #' ## save the results under a name, e.g. "corrected.spectra"
+  #' spectra(australia) <- getCorrected(corrected.spectra)
+  #' plot(australia)
+  #' }
+  #' 
   setGeneric('base_line', function(object, ...)
     standardGeneric('base_line')
 )

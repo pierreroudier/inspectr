@@ -94,11 +94,20 @@ if (!isGeneric("summary"))
   setGeneric("summary", function(object, ...)
     standardGeneric("summary"))
 
-#' @param object an object inheriting from \code{Spectra}
-#' @param ... Ignored
-#' @method summary Spectra
-#' @rdname Spectra
+#' Summary
+#' 
+#' Summarize a Spectra* object.
+#' 
+#' 
+#' @aliases summary.Spectra print.summary.Spectra
+#' @return A \code{"summary.Spectra"} object
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @examples
+#' 
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' summary(australia)
+#' 
 summary.Spectra <- function (object, ...){
     obj = list()
     obj[["class"]] = class(object)
@@ -118,10 +127,6 @@ summary.Spectra <- function (object, ...){
 
 # setMethod("summary", "summary.Spectra", summary.Spectra)
 
-#' @param object a summary for an object inheriting from \code{Spectra}
-#' @param ... Ignored
-#' @method print summary.Spectra
-#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 print.summary.Spectra = function(x, ...) {
     cat(paste("Object of class ", x[["class"]], "\n", sep = ""))
     cat("Set of ", nrow(x[['id']])," spectra\n", sep = "")
@@ -203,13 +208,182 @@ if (!isGeneric("spectra"))
   setGeneric("spectra", function(object, ...)
     standardGeneric("spectra"))
 
-#' Returns the matrix of the spectra in the collection
-#'
-#' @param object an object inheriting from \code{Spectra}
-#' @return a \code{matrix} object
-#'
-#' @export
+#' Retrieves or sets the spectra of a \code{Spectra*} objects.
+#' 
+#' Either retrieves the spectra matrix from a \code{Spectra*} object, or
+#' creates a \code{Spectra*} object from a \code{"data.frame"} object different
+#' interfaces detailed below.
+#' 
+#' When applied to a \code{Spectra*} object, this functions simply returns the
+#' spectra it is storing.
+#' 
+#' If applied on a \code{"data.frame"} object, it is an helper function to
+#' create a \code{Spectra*} object. Two kind of interfaces are then available.
+#' \code{value} can be: \describe{ \item{a vector:}{Similarly to
+#' \code{\link{wl}}, the wavelengths of the spectra can be passed by a
+#' \code{"numeric"} vector. Alternatively, the names of the columns that
+#' contain the spectra information can be passed as a \code{"character"}
+#' vector.}
+#' 
+#' \item{a formula:}{This interface is specific to inspectr. It follows a
+#' scheme where differents parts can be observed, the id column, the attributes
+#' columns, and the spectra columns, described by the wavelengths at which it
+#' has been measured:}
+#' 
+#' \itemize{ \item \bold{Placeholders:} \itemize{ \item\code{...}:placeholder
+#' for all the columns of your data.frame object except those that have been
+#' already used in other parts of the formula. This can lead to errors. E.g. if
+#' \code{object} has data one every wavelength between 350 and 2500 nm,
+#' \code{spectra(object) <- id_field ~ ... ~ 500:2500} will stores the columns
+#' corresponding to the wavelengths 350-499 nm in its data slot!
+#' \item\code{id}:For the creation of a \code{SpectraDataFrame}, it is
+#' important to always specify an id field in the formula. If no id column is
+#' present, the \code{id} placeholder will create one for you.
+#' 
+#' }
+#' 
+#' \item \code{spectra(object) <- ~ 350:2500} will build a \code{Spectra}
+#' object from the wavelengths between 350 and 2500, based on the column names.
+#' 
+#' \item \code{spectra(object) <- ~ 350:2:2500} will build a \code{Spectra}
+#' object from the wavelengths in \code{seq(350, 2500, by = 2)}.
+#' 
+#' \item \code{spectra(object) <- ~ 500:2350} will build a \code{Spectra}
+#' object from the wavelengths between 500 and 2350, even though other
+#' wavelengths are present (they will be dropped).
+#' 
+#' In the three later cases, the id field has been dropped (it will be
+#' automatically created). If you want to use a column of \code{"data.frame"}
+#' as an id filed, you can still use the first part of the formula:
+#' 
+#' \item \code{spectra(object) <- id_field ~ 350:2500} \item
+#' \code{spectra(object) <- id_field ~ 350:5:2500}
+#' 
+#' Some data can also be added to the object, which will then be of
+#' \code{SpectraDataFrame} class:
+#' 
+#' \item \code{spectra(object) <- id_field ~ property1 ~ 500:2300} will create
+#' a \code{SpectraDataFrame} with ids from the id_field column, data from the
+#' property1 column, and spectral information between 500 and 2300 nm. That
+#' means that data property2, and all spectral information from bands < 500 nm
+#' or > 2300 nm will be dropped.
+#' 
+#' You can also combine the placeholders:
+#' 
+#' \item \code{spectra(object) <- id_field ~ ... ~ 350:2500} will create a
+#' \code{SpectraDataFrame} object with ids from the id_field column, all
+#' spectral bands between 350 and 2500 nm. The data slot is given all the
+#' remaining columns.  } }
+#' 
+#' @name spectra
+#' @aliases spectra spectra<- spectra,Spectra-method
+#' spectra<-,data.frame-method spectra<-,Spectra-method
+#' spectra<-,SpectraDataFrame-method
+#' @docType methods
+#' @return If applied on a \code{"data.frame"}, either a \code{Spectra} or a
+#' \code{SpectraDataFrame} object. If applied on a \code{Spectra*} object, a
+#' matrix.
+#' @section Methods: \describe{
+#' 
+#' \bold{obj=data.frame}
+#' 
+#' \code{spectra(obj, ..., mode="rowwise") <- value}
+#' 
+#' \tabular{rll}{ \tab \code{obj} \tab A \code{"data.frame"} object \cr \tab
+#' \code{mode} \tab A character describing the data representation of
+#' \code{object} ; it can be either \code{'rowwise'} (default value) or
+#' \code{'colwise'}. See Details section. \cr \tab \code{...} \tab Ignored \cr
+#' \tab \code{value} \tab A representation of the wavelengths of the
+#' \code{Spectra*} object to create. See details section. \cr }
+#' 
+#' \bold{obj=Spectra}
+#' 
+#' \code{spectra(obj)}
+#' 
+#' \tabular{rll}{ \tab \code{obj} \tab A \code{Spectra} object \cr \tab
+#' \code{...} \tab Ignored \cr }
+#' 
+#' }
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @seealso \code{\link{wl}}, \code{\link{Spectra-class}},
+#' \code{\link{SpectraDataFrame-class}}
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' class(australia) # this is a simple data.frame
+#' # structure of the data.frame: it is rowwise-formatted
+#' big.head(australia) 
+#' 
+#' ## CREATING Spectra OBJECTS
+#' ##
+#' 
+#' # Using spectra() to initiate a Spectra from 
+#' # the data.frame
+#' spectra(australia) <- sr_no ~ 350:2500
+#' summary(australia)
+#' 
+#' # It is possible to select wavelengths using the formula interface
+#' data(australia)
+#' spectra(australia) <- sr_no ~ 350:5:2500
+#' summary(australia)
+#' 
+#' data(australia)
+#' spectra(australia) <- sr_no ~ 500:1800
+#' summary(australia)
+#' 
+#' ## CREATING SpectraDataFrame OBJECTS
+#' ##
+#' 
+#' # Using spectra() to initiate a SpectraDataFrame from 
+#' # the data.frame
+#' data(australia)
+#' spectra(australia) <- sr_no ~ carbon + ph + clay ~ 350:2500
+#' summary(australia)
+#' 
+#' # Selecting data to be included in the SpectradataFrame object
+#' data(australia)
+#' spectra(australia) <- sr_no ~ carbon ~ 350:2500
+#' summary(australia)
+#' 
+#' # Forcing the creation of new ids using the id keyword in the 
+#' # formula interface
+#' data(australia)
+#' spectra(australia) <- id ~ carbon ~ 350:2500
+#' summary(australia)
+#' ids(australia, as.vector = TRUE)
+#' 
+#' # Using the "..." short-hand to select all the remaining columns
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' summary(australia)
+#' 
+#' ## CREATING Spectra OBJECTS FROM
+#' ## BY-COLS-FORMATTED DATA
+#' ##
+#' 
+#' # For data formatted in the colwise format, 
+#' # use the "colwise" mode
+#' 
+#' # Transforming data into colwise format
+#' # for demonstration's sake
+#' #
+#' m <- melt_spectra(australia)
+#' australia_by_col <- reshape2::acast(m, ... ~ sr_no)
+#' australia_by_col <- data.frame(wl = rownames(australia_by_col), australia_by_col, check.names = FALSE)
+#' 
+#' # Here's colwise-formatted data 
+#' big.head(australia_by_col)
+#' 
+#' # Convert it into Spectra object
+#' spectra(australia_by_col, mode = "colwise") <- wl ~ ...
+#' summary(australia_by_col)
+#' 
+#' # Then data can be added to promote it as a SpectraDataFrame
+#' my.data <- features(australia, exclude_id = FALSE)
+#' features(australia_by_col, key = 'sr_no') <- my.data
+#' summary(australia_by_col)
+#' 
 setMethod("spectra", "Spectra",
   function(object) {
     res <- object@nir
@@ -223,13 +397,59 @@ if (!isGeneric("wl"))
   setGeneric("wl", function(object, ...)
     standardGeneric("wl"))
 
-#' Returns the wavelengths at which the spectra have been recorded
-#'
-#' @param object an object inheriting from \code{Spectra}
-#' @return a \code{numeric} object
-#'
-#' @export
+#' Retrieves or sets the wavelengths of a \code{Spectra*} object.
+#' 
+#' Either retrieves the wavelengths from a \code{Spectra*} object, or creates a
+#' \code{Spectra*} object from a \code{"data.frame"} object by setting some of
+#' its columns as the wavelengths.
+#' 
+#' When applied to a \code{Spectra*} object, this functions simply returns the
+#' wavelengths of the spectra it is storing.
+#' 
+#' If applied on a \code{"data.frame"} object, it is an helper function to
+#' create a \code{Spectra*} object. It then needs to be indicated the
+#' wavelengths at which the spectra values are measured. The assumption is that
+#' each row of the \code{"data.frame"} is a spectra, and the column names of
+#' the \code{"data.frame"} contain the wavelengths values.
+#' 
+#' If all the columns are used to create the \code{Spectra*} object, a
+#' \code{Spectra} object is created. If some attributes are left, they will be
+#' used to generate a \code{SpectraDataFrame} object.
+#' 
+#' @name wl
+#' @aliases wl wl<- wl,Spectra-method wl<-,Spectra-method
+#' wl<-,data.frame-method
+#' @docType methods
+#' @param object a \code{"data.frame"} or an object inheriting from class
+#' \code{Spectra}
+#' @param value the wavelengths of the \code{Spectra*} object to create
+#' @param ... Ignored
+#' @return If applied on a \code{"data.frame"}, either a \code{Spectra} or a
+#' \code{SpectraDataFrame} object. If applied on a \code{Spectra*} object, a
+#' vector.
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @seealso \code{\link{spectra}}, \code{\link{Spectra-class}},
+#' \code{\link{SpectraDataFrame-class}}
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Retrieving wavelengths from Spectra* object
+#' wl(australia)
+#' 
+#' # Replacing wavelength values - USE WITH CAUTION!
+#' wl(australia) <- 1:length(australia)
+#' wl(australia)
+#' 
+#' # Use to initiate a Spectra* object from a data.frame
+#' data(australia)
+#' wl(australia) <- 350:2500
+#' ids(australia) <- ~ sr_no
+#' summary(australia)
+#' 
+#' @export wl
 setMethod("wl", "Spectra",
   function(object)
     object@wl
@@ -263,13 +483,37 @@ if (!isGeneric("wl_units"))
   setGeneric("wl_units", function(object)
     standardGeneric("wl_units"))
 
-#' Returns the unit in which the wavelengths values are expressed
-#'
-#' @param object an object inheriting from \code{Spectra}
-#' @return a \code{character}
-#'
-#' @export
+#' Wavelengths of Spectra* objects
+#' 
+#' Retrieves the wavelengths units and the spectral resolution from
+#' \code{Spectra*} objects.
+#' 
+#' @name wl_units
+#' @aliases wl_units wl_units<- res res.numeric res.integer res.Spectra
+#' wl_units,Spectra-method wl_units<-,Spectra-method res,numeric-method
+#' res,integer-method res,Spectra-method
+#' @docType methods
+#' @param object,x an object inheriting from class \code{Spectra}, or a
+#' \code{"numeric"} vector for \code{resolution}
+#' @param value a character string
+#' @return A vector. \code{res} is giving NULL for irregularly spaced
+#' wavelengths (eg when there is parts of the spectra data have been removed).
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Print wavelength information
+#' wl(australia)
+#' range(wl(australia))
+#' res(australia)
+#' 
+#' # Manipulate wavelength information
+#' wl(australia) <- wl(australia) + 1000
+#' wl(australia)
+#' 
 setMethod("wl_units", signature = "Spectra",
   function(object)
     object@units
@@ -288,33 +532,57 @@ setReplaceMethod("wl_units", "Spectra",
   }
 )
 
-#' Returns the number of wavelengths in the object
-#'
-#' @param object an object inheriting from \code{Spectra}
-#' @return a vector
-#'
-#' @export
+#' Retrieve dimensions of Spectra* objects
+#' 
+#' Retrieves the wavelengths units and the spectral resolution from
+#' \code{Spectra*} objects.
+#' 
+#' * Methods for \code{Spectra} objects
+#' 
+#' \code{nrow} returns the number of individuals in the collection
+#' \code{length} returns the number of wavelengths in the collection
+#' \code{ncol} returns NULL \code{dim} returns a vector containing (1) the
+#' number of individuals and (2) in the number of wavelengths in the collection
+#' 
+#' * Methods for \code{Spectra} objects
+#' 
+#' \code{nrow} returns the number of individuals in the collection
+#' \code{length} returns the number of wavelengths in the collection
+#' \code{ncol} returns the number of attributes in the collection \code{dim}
+#' returns a vector containing (1) the number of individuals, (2) in the number
+#' of wavelengths, and (3) the number of attributes in the collection
+#' 
+#' @name nrow
+#' @aliases nrow,Spectra-method ncol,Spectra-method dim length dim.Spectra
+#' length.Spectra
+#' @docType methods
+#' @param x For \code{nrow}, \code{length}, \code{dim}, a \code{Spectra}
+#' object. For \code{ncol}, a \code{SpectraDataFrame} object.
+#' @return \code{nrow}, \code{ncol}, \code{nwl}, and \code{length}, return an
+#' \code{integer}.
+#' 
+#' \code{dim} returns a vector of length 2 or 3 (see Details section).
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-# setMethod(f='length', signature='Spectra',
-#   definition=
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' nrow(australia)
+#' ncol(australia)
+#' length(australia)
+#' dim(australia)
+#' 
 length.Spectra <- function(x)
     ncol(x@nir)
-# )
 
 #' Returns the number of samples in the object
-#'
-#' @param object an object inheriting from \code{Spectra}
-#' @return a vector
-#'
-#' @export
-#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 setMethod(f='nrow', signature='Spectra',
 definition = function(x)
   nrow(ids(x, as.vector = FALSE))
 )
 
-' Returns the number of data cols in the object
-'
 setMethod(f='ncol', signature='Spectra',
 definition = function(x) {
   if ("data" %in% slotNames(x)) {
@@ -326,8 +594,6 @@ definition = function(x) {
 }
 )
 
-# setMethod(f='dim', signature='Spectra',
-# definition=
 dim.Spectra <- function(x) {
   r <- c(nrow(x), length(x))
   if ('data' %in% slotNames(x)) {
@@ -335,8 +601,6 @@ dim.Spectra <- function(x) {
   }
   r
 }
-# )
-
 
 ## Returns spectral resolution of the wavelengths
 
@@ -376,14 +640,81 @@ setMethod("res", "Spectra", res.Spectra)
 
 ## overloads
 
-#' extract parts of Spectra objects
-#'
-#' @name [
-#' @aliases [, Spectra-method
+#' Extracting and replacing parts of Spectra* objects
+#' 
+#' These methods emulates classic base methods '[', '[[' and '$' to extract or
+#' replace parts of Spectra* objects.
+#' 
+#' 
+#' @name extraction-methods
+#' @aliases [ [<- [[ [[<- $ $<- [,Spectra,ANY,ANY,missing-method
+#' [,SpectraDataFrame,ANY,ANY,missing-method
+#' [[,SpectraDataFrame,ANY,missing-method [[<-,Spectra,ANY,missing-method
+#' [<-,SpectraDataFrame-method $<-,Spectra-method $,SpectraDataFrame-method
 #' @docType methods
-#' @rdname extract-methods
-#'
+#' @return These methods either return an object of the same clss as \code{x},
+#' or can promote a \code{Spectra} object to a \code{SpectraDataFrame} object
+#' by adding data ("[[<-" and "$<-" methods).
+#' @section Methods: \describe{
+#' 
+#' \bold{x=Spectra}
+#' 
+#' \code{x[i, j, ..., drop = FALSE]}
+#' 
+#' \code{x$name <- value}
+#' 
+#' \code{x[[name]] <- value}
+#' 
+#' \tabular{rll}{ \tab \code{x} \tab A \code{Spectra} object \cr \tab \code{i}
+#' \tab Row index of the selected individuals \cr \tab \code{j} \tab Selected
+#' wavelengths \cr \tab \code{name} \tab A literal character string or a name
+#' \cr \tab \code{...} \tab Ignored \cr \tab \code{drop} \tab Ignored \cr }
+#' 
+#' \bold{x=SpectraDataFrame}
+#' 
+#' \code{x[i, j, k, ..., drop = FALSE]}
+#' 
+#' \code{x[[name]]}
+#' 
+#' \code{x[[name]] <- value}
+#' 
+#' \code{x$name}
+#' 
+#' \code{x$name <- value}
+#' 
+#' \tabular{rll}{ \tab \code{x} \tab A \code{SpectraDataFrame} object \cr \tab
+#' \code{i} \tab Row index of the selected individuals \cr \tab \code{j} \tab
+#' Selected wavelengths \cr \tab \code{k} \tab Selected columns in the @data
+#' slot\cr \tab \code{name} \tab A literal character string or a name \cr \tab
+#' \code{...} \tab Ignored \cr \tab \code{drop} \tab Ignored \cr } }
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @seealso \code{\link{subset}}, \code{\link{aggregate_spectra}}
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Getting features information from SpectraDataFrame
+#' australia$carbon
+#' australia[['carbon']]
+#' 
+#' # Creating new features
+#' australia$foo <- runif(nrow(australia))
+#' australia[['bar']] <- runif(nrow(australia))
+#' summary(australia)
+#' 
+#' # Replacing values
+#' australia$foo <- sample(LETTERS[1:5], size = nrow(australia), replace = TRUE)
+#' australia[['bar']] <- sample(c(TRUE, FALSE), size = nrow(australia), replace = TRUE)
+#' summary(australia)
+#' 
+#' # Promote Spectra to SpectraDataFrame
+#' s <- as(australia, 'Spectra')
+#' class(s)
+#' s$foo <- runif(nrow(s))
+#' summary(s)
+#' 
 setMethod("[", c("Spectra", "ANY", "ANY", "missing"),
   function(x, i, j, ..., drop = FALSE) {
 
@@ -545,8 +876,29 @@ setReplaceMethod("features", signature("Spectra", "ANY"),
 # setMethod("add", signature=c("SpectraDataFrame", "SpectraDataFrame"),
 #   function(x,y,...) add.Spectra(x, y, ...))
 
-## rbind overload to put together Spectra* objects
-
+#' Stacking \code{Spectra} objects together
+#' 
+#' This method stacks two or more \code{Spectra*} objects together.
+#' 
+#' 
+#' @aliases rbind.Spectra rbind.SpectraDataFrame
+#' @param \dots The \code{Spectra} objects to be combined.
+#' @param create_new_ids allows creation of new ids if the ids of the
+#' \code{Spectra*} objects you are trying to stack are redondant
+#' @param new_ids vector of new ids to be given to the new object
+#' @return a \code{Spectra*} object.
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' s <- rbind(australia, australia, create_new_ids = TRUE)
+#' summary(s)
+#' 
+#' l <- separate(australia, calibration = 0.6)
+#' s <- rbind(l$validation, l$calibration)
+#' summary(s)
 rbind.Spectra <- function(..., create_new_ids = FALSE, new_ids = NULL) {
   dots <- list(...)
   names(dots) <- NULL
@@ -607,8 +959,51 @@ rbind.Spectra <- function(..., create_new_ids = FALSE, new_ids = NULL) {
 
 rbind.SpectraDataFrame <- rbind.Spectra
 
-## Split
-
+#' Split a Spectra* object using factors
+#' 
+#' Splits a Spectra* object into groups using a factor, either a provided as a
+#' vector or as an attribute in the features of the object.
+#' 
+#' This is an adaptation of the \code{split} function in the base package.
+#' 
+#' @name split
+#' @aliases split split.Spectra split,Spectra-method
+#' @docType methods
+#' @param x Spectra object
+#' @param f either a vector of factors (for objects inheriting from
+#' \code{Spectra}), or the name or indice of an attribute in the data slot of
+#' an object inheriting from \code{SpectraDataFrame}
+#' @param drop ignored
+#' @param ... further potential arguments passed to methods.
+#' @return A list of objects of same class as \code{x}.
+#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @seealso \code{\link{separate}}, \code{\link{melt_spectra}},
+#' \code{\link{lapply}}, and the \code{l*pply} family of function inthe plyr
+#' package.
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # On a Spectra object, we need to provide a vector of factors
+#' # to split the object
+#' s <- as(australia, 'Spectra')
+#' # We make up some kind of factor to split the data. 
+#' idx <- sample(letters[1:5], replace = TRUE, size = nrow(s)) # This is a vector
+#' r <- split(s, idx)
+#' str(r)
+#' 
+#' # On a SpectradataFrame object, we can also provide the name or index 
+#' # of an attribute
+#' australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE) # Generate some kind of factor
+#' summary(australia)
+#' r <- split(australia, 'fact')
+#' str(r)
+#' 
+#' # A list is returned, and is thus ready for use with lapply, or any
+#' # of the l*ply functions from the plyr package
+#' lapply(r, nrow)
 setMethod("split", "Spectra", function(x, f, drop = FALSE, ...){
   
   # If length(f) <= 1, we consider f is giving the colname or index
@@ -619,24 +1014,52 @@ setMethod("split", "Spectra", function(x, f, drop = FALSE, ...){
   lapply(split(seq_len(nrow(x)), f, ...), function(ind) x[ind, ])
 })
 
-#`  Mutate a Spectra object by adding new or replacing existing columns.
-#`
-#` This function is a simple port of the \code{\link{mutate}} function in the
-#' plyr package to the Spectra objects, which it wraps.
-#'
-#' This function is very similar to \code{\link{transform}} but it executes
-#' the transformations iteratively so that later transformations can use the
+#' Mutate a Spectra* object by transforming the spectra values, and/or adding
+#' new or replacing existing attributes.
+#' 
+#' Mutate a Spectra* object by transforming the spectra values, and/or adding
+#' new or replacing existing attributes.
+#' 
+#' 
+#' This function is very similar to \code{\link{transform}} but it executes the
+#' transformations iteratively so that later transformations can use the
 #' columns created by earlier transformations. Like transform, unnamed
 #' components are silently dropped.
-#'
-#' Mutate seems to be considerably faster than transform for large data
-#' frames.
-#'
-#' @param obj an object inheriting from the \code{Spectra} class
+#' 
+#' Either the spectra, and/or the attributes (if the \code{.data} inherits from
+#' the \code{SpectraDataFrame} class) can be affected: \itemize{ \item To
+#' affect the spectra, one should use the \code{nir} placeholder, eg \code{nir
+#' = log(1/nir)} \item To affect the attributes of the object, the definitions
+#' of new columns are simply given using attributes names, \code{newAttribute =
+#' 1/sqrt(attribute)} \item Both spectra and attrbutes can be transformed in
+#' one command, eg \code{mutate(s, nir = log(1/nir), newAttribute =
+#' 1/sqrt(attribute)} }
+#' 
+#' @name mutate
+#' @aliases mutate mutate.Spectra mutate,Spectra-method
+#' @docType methods
+#' @param .data an object inheriting from the \code{Spectra} class
 #' @param ... named parameters giving definitions of new columns
-#' @seealso \code{\link{mutate}}
-#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}, from code from
+#' Hadley Wickham
+#' @references Hadley Wickham (2011). The Split-Apply-Combine Strategy for Data
+#' Analysis. Journal of Statistical Software, 40(1), 1-29. URL
+#' http://www.jstatsoft.org/v40/i01/.
 #' @export
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Modifying spectra
+#' m <- mutate(australia, nir = log1p(1/nir))
+#' plot(m)
+#' 
+#' # Modifying and creating attributes
+#' m <- mutate(australia, sqrt_carbon = sqrt(carbon), foo = clay + ph, nir = log1p(1/nir))
+#' summary(m)
+#' plot(m)
 setMethod("mutate", "Spectra", function (.data, ...){
 
   wls <- wl(.data)
@@ -675,6 +1098,36 @@ if (!isGeneric("separate"))
   setGeneric("separate", function(obj, calibration, ...)
     standardGeneric("separate"))
 
+#' Separates a \code{Spectra*} object into a calibration and a validation set.
+#' 
+#' 
+#' @name separate
+#' @aliases separate separate.Spectra separate,Spectra-method
+#' @docType methods
+#' @param obj an object inheriting from class \code{SpectraDataFrame}
+#' @param calibration The fraction of the dataset to be put in the calibration
+#' set
+#' @param ... Ignored
+#' @return An list with two \code{SpectraDataFrame} objects, one for the
+#' calibration, and the other for the validation.
+#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @seealso \code{\link{split}}, \code{\link{melt_spectra}},
+#' \code{\link{lapply}}, and the \code{l*pply} family of function inthe plyr
+#' package.
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' l <- separate(australia, calibration=0.7)
+#' # The result is a list of two Spectra* objects
+#' str(l)
+#' lapply(l, nrow)
+#' 
+#' summary(l$calibration)
+#' summary(l$validation)
+#' 
 setMethod("separate", "Spectra", function(obj, calibration){
   if (calibration < 1)
     calibration <- floor(calibration*nrow(obj))
@@ -683,17 +1136,70 @@ setMethod("separate", "Spectra", function(obj, calibration){
   list(calibration=obj[calib, ], validation=obj[valid, ])
 })
 
-#` Melting the spectra matrix
-#'
-#' @param obj an object inheriting from the \code{Spectra} class
-#' @export
-#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-#` @import reshape2
 if (!isGeneric('melt_spectra'))
   setGeneric('melt_spectra', function(obj, ...)
     standardGeneric('melt_spectra')
 )
 
+#' melt_spectra
+#' 
+#' Melts the spectra data of a Spectra object and returns it as wide format.
+#' 
+#' This function is very useful when wanting to plot spectra using the lattice
+#' or ggplot2 packages.
+#' 
+#' @name melt_spectra
+#' @aliases melt_spectra melt_spectra-methods melt_spectra,Spectra-method
+#' melt_spectra,SpectraDataFrame-method
+#' @docType methods
+#' @section Methods: \describe{
+#' 
+#' \bold{x=Spectra}
+#' 
+#' \code{melt_spectra(obj, ...)}
+#' 
+#' \tabular{rll}{ \tab \code{obj} \tab A \code{Spectra} object \cr \tab
+#' \code{...} \tab Ignored \cr }
+#' 
+#' \bold{x=SpectraDataFrame}
+#' 
+#' \code{melt_spectra(obj, attr=NULL, ...)}
+#' 
+#' \tabular{rll}{ \tab \code{obj} \tab A \code{SpectraDataFrame} object \cr
+#' \tab \code{attr} \tab Character, the name of an attribute in the object data
+#' to split the spectra against. \cr \tab \code{...} \tab Ignored \cr }
+#' 
+#' }
+#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @seealso \code{\link{melt}}
+#' @references Hadley Wickham (2011). The Split-Apply-Combine Strategy for Data
+#' Analysis. Journal of Statistical Software, 40(1), 1-29. URL
+#' http://www.jstatsoft.org/v40/i01/.
+#' @import reshape2
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Simple melt
+#' r <- melt_spectra(australia)
+#' head(r)
+#' 
+#' \dontrun{
+#' # Melt against some factor (or continuous data), and plot
+#' # using ggplot2
+#' 
+#' # Create some factor
+#' australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE) # Generate some kind of factor
+#' r <- melt_spectra(australia, attr = 'fact')
+#' 
+#' # Create plot
+#' library(ggplot2)
+#' p <- ggplot(r) + geom_line(aes(x=wl, y=nir, group=id, colour=fact)) + theme_bw()
+#' print(p)
+#' }
+#' 
 setMethod("melt_spectra", "Spectra", function(obj, ...){
 
   id.nm <- names(ids(obj, as.vector = FALSE))
@@ -712,6 +1218,44 @@ if (!isGeneric("cut")) {
         standardGeneric("cut"))
 }   
 
+#' Manipulating the wavelength range of a \code{Spectra} object
+#' 
+#' This methods allows to either select or remove a specific range of
+#' wavelengths from a \code{Spectra} object.
+#' 
+#' The wavelengths are extracted if \code{wl > 0}, or removed if \code{wl < 0}.
+#' You can't mix negative and positive index in \code{wl}.
+#' 
+#' @name cut
+#' @aliases cut cut,Spectra-method
+#' @docType methods
+#' @param x an object inheriting from class \code{Spectra}
+#' @param wl a vector of the wavelengths to either select or remove from
+#' \code{x}
+#' @param ... ignored
+#' @return An object of the same class as \code{x}.
+#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @seealso \code{\link{[}}
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Extracting a specific wavelengths range
+#' s <- cut(australia, wl = 450:550)
+#' plot(s)
+#' 
+#' s <- cut(australia, wl = c(450:550, 1850:2050))
+#' plot(s)
+#' 
+#' # Removing a specific wavelengths range
+#' s <- cut(australia, wl = -1*450:550)
+#' plot(s)
+#' 
+#' s <- cut(australia, wl = -1*c(450:550, 1850:2050))
+#' plot(s)
+#' 
 setMethod("cut", "Spectra", function(x, ..., wl) {
   
   # If wl is negative, we REMOVE these

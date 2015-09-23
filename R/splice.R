@@ -37,6 +37,31 @@ splice.Spectra <- function(x, wl = c(725:1020, 1801:1950), method = "spline") {
 setGeneric("splice", function(x, wl, method="spline")
   standardGeneric("splice"))
 
+#' "Splicing" and interpolation of spectra
+#' 
+#' This method mimicks the "splicing" method available in the ViewSpec Pro
+#' software from ASD, which aims at correcting steps in the data.
+#' 
+#' It removes parts of the spectra defined by the \code{wl} vector, and
+#' interpolates these parts using a method chosen using the \code{method}
+#' option.
+#' 
+#' This function is a wrapper around \code{signal::interp1}.
+#' 
+#' @aliases "Splicing" and interpolation splice,Spectra-method
+#' @param x a \code{Spectra} object
+#' @param wl the wavelengths to cut out and interpolate
+#' @param method the interpolation method. Available options are "linear",
+#' "nearest", "pchip", "cubic", and "spline".
+#' @return an object of same class as x
+#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @examples
+#' 
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' oz_spliced <- splice(australia, wl = c(725:1020, 1801:1950), method = "spline")
+#' plot(oz_spliced)
+#' 
 setMethod("splice", 
           signature(x="Spectra"),
           function(x, wl = c(725:1020, 1801:1950), method = "spline") {
