@@ -1,6 +1,8 @@
-#' Constructor for the SpectraDataFrame class.
-#' 
-#' Constructor for the SpectraDataFrame class. Creates a SpectraDataFrame
+#' @include Spectra-methods.R
+
+#' @title Constructor for the SpectraDataFrame class.
+#' @name SpectraDataFrame
+#' @description Constructor for the SpectraDataFrame class. Creates a SpectraDataFrame
 #' object, either from scratch, or from an existing Spectra object.
 #' 
 #' 
@@ -392,8 +394,6 @@ names.SpectraDataFrame <- function(x) names(x@data)
   x
 }
 
-#` Melting the spectra matrix
-#'
 if (!isGeneric("melt_spectra"))
   setGeneric("melt_spectra", function(obj, attr, ...)
     standardGeneric("melt_spectra"))
@@ -426,10 +426,12 @@ setMethod("melt_spectra", "SpectraDataFrame", function(obj, attr = NULL, ...){
 #' @aliases subset subset.SpectraDataFrame subset,SpectraDataFrame-method
 #' @docType methods
 #' @param x SpectraDataFrame object
-#' @param ... Additional arguments: \itemize{ \itemsubsetlogical expression
-#' indicating elements or rows to keep: missing values are taken as false.
-#' \itemselectexpression, indicating columns to select from the data slot.
-#' \itemdroppassed on to "[" indexing operator.  }
+#' @param ... Additional arguments: 
+#'  \itemize{
+#'    \item{subset}{logical expression indicating elements or rows to keep: missing values are taken as false.}
+#'    \item{select}{expression, indicating columns to select from the data slot.}
+#'    \item{drop}{passed on to "[" indexing operator.}
+#'  }
 #' @return SpectraDataFrame object
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #' @seealso \code{\link{mutate}}

@@ -1,6 +1,15 @@
-#' Spectra* classes
-#' 
-#' The inspectr package provides the user with S4 classes that have been
+#' @include inspectr-package.R
+
+#' @title Spectra* classes
+#' @name Spectra-class
+#' @aliases inspectr Spectra-class SpectraDataFrame-class SpatialSpectra-class
+#' SpatialSpectraDataFrame-class as.data.frame.Spectra
+#' as.data.frame.SpectraDataFrame as.data.frame.SpatialSpectra
+#' names.SpectraDataFrame names<-.SpectraDataFrame print,Spectra-method
+#' show,Spectra-method
+#' @docType class
+
+#' @description The inspectr package provides the user with S4 classes that have been
 #' developped to store and manipulate spectroscopy data.
 #' 
 #' The \code{Spectra} class is storing the spectra matrix, along with the
@@ -28,14 +37,6 @@
 #' \code{SpatialSpectra} and \code{SpatialSpectraDataFrame} objects are they
 #' inherit from this class.
 #' 
-#' 
-#' @name Spectra-class
-#' @aliases inspectr Spectra-class SpectraDataFrame-class SpatialSpectra-class
-#' SpatialSpectraDataFrame-class as.data.frame.Spectra
-#' as.data.frame.SpectraDataFrame as.data.frame.SpatialSpectra
-#' names.SpectraDataFrame names<-.SpectraDataFrame print,Spectra-method
-#' show,Spectra-method
-#' @docType class
 #' @section Objects from the Class: Objects can be created by calls of the form
 #' \code{new("Spectra", ...)}, with the constructor functions like
 #' \code{Spectra(...)}, or with the helper functions such as \code{wl} and
@@ -143,7 +144,7 @@ setClass(
 #' @slot bbox object of class "matrix"; bounding box
 #' @slot proj4string object of class "CRS"; projection string
 #' @slot coords object of class "matrix"; the coordinates matrix (points are rows in the matrix)
-#' @slot coords.nrs object of class logical; if TRUE, when the object was created the coordinates were retrieved from the data.frame, and hence stripped from it; after coercion to data.frame, e.g. by as.data.frame(x), coordinates will again be added (as ﬁrst few columns) to the data.frame
+#' @slot coords.nrs object of class logical; if TRUE, when the object was created the coordinates were retrieved from the data.frame, and hence stripped from it; after coercion to data.frame, e.g. by as.data.frame(x), coordinates will again be added (as first few columns) to the data.frame
 #' @seealso \code{\link{spectra}}, \code{\link{wl}}, \code{\link{coordinates}}, \code{\link{SpectraDataFrame-class}}
 #' @author Pierre Roudier \email{pierre.roudier@@gmail.com}
 #' @rdname SpatialSpectraDataFrame-class

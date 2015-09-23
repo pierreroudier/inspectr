@@ -1,6 +1,10 @@
-#' Constructor for the Spectra class.
+#' @include AAA-Classes.R
+
+#' @title Constructor for the Spectra class.
+#' @aliases Spectra
+#' @rdname Spectra
 #' 
-#' Constructor for the Spectra class. Creates a Spectra object from scratch.
+#' @description Constructor for the Spectra class. Creates a Spectra object from scratch.
 #' 
 #' 
 #' @param wl a numeric vector giving the wavelengths at with the spectra have
@@ -154,10 +158,6 @@ print.summary.Spectra = function(x, ...) {
 
 ## PRINT
 
-#' @param object an object inheriting from \code{Spectra}
-#' @method show Spectra
-#' @rdname Spectra-methods
-#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 setMethod(
   f='show',
   signature='Spectra',
@@ -183,12 +183,6 @@ setMethod(
   }
 )
 
-## coercition methods
-
-#' @param x an object inheriting from \code{Spectra}
-#' @param ... Ignored
-#' @return a \code{data.frame} object
-#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 as.data.frame.Spectra <- function(x, ..., exclude_id = FALSE)  {
   df <- as.data.frame(spectra(x))
   names(df) <- wl(x)
@@ -208,7 +202,7 @@ if (!isGeneric("spectra"))
   setGeneric("spectra", function(object, ...)
     standardGeneric("spectra"))
 
-#' Retrieves or sets the spectra of a \code{Spectra*} objects.
+#' @title Retrieves or sets the spectra of a \code{Spectra*} objects.
 #' 
 #' Either retrieves the spectra matrix from a \code{Spectra*} object, or
 #' creates a \code{Spectra*} object from a \code{"data.frame"} object different
@@ -275,35 +269,6 @@ if (!isGeneric("spectra"))
 #' spectral bands between 350 and 2500 nm. The data slot is given all the
 #' remaining columns.  } }
 #' 
-#' @name spectra
-#' @aliases spectra spectra<- spectra,Spectra-method
-#' spectra<-,data.frame-method spectra<-,Spectra-method
-#' spectra<-,SpectraDataFrame-method
-#' @docType methods
-#' @return If applied on a \code{"data.frame"}, either a \code{Spectra} or a
-#' \code{SpectraDataFrame} object. If applied on a \code{Spectra*} object, a
-#' matrix.
-#' @section Methods: \describe{
-#' 
-#' \bold{obj=data.frame}
-#' 
-#' \code{spectra(obj, ..., mode="rowwise") <- value}
-#' 
-#' \tabular{rll}{ \tab \code{obj} \tab A \code{"data.frame"} object \cr \tab
-#' \code{mode} \tab A character describing the data representation of
-#' \code{object} ; it can be either \code{'rowwise'} (default value) or
-#' \code{'colwise'}. See Details section. \cr \tab \code{...} \tab Ignored \cr
-#' \tab \code{value} \tab A representation of the wavelengths of the
-#' \code{Spectra*} object to create. See details section. \cr }
-#' 
-#' \bold{obj=Spectra}
-#' 
-#' \code{spectra(obj)}
-#' 
-#' \tabular{rll}{ \tab \code{obj} \tab A \code{Spectra} object \cr \tab
-#' \code{...} \tab Ignored \cr }
-#' 
-#' }
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #' @seealso \code{\link{wl}}, \code{\link{Spectra-class}},
 #' \code{\link{SpectraDataFrame-class}}
@@ -460,13 +425,51 @@ if (!isGeneric("ids"))
   setGeneric("ids", function(object, ...)
     standardGeneric("ids"))
 
-#' Returns the ids of each spectra in the collection
-#'
-#' @param object an object inheriting from \code{Spectra}
-#' @return a \code{character} object
-#'
-#' @export
+#' @title Retrieves or sets the ids of a \code{Spectra*} object.
+#' 
+#' @description Either retrieves the wavelengths from a \code{Spectra*} object, or creates a
+#' \code{Spectra*} object from a \code{"data.frame"} object by setting some of
+#' its columns as the wavelengths. The \code{"ids<-"} method for 
+#' \code{SpectraDataFrame} objects allows to use a formula interface to use a 
+#' column in its \code{data} slot as the object IDs (see the last example provided 
+#' in the Examples section).
+#' 
+#' @name ids
+#' @rdname ids
+#' @aliases ids ids<- ids,Spectra-method ids<-,Spectra-method
+#' ids<-,SpectraDataFrame-method
+#' @docType methods
+#' @return The \code{ids} methods return a vector if \code{as.vector} is TRUE,
+#' a \code{data.frame} otherwise. The \code{"ids<-"} method return a
+#' \code{SpectraDataFrame} object (or a \code{Spectra} object if the column in
+#' the data slot that has been used to initiate the IDs was the only
+#' attribute).
+#' @section Methods: \itemize{
+#'  \item \code{ids(obj, ..., as.vector = TRUE)} 
+#'  \item \code{ids(obj) <- value} 
+#' }
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @seealso \code{\link{spectra}}, \code{\link{Spectra-class}},
+#' \code{\link{SpectraDataFrame-class}}
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Retrieving ids
+#' ids(australia)
+#' 
+#' # Setting ids using a vector of values
+#' ids(australia) <- seq_len(nrow(australia))
+#' ids(australia)
+#' 
+#' # Setting ids using an attribute
+#' australia$new_id <- seq_len(nrow(australia)) + 1000
+#' ids(australia) <- ~ new_id
+#' ids(australia)
+#' 
+#' @export ids
 setMethod("ids", "Spectra",
   function(object, ..., as.vector = TRUE) {
     if (as.vector) {
@@ -684,9 +687,10 @@ setMethod("res", "Spectra", res.Spectra)
 #' 
 #' \tabular{rll}{ \tab \code{x} \tab A \code{SpectraDataFrame} object \cr \tab
 #' \code{i} \tab Row index of the selected individuals \cr \tab \code{j} \tab
-#' Selected wavelengths \cr \tab \code{k} \tab Selected columns in the @data
+#' Selected wavelengths \cr \tab \code{k} \tab Selected columns in the @@data
 #' slot\cr \tab \code{name} \tab A literal character string or a name \cr \tab
-#' \code{...} \tab Ignored \cr \tab \code{drop} \tab Ignored \cr } }
+#' \code{...} \tab Ignored \cr \tab \code{drop} \tab Ignored \cr }}
+#' 
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #' @seealso \code{\link{subset}}, \code{\link{aggregate_spectra}}
 #' @examples
@@ -767,9 +771,8 @@ setMethod("[", c("Spectra", "ANY", "ANY", "missing"),
 if (!isGeneric('features<-'))
   setGeneric('features<-', function(object, ..., value)
     standardGeneric('features<-')
-)
+  )
 
-#'
 setReplaceMethod("features", signature("Spectra", "ANY"),
   # safe enables id check
   # key gives the column name of the ids in the data.frame
@@ -1014,12 +1017,8 @@ setMethod("split", "Spectra", function(x, f, drop = FALSE, ...){
   lapply(split(seq_len(nrow(x)), f, ...), function(ind) x[ind, ])
 })
 
-#' Mutate a Spectra* object by transforming the spectra values, and/or adding
+#' @title Mutate a Spectra* object by transforming the spectra values, and/or adding
 #' new or replacing existing attributes.
-#' 
-#' Mutate a Spectra* object by transforming the spectra values, and/or adding
-#' new or replacing existing attributes.
-#' 
 #' 
 #' This function is very similar to \code{\link{transform}} but it executes the
 #' transformations iteratively so that later transformations can use the

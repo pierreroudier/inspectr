@@ -1,13 +1,8 @@
 #' @include SpectraDataFrame-methods.R
-# roxygen()
 
-
-
-
-
-#' Constructor for the SpatialSpectraDataFrame class.
-#' 
-#' Constructor for the SpatialSpectraDataFrame class. Creates a
+#' @title Constructor for the SpatialSpectraDataFrame class.
+#' @name SpatialSpectraDataFrame-class
+#' @description Constructor for the SpatialSpectraDataFrame class. Creates a
 #' SpatialSpectraDataFrame object from scratch.
 #' 
 #' 

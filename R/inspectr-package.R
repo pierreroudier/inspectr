@@ -1,16 +1,19 @@
-#' Australia spectra library data set
+#' @title Australia spectra library data set
+#' @name australia
 #' 
-#' This data set gathers 100 soil spectra, along side with their organic
+#' @description This data set gathers 100 soil spectra, along side with their organic
 #' carbon, pH and clay content values. This data set has been collected by
 #' CSIRO.
 #' 
-#' The \code{data.frame} contains the following columns: \itemize{ \itemsr_no a
-#' unique identifier for each spectrum \itemcarbon soil organic carbon values
-#' \itemph soil pH values \itemclay soil clay values \itemX350, X351, \dots{},
-#' X2499, X2500 reflectance in wavelengths 350 to 2500nm }
+#' The \code{data.frame} contains the following columns: 
+#' \itemize{
+#'  \item{sr_no}{a unique identifier for each spectrum}
+#'  \item{carbon}{soil organic carbon values}
+#'  \item{ph}{soil pH values}
+#'  \item{clay}{soil clay values}
+#'  \item{X350, X351, \dots{},X2499, X2500}{reflectance in wavelengths 350 to 2500nm}
+#' }
 #' 
-#' 
-#' @name australia
 #' @docType data
 #' @author Data kindly contributed by Raphael Viscarra Rossel. To reduce the
 #' size of the package, the original dataset has been reduced to 100 spectra

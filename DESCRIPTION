@@ -34,6 +34,7 @@ Collate:
     'Spectra-methods.R'
     'SpectraDataFrame-methods.R'
     'SpatialSpectraDataFrame-methods.R'
+    'ZZZ.R'
     'aggregate_spectra.R'
     'big_head.R'
     'helpers.R'
@@ -43,4 +44,3 @@ Collate:
     'preprocessing.R'
     'setters.R'
     'splice.R'
-    'ZZZ.R'
