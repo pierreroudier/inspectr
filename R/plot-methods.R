@@ -47,6 +47,8 @@
 #' # Default plot using ggplot2
 #' plot(australia, gg = TRUE)
 #' 
+#' #' \dontrun{
+#' 
 #' # Managing gaps in the spectra
 #' s <- cut(australia, wl =c(-1*450:500, -1*1800:2050))
 #' plot(s, gaps = TRUE)
@@ -58,17 +60,16 @@
 #' # Using colour ramps
 #' plot(australia, lty = 1, col = rainbow(10), main = "It is possible to create really ugly visualisations")
 #' 
-#' \dontrun{
 #' # Example using colours given by ColorBrewer (http://colorbrewer2.org/)
 #' library(RColorBrewer)
 #' plot(australia, lty = 1, col = brewer.pal(n = 8, name = "Set2"))
-#' }
 #' 
 #' # Using an attribute to group spectra
 #' 
 #' australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE) # Generate some kind of factor
 #' s <- aggregate_spectra(australia, fun = mean, id = 'fact')
 #' plot(s, gg = TRUE, attr = 'fact')
+#' }
 #' 
 #' @export plot.Spectra
 plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
@@ -131,6 +132,11 @@ if (!isGeneric("plot_summary")) {
         standardGeneric("plot_summary"))
 }
 
+#' @title Summary plot of a collection of spectra
+#' @name plot_summary
+#' @description Creates a summary plot of a collection of Spectra
+#' @author Pierre Roudier
+#' @example 
 setMethod("plot_summary", signature('Spectra'), 
   function(x, fun = mean, se = TRUE, ...) {
 
@@ -160,7 +166,12 @@ setMethod("plot_summary", signature('Spectra'),
     }
 
     s.melt <- melt_spectra(x)
-
+    load_obj <- function(f)
+    {
+      env <- new.env()
+      nm <- load(f, env)[1]
+      env[[nm]]
+    }
   #   s.summary <- ddply(s.melt, 'wl', fun, ...)
     s.summary <- ddply(s.melt, 'wl', function(x) {do.call(fun, list(x$nir))})
     names(s.summary)[2] <- 'nir'
