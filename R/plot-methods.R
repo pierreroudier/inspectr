@@ -166,12 +166,7 @@ setMethod("plot_summary", signature('Spectra'),
     }
 
     s.melt <- melt_spectra(x)
-    load_obj <- function(f)
-    {
-      env <- new.env()
-      nm <- load(f, env)[1]
-      env[[nm]]
-    }
+    
   #   s.summary <- ddply(s.melt, 'wl', fun, ...)
     s.summary <- ddply(s.melt, 'wl', function(x) {do.call(fun, list(x$nir))})
     names(s.summary)[2] <- 'nir'
