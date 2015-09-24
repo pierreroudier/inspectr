@@ -25,7 +25,7 @@ Suggests:
     pls,
     RColorBrewer,
     aqp,
-    waveslim
+    asdreader
 License: GPL
 LazyData: true
 Collate:
