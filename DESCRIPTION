@@ -3,11 +3,11 @@ Type: Package
 Title: Storing, Manipulating and Analysis Spectroscopy and Associated Data in R
 Version: 0.4-0
 Date: 2015-09-24
-Author: Pierre Roudier <pierre.roudier@gmail.com>
-Maintainer: Pierre Roudier <pierre.roudier@gmail.com>
+Author: person("Pierre", "Roudier", email = "roudierp@landcareresearch.co.nz", role = c("aut", "cre"))
 Description: Stores and eases the manipulation of spectra and associated data,
     with dedicated classes for spatial and soil-related datasets.
-URL: http://inspectr.r-forge.r-project.org/
+URL: https://github.com/pierreroudier/inspectr/
+BugReports: https://github.com/pierreroudier/inspectr/issues
 Depends:
     R (>= 2.14)
 Imports:
@@ -25,7 +25,7 @@ Suggests:
     pls,
     RColorBrewer,
     aqp
-License: GPL
+License: GPL-3
 LazyData: true
 Collate:
     'inspectr-package.R'
@@ -35,6 +35,7 @@ Collate:
     'SpatialSpectraDataFrame-methods.R'
     'ZZZ.R'
     'aggregate_spectra.R'
+    'australia.R'
     'big_head.R'
     'helpers.R'
     'kenstone.R'
