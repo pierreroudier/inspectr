@@ -24,8 +24,7 @@ Suggests:
     ggplot2,
     pls,
     RColorBrewer,
-    aqp,
-    asdreader
+    aqp
 License: GPL
 LazyData: true
 Collate:
