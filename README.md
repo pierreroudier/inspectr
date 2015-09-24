@@ -1,3 +1,6 @@
+[![Travis-CI Build Status](https://travis-ci.org/pierreroudier/inspectr.svg?branch=master)](https://travis-ci.org/pierreroudier/inspectr)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/inspectr)](http://cran.r-project.org/web/packages/inspectr)
+
 # inspectr
 
 In chemometrics (eg vis-NIR spectroscopy) you are analysing a bunch of spectra (a matrix of size nb of samples x nb of wavelength) vs a set of measured variables on the same samples to build up a prediction model. If the `caret` package is great to build up such relations, I was after a proper class to handle vis-NIR spectra along with their measured attributes. `inspectr` tries to make the handling of those easier. It should:
