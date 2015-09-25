@@ -47,7 +47,7 @@
 #' # Default plot using ggplot2
 #' plot(australia, gg = TRUE)
 #' 
-#' #' \dontrun{
+#' \dontrun{
 #' 
 #' # Managing gaps in the spectra
 #' s <- cut(australia, wl =c(-1*450:500, -1*1800:2050))
@@ -70,7 +70,6 @@
 #' s <- aggregate_spectra(australia, fun = mean, id = 'fact')
 #' plot(s, gg = TRUE, attr = 'fact')
 #' }
-#' 
 #' @export plot.Spectra
 plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
 
@@ -80,8 +79,7 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
   }
 
   if (gg) {
-    .try_require("ggplot2")
-
+    
     if (is.null(attr)) s.melt <- melt_spectra(x)
     else s.melt <- melt_spectra(x, attr = attr)
 
@@ -97,7 +95,7 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
       p <- p + geom_line(aes_string(x = 'wl', y = 'nir', group = 'id', colour = attr))
     }
     p <- p +
-      labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Reflectance") +
+      labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Value") +
       theme_bw()
     return(p)
   }
@@ -111,7 +109,7 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
     # insert default values if no matplot args given by user
     if (!("type" %in% nm_dts)) dots$type <- 'l'
     if (!("lty" %in% nm_dts)) dots$lty <- 1
-    if (!("ylab" %in% nm_dts)) dots$ylab <- "Reflectance"
+    if (!("ylab" %in% nm_dts)) dots$ylab <- "Value"
     if (!("xlab" %in% nm_dts)) dots$xlab <- paste("Wavelength (", wl_units(x), ")", sep = "")
     if (!("xlim" %in% nm_dts)) dots$xlim <- range(wl(x))
     if (!("ylim" %in% nm_dts)) dots$ylim <- range(spectra(x), na.rm = TRUE, finite = TRUE)
@@ -125,8 +123,6 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
   }
 }
 
-## TODO: plot_summary() plotting mean spectra +- sd
-
 if (!isGeneric("plot_summary")) {
     setGeneric("plot_summary", function(x, ...)
         standardGeneric("plot_summary"))
@@ -136,13 +132,13 @@ if (!isGeneric("plot_summary")) {
 #' @name plot_summary
 #' @description Creates a summary plot of a collection of Spectra
 #' @author Pierre Roudier
-#' @example 
+#' @examples 
+#'  oz <- load_oz()
+#'  plot_summary(oz)
 setMethod("plot_summary", signature('Spectra'), 
   function(x, fun = mean, se = TRUE, ...) {
 
-    .try_require("ggplot2")
-
-    # If sd is given as TRUE or FALSE
+        # If sd is given as TRUE or FALSE
     if (is.logical(se)) {
       if (se) {
         plot.se <- TRUE
@@ -184,13 +180,13 @@ setMethod("plot_summary", signature('Spectra'),
         geom_line(data = s, aes(x = wl, y = nir - nir_se), linetype = 2) +
         geom_line(data = s, aes(x = wl, y = nir + nir_se), linetype = 2) +
         geom_line(data = s, aes(x = wl, y = nir)) +
-        labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Reflectance") +
+        labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Value") +
         theme_bw()
     } 
     else {
       p <- ggplot() + 
         geom_line(data = s.summary, aes(x = wl, y = nir)) +
-        labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Reflectance") +
+        labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Value") +
         theme_bw()
     }
 
@@ -203,9 +199,16 @@ if (!isGeneric("plot_stack")) {
         standardGeneric("plot_stack"))
 }
 
+#' @title Stacked plot of a collection of spectra
+#' @name plot_stack
+#' @description Creates a stacked plot of a collection of Spectra
+#' @author Pierre Roudier
+#' @examples 
+#'  oz <- load_oz(3)
+#'  plot_stack(oz)
 setMethod("plot_stack", signature('Spectra'), 
   function(x){
-    .try_require("ggplot2")
+    
     m <- melt_spectra(x)
     idnm <- names(m)[1]
     m[[idnm]] <- as.factor(m[[idnm]])
@@ -213,22 +216,37 @@ setMethod("plot_stack", signature('Spectra'),
     ggplot(m) + 
       geom_line(aes_string(x = 'wl', y = 'nir', colour = idnm)) + 
       facet_grid(form_grid) + 
+      labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "Value") +
       theme_bw()
   }
 )
 
 if (!isGeneric("plot_offset")) {
-    setGeneric("plot_offset", function(x, offset, ...)
+    setGeneric("plot_offset", function(x, ...)
         standardGeneric("plot_offset"))
 }
 
-setMethod("plot_offset", signature('Spectra', 'ANY'), 
+#' @title Offset plot of a collection of spectra
+#' @name plot_offset
+#' @description Creates an offset plot of a collection of Spectra
+#' @author Pierre Roudier
+#' @examples 
+#'  oz <- load_oz(3)
+#'  plot_offset(oz)
+#'  plot_offset(oz, 0.3)
+#'  plot_offset(oz, 2)
+setMethod("plot_offset", signature('Spectra'), 
   function(x, offset = 1){
-    .try_require("ggplot2")
+    
     # offsets values
-    offsets <- (seq_len(nrow(x)) - 1)*offset
+    offsets <- (seq_len(nrow(x)) - 1) * offset
+    
     # affect spectra with offset values
-    spectra(x) <- aaply(offsets, 1, function(offsets) spectra(x[offsets + 1,]) + offsets)
+    spectra(x) <- aaply(1:length(offsets), 1, function(i) {
+      spectra(x)[i,] + offsets[i]
+    })
+    
+    # melt spectra for data visualisation with ggplot2
     m <- melt_spectra(x)
     
     idnm <- names(m)[1]
@@ -236,7 +254,7 @@ setMethod("plot_offset", signature('Spectra', 'ANY'),
     
     ggplot(m) + 
       geom_line(aes_string(x = 'wl', y = 'nir', colour = idnm, group = idnm)) +
-      labs(y = NULL) +
+      labs(x = paste("Wavelength (", wl_units(x), ")", sep = ""), y = "") +
       theme_bw()
 
   }
@@ -251,9 +269,9 @@ setMethod("plot_offset", signature('Spectra', 'ANY'),
 
 
 
-#' Fill missing wavelengths of a Spectra* object with a given value
-#' 
-#' Fill missing wavelengths of a Spectra* object with a given value. This is
+#' @title Fill missing wavelengths of a Spectra* object with a given value
+#' @name fill_spectra
+#' @description Fill missing wavelengths of a Spectra* object with a given value. This is
 #' mostly usefull to include NA values in the spectra in order to show missing
 #' bits in plots.
 #' 
