@@ -275,7 +275,7 @@ setMethod("plot_offset", signature('Spectra'),
 #' mostly usefull to include NA values in the spectra in order to show missing
 #' bits in plots.
 #' 
-#' At this stage removing gaps does not work well with irreguarly spaced
+#' @details At this stage removing gaps does not work well with irreguarly spaced
 #' wavelengths. Results might be odd for binned spectra.
 #' 
 #' 
