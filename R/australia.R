@@ -35,16 +35,21 @@ NULL
 #' @name load_oz
 #' @description Loads the australia dataset as a SpectraDataFrame 
 #' @param n the number of spectra to return. By default, it returns all 100 spectra in the dataset.
-#' @returns a SpectraDataFrame
+#' @return a SpectraDataFrame
 #' @author Pierre Roudier
 #' @examples 
 #' oz <- load_oz()
 #' summary(oz)
 #' 
 load_oz <- function(n = NULL) {
+  # Load data as SPC
   data(australia)
   spectra(australia) <- sr_no ~ ... ~ 350:2500
-  if (n <= 0) stop("The number of spectra n should be > 0.")
-  if (!is.null(n)) australia <- australia[sample(1:nrow(australia), size = n),]
+  
+  if (!is.null(n)) {
+    stopifnot(n > 0)
+    australia <- australia[sample(1:nrow(australia), size = n),]
+  }
+  
   australia
 }
