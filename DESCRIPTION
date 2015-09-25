@@ -37,7 +37,6 @@ Collate:
     'aggregate_spectra.R'
     'australia.R'
     'big_head.R'
-    'helpers.R'
     'kenstone.R'
     'performance.R'
     'plot-methods.R'
