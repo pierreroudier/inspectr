@@ -202,9 +202,8 @@ if (!isGeneric('base_line'))
 )
 
 setMethod('base_line', 'Spectra', function(object, ...) {
-  .try_require('baseline')
   nir <- spectra(object)
-  new_nir <- baseline:::baseline(nir, ...)
+  new_nir <- baseline(nir, ...)
   spectra(object) <- getCorrected(new_nir)
   object
 })
