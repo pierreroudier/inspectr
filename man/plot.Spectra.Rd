@@ -62,10 +62,22 @@ plot(s, gaps = TRUE)
 plot(s, gaps = FALSE)
 
 # passing various options to matplot
-plot(australia, lty = 1:5, col = 'blue', xlab = 'foo', ylab = 'bar', ylim = c(0.4,0.6), main = 'my plot')
+plot(
+  australia,
+  lty = 1:5,
+  col = 'blue',
+  xlab = 'foo', ylab = 'bar',
+  ylim = c(0.4,0.6),
+  main = 'my plot'
+)
 
 # Using colour ramps
-plot(australia, lty = 1, col = rainbow(10), main = "It is possible to create really ugly visualisations")
+plot(
+  australia,
+  lty = 1,
+  col = rainbow(10),
+  main = "It is possible to create really ugly visualisations"
+)
 
 # Example using colours given by ColorBrewer (http://colorbrewer2.org/)
 library(RColorBrewer)
@@ -73,7 +85,9 @@ plot(australia, lty = 1, col = brewer.pal(n = 8, name = "Set2"))
 
 # Using an attribute to group spectra
 
-australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE) # Generate some kind of factor
+# Generate some kind of factor
+australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE)
+
 s <- aggregate_spectra(australia, fun = mean, id = 'fact')
 plot(s, gg = TRUE, attr = 'fact')
 }

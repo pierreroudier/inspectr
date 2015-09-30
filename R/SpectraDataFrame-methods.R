@@ -199,9 +199,15 @@ if (!isGeneric("features"))
 #' 
 #' # Promoting a Spectra to a SpectraDataFrame object
 #' s <- as(australia, "Spectra")
+#' 
 #' # Generating dummy data
-#' d <- data.frame(id = ids(australia), foo = runif(nrow(australia)), bar = sample(LETTERS[1:5], size = nrow(australia), replace = TRUE))
+#' d <- data.frame(
+#'   id = ids(australia), 
+#'   foo = runif(nrow(australia)), 
+#'   bar = sample(LETTERS[1:5], size = nrow(australia), replace = TRUE)
+#' )
 #' head(d)
+#' 
 #' # Affecting data to Spectra object
 #' features(s, key = 'id') <- d
 #' summary(s)
@@ -417,39 +423,7 @@ setMethod("melt_spectra", "SpectraDataFrame", function(obj, attr = NULL, ...){
   res
 })
 
-#' Subset SpectraDataFrame object
-#' 
-#' Returns subsets of a SpectraDataFrame object.
-#' 
-#' 
-#' @name subset
-#' @aliases subset subset.SpectraDataFrame subset,SpectraDataFrame-method
-#' @docType methods
-#' @param x SpectraDataFrame object
-#' @param ... Additional arguments: 
-#'  \itemize{
-#'    \item{subset}{logical expression indicating elements or rows to keep: missing values are taken as false.}
-#'    \item{select}{expression, indicating columns to select from the data slot.}
-#'    \item{drop}{passed on to "[" indexing operator.}
-#'  }
-#' @return SpectraDataFrame object
-#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-#' @seealso \code{\link{mutate}}
-#' @examples
-#' 
-#' # Loading example data
-#' data(australia)
-#' spectra(australia) <- sr_no ~ ... ~ 350:2500
-#' 
-#' # Subset on attributes
-#' s <- subset(australia, carbon < 5)
-#' summary(s)
-#' 
-#' # Subset and selection of attributes
-#' s <- subset(australia, carbon < 5, select = 1)
-#' summary(s)
-#' 
-subset.SpectraDataFrame <- function(x, subset, select, drop = FALSE, ...) {
+.subset.SpectraDataFrame <- function(x, subset, select, drop = FALSE, ...) {
   # adapted from subset.data.frame
   df <- features(x)
   if (missing(subset))
@@ -475,17 +449,34 @@ subset.SpectraDataFrame <- function(x, subset, select, drop = FALSE, ...) {
   SpectraDataFrame(wl = wl(x), nir = spectra(x)[id_selected, , drop = FALSE], id = ids(x, as.vector = FALSE)[id_selected, 1, drop = FALSE], units = wl_units(x), data = df_sub)
 }
 
-setMethod("subset", "SpectraDataFrame", subset.SpectraDataFrame)
-
-## REMOVED - rbind is doing the same thing now
-# if (!isGeneric("unseparate"))
-#   setGeneric("unseparate", function(obj, ...)
-#     standardGeneric("unseparate"))
-# 
-# unseparate.SpectraDataFrame <- function(obj){
-#   #' Warning: does not recover the order of the samples
-#   #'
-#   add(obj$calibration, obj$validation)
-# }
-# 
-# setMethod("unseparate", "list", unseparate.SpectraDataFrame)
+#' Subset SpectraDataFrame object
+#' 
+#' Returns subsets of a SpectraDataFrame object.
+#' 
+#' 
+#' @name subset
+#' @aliases subset subset.SpectraDataFrame subset,SpectraDataFrame-method
+#' @docType methods
+#' @usage subset(x, subset, select, drop = FALSE, ...)
+#' @param x SpectraDataFrame object
+#' @param subset logical expression indicating elements or rows to keep: missing values are taken as false
+#' @param select expression, indicating columns to select from the data slot
+#' @param drop passed on to "[" indexing operator
+#' @param ... Additional arguments
+#' @return SpectraDataFrame object
+#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @seealso \code{\link{mutate}}
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Subset on attributes
+#' s <- subset(australia, carbon < 5)
+#' summary(s)
+#' 
+#' # Subset and selection of attributes
+#' s <- subset(australia, carbon < 5, select = 1)
+#' summary(s)
+setMethod("subset", "SpectraDataFrame", .subset.SpectraDataFrame)

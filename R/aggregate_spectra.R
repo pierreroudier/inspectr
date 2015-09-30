@@ -55,7 +55,9 @@ if (!isGeneric("aggregate_spectra"))
   #' plot(m)
   #' 
   #' # Aggregation factor-wise
-  #' australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE) # Generate some kind of factor
+  #' 
+  #' # Generate some kind of factor
+  #' australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE)
   #' summary(australia)
   #' m <- aggregate_spectra(australia, fun = mean, id = 'fact')
   #' summary(m)

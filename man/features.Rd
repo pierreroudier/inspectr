@@ -71,9 +71,15 @@ features(australia)
 
 # Promoting a Spectra to a SpectraDataFrame object
 s <- as(australia, "Spectra")
+
 # Generating dummy data
-d <- data.frame(id = ids(australia), foo = runif(nrow(australia)), bar = sample(LETTERS[1:5], size = nrow(australia), replace = TRUE))
+d <- data.frame(
+  id = ids(australia),
+  foo = runif(nrow(australia)),
+  bar = sample(LETTERS[1:5], size = nrow(australia), replace = TRUE)
+)
 head(d)
+
 # Affecting data to Spectra object
 features(s, key = 'id') <- d
 summary(s)
