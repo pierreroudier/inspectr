@@ -88,7 +88,7 @@
 # s an object of class Spectra*
 # locations a list of length 2 describing the reference points and vertex points
 # for the parabolic offset correction.
-.splice.Spectra <- function(s, locations = list(c(750, 1000), c(1800, 1950))) {
+.splice.Spectra <- function(s, locations = list(c(750, 1000), c(1830, 1950))) {
   res <- .splice.numeric(w = wl(s), nir = spectra(s), locations = locations)
   spectra(s) <- res
   return(s)
@@ -122,7 +122,7 @@ if (!isGeneric("splice"))
 #' 
 setMethod("splice", 
   signature(x = "Spectra"),
-  function(x, locations = list(c(750, 1000), c(1800, 1950))) {
+  function(x, locations = list(c(750, 1000), c(1830, 1950))) {
     .splice.Spectra(x, locations)
   }
 )

@@ -5,7 +5,7 @@
 \alias{splice}
 \title{Splice correction of a spectra collected using ASD hardware}
 \usage{
-\S4method{splice}{Spectra}(x, locations = list(c(750, 1000), c(1800, 1950)))
+\S4method{splice}{Spectra}(x, locations = list(c(750, 1000), c(1830, 1950)))
 }
 \arguments{
 \item{x}{a \code{Spectra} object}
