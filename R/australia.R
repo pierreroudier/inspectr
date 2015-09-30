@@ -43,7 +43,7 @@ NULL
 #' 
 load_oz <- function(n = NULL) {
   # Load data as SPC
-  data(australia)
+  data("australia", envir = environment())
   spectra(australia) <- sr_no ~ ... ~ 350:2500
   
   if (!is.null(n)) {
