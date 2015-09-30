@@ -1,71 +1,59 @@
 
 if (!isGeneric("aggregate_spectra"))
-  #' Aggregates spectral and data information
-  #' 
-  #' Aggregates spectral and data information of a \code{Spectra} object using a
-  #' user-defined function.
-  #' 
-  #' Aggregates the spectral information of a \code{Spectra} object using an
-  #' aggregation function chosen by the user.
-  #' 
-  #' There is two distinct function for \code{Spectra} and
-  #' \code{SpectraDataFrame} classes. For \code{SpectraDataFrame} objects,
-  #' associated data is also aggregated using the function provided by the
-  #' \code{fun} option. Additionally, the method for \code{SpectraDataFrame} has
-  #' an \code{id} option that allows to specify an attribute which will be used
-  #' to split the object, apply sequentially the \code{fun} function, and
-  #' recombine the results in an unique object.
-  #' 
-  #' @name aggregate_spectra
-  #' @aliases aggregate_spectra,Spectra-method
-  #' aggregate_spectra,SpectraDataFrame-method aggregate_spectra
-  #' @docType methods
-  #' @return An object of the same class as \code{obj}
-  #' @section Methods: \describe{
-  #' 
-  #' \bold{x=Spectra}
-  #' 
-  #' \code{aggregate_spectra(obj, fun=mean, ...)}
-  #' 
-  #' \tabular{rll}{ \tab \code{obj} \tab A \code{Spectra} object \cr \tab
-  #' \code{fun} \tab An aggregation function \cr \tab \code{...} \tab Expressions
-  #' evaluated in the context of \code{fun} \cr }
-  #' 
-  #' \bold{x=SpectraDataFrame}
-  #' 
-  #' \code{aggregate_spectra(obj, fun=mean, id=NULL, ...)}
-  #' 
-  #' \tabular{rll}{ \tab \code{obj} \tab A \code{SpectraDataFrame} object \cr
-  #' \tab \code{fun} \tab An aggregation function \cr \tab \code{id} \tab
-  #' Attribute(s) to split the object (character vector) \cr \tab \code{...} \tab
-  #' Expressions evaluated in the context of \code{fun} \cr }
-  #' 
-  #' }
-  #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-  #' @seealso \code{\link{apply_spectra}}
-  #' @examples
-  #' 
-  #' # Loading example data
-  #' data(australia)
-  #' spectra(australia) <- sr_no ~ ... ~ 350:2500
-  #' 
-  #' # Aggregation on the whole collection
-  #' m <- aggregate_spectra(australia, fun = mean)
-  #' summary(m)
-  #' plot(m)
-  #' 
-  #' # Aggregation factor-wise
-  #' 
-  #' # Generate some kind of factor
-  #' australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE)
-  #' summary(australia)
-  #' m <- aggregate_spectra(australia, fun = mean, id = 'fact')
-  #' summary(m)
-  #' plot(m)
-  #' 
   setGeneric("aggregate_spectra", function(obj, fun = mean, ...)
     standardGeneric("aggregate_spectra"))
 
+#' @title Aggregates spectral and data information
+#' @name aggregate_spectra
+#' @aliases aggregate_spectra,Spectra-method aggregate_spectra,SpectraDataFrame-method aggregate_spectra
+#' @docType methods
+#' @description Aggregates spectral and data information of a \code{Spectra} object using a
+#' user-defined function
+#' 
+#' @details There is two distinct function for \code{Spectra} and \code{SpectraDataFrame} classes. For \code{SpectraDataFrame} objects, associated data is also aggregated using the function provided by the \code{fun} option. Additionally, the method for \code{SpectraDataFrame} has an \code{id} option that allows to specify an attribute which will be used to split the object, apply sequentially the \code{fun} function, and recombine the results in an unique object.
+#' 
+#' @section Methods: \describe{
+#' 
+#' \bold{x=Spectra}
+#' 
+#' \code{aggregate_spectra(obj, fun=mean, ...)}
+#' 
+#' \tabular{rll}{ \tab \code{obj} \tab A \code{Spectra} object \cr \tab
+#' \code{fun} \tab An aggregation function \cr \tab \code{...} \tab Expressions
+#' evaluated in the context of \code{fun} \cr }
+#' 
+#' \bold{x=SpectraDataFrame}
+#' 
+#' \code{aggregate_spectra(obj, fun=mean, id=NULL, ...)}
+#' 
+#' \tabular{rll}{ \tab \code{obj} \tab A \code{SpectraDataFrame} object \cr
+#' \tab \code{fun} \tab An aggregation function \cr \tab \code{id} \tab
+#' Attribute(s) to split the object (character vector) \cr \tab \code{...} \tab
+#' Expressions evaluated in the context of \code{fun} \cr }
+#' 
+#' }
+#' @return An object of the same class as \code{obj}
+#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @seealso \code{\link{apply_spectra}}
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Aggregation on the whole collection
+#' m <- aggregate_spectra(australia, fun = mean)
+#' summary(m)
+#' plot(m)
+#' 
+#' # Aggregation factor-wise
+#' 
+#' # Generate some kind of factor
+#' australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE)
+#' summary(australia)
+#' m <- aggregate_spectra(australia, fun = mean, id = 'fact')
+#' summary(m)
+#' plot(m)
 setMethod("aggregate_spectra", "Spectra",
   function(obj, fun = mean, ...){
     
@@ -83,7 +71,7 @@ setMethod("aggregate_spectra", "Spectra",
 )
 
 # In the case of a SDF, an id can be given to split the SDF and apply fun
-#
+#' @rdname aggregate_spectra
 setMethod("aggregate_spectra", "SpectraDataFrame",
   function(obj, fun = mean, id = NULL, ...){
 
