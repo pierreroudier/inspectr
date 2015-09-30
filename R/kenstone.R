@@ -2,11 +2,9 @@ if (!isGeneric("kenstone"))
   setGeneric("kenstone", function(x, size, ...)
     standardGeneric("kenstone"))
 
-#' Kennard-Stone algorithm for optimal calibration set selection.
-#' 
-#' %% ~~ A concise (1-5 lines) description of what the function does. ~~ An
-#' implemnentation of the Kennard-Stone algorithm for calibration set
-#' selection.
+#' @title Kennard-Stone algorithm for optimal calibration set selection.
+#' @name kenstone
+#' @description An implemnentation of the Kennard-Stone algorithm for calibration set selection.
 #' 
 #' 
 #' @aliases kenstone kenstone,Spectra-method
@@ -18,10 +16,10 @@ if (!isGeneric("kenstone"))
 #' @references 
 #' Kennard, L.A. Stone, Technometrics 11 (1969) 137.
 setMethod("kenstone", "Spectra", 
-          function(x, size, ...) {
-            idx <- .kenstone.matrix(spectra(x), size = size, ...)
-            idx
-          }
+  function(x, size, ...) {
+    idx <- .kenstone.matrix(spectra(x), size = size, ...)
+    idx
+  }
 )
 
 ## Kennard-Stone algorithm for calibration set selection
