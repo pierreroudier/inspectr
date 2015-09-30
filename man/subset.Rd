@@ -7,17 +7,18 @@
 \alias{subset.SpectraDataFrame}
 \title{Subset SpectraDataFrame object}
 \usage{
-subset.SpectraDataFrame(x, subset, select, drop = FALSE, ...)
+subset(x, subset, select, drop = FALSE, ...)
 }
 \arguments{
 \item{x}{SpectraDataFrame object}
 
-\item{...}{Additional arguments:
-\itemize{
-  \item{subset}{logical expression indicating elements or rows to keep: missing values are taken as false.}
-  \item{select}{expression, indicating columns to select from the data slot.}
-  \item{drop}{passed on to "[" indexing operator.}
-}}
+\item{subset}{logical expression indicating elements or rows to keep: missing values are taken as false}
+
+\item{select}{expression, indicating columns to select from the data slot}
+
+\item{drop}{passed on to "[" indexing operator}
+
+\item{...}{Additional arguments}
 }
 \value{
 SpectraDataFrame object
