@@ -321,6 +321,7 @@ if (!isGeneric('spectra<-')) {
   r
 }
 
+#' @rdname spectra-methods
 setReplaceMethod("spectra", "data.frame", 
   function(object, ..., value) {
     
@@ -345,6 +346,7 @@ setReplaceMethod("spectra", "data.frame",
 )
 
 ## for a Spectra* object
+#' @rdname spectra-methods
 setReplaceMethod("spectra", "Spectra",
   function(object, value) {
     if (is(value, 'matrix')) {
@@ -369,21 +371,6 @@ setReplaceMethod("spectra", "Spectra",
     object
   }
 )
-
-# ## 
-# if (!isGeneric('spectra_wide<-')) {
-#   setGeneric('spectra_wide<-', function(object, value)
-#     standardGeneric('spectra_wide<-'))
-# }
-# 
-# setReplaceMethod("spectra_wide", "data.frame", .spectra_replace.data.frame)
-
-# ## Spectra setter for long-formatted (col-based) dataset
-# if (!isGeneric('spectra_long<-')) {
-#   setGeneric('spectra_long<-', function(object, value)
-#     standardGeneric('spectra_long<-'))
-# }
-
 
 ## id
 

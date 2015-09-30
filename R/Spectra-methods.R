@@ -203,15 +203,13 @@ if (!isGeneric("spectra"))
     standardGeneric("spectra"))
 
 #' @title Retrieves or sets the spectra of a \code{Spectra*} objects.
-#' 
-#' Either retrieves the spectra matrix from a \code{Spectra*} object, or
+#' @name spectra-methods
+#' @rdname spectra-methods
+#' @description Either retrieves the spectra matrix from a \code{Spectra*} object, or
 #' creates a \code{Spectra*} object from a \code{"data.frame"} object different
-#' interfaces detailed below.
+#' interfaces detailed below.When applied to a \code{Spectra*} object, this functions simply returns the spectra it is storing.
 #' 
-#' When applied to a \code{Spectra*} object, this functions simply returns the
-#' spectra it is storing.
-#' 
-#' If applied on a \code{"data.frame"} object, it is an helper function to
+#' @details If applied on a \code{"data.frame"} object, it is an helper function to
 #' create a \code{Spectra*} object. Two kind of interfaces are then available.
 #' \code{value} can be: \describe{ \item{a vector:}{Similarly to
 #' \code{\link{wl}}, the wavelengths of the spectra can be passed by a
