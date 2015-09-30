@@ -52,6 +52,7 @@ if (!isGeneric('wl<-')) {
     standardGeneric('wl<-'))
 }
 
+#' @rdname wl
 setReplaceMethod("wl", "data.frame",
   function(object, value) {
 
@@ -77,7 +78,7 @@ setReplaceMethod("wl", "data.frame",
 )
 
 #` Replacing the wavelength range of a Spectra object. Handle with care!
-#`
+#' @rdname wl
 setReplaceMethod("wl", "Spectra",
   function(object, value) {
 
