@@ -60,6 +60,16 @@ postResampleSpectro <- function(pred, obs){
   out  
 }
 
+#' @title Calculates performance indictors across resamples
+#' @name postResampleSpectro
+#' @aliases postResampleSpectro spectroSummary
+#' @description Given two numeric vectors of data, the root mean squared error, the R-squared, the bias, the RPD, the RPIQ, the CCC and the standard error are calculated. For two factors, the overall agreement rate and Kappa are determined. 
+#' @details This function extends \code{postResample} in the \code{caret} package.
+#' @author Pierre Roudier, adapted from code from Max Kuhn
+#' @examples
+#' predicted <-  matrix(rnorm(50), ncol = 5)
+#' observed <- rnorm(10)
+#' apply(predicted, 2, postResampleSpectro, obs = observed)
 spectroSummary <- function (data, lev = NULL, model = NULL) {
   if (is.character(data$obs)) 
     data$obs <- factor(data$obs, levels = lev)
