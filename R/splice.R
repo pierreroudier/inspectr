@@ -100,6 +100,7 @@ if (!isGeneric("splice"))
 
 #' @title Splice correction of a spectra collected using ASD hardware
 #' @name splice 
+#' @aliases splice,Spectra-method
 #' @description This is the correction method available in the ViewSpec Pro
 #' software from ASD, which aims at correcting steps in the data (see details).
 #' 

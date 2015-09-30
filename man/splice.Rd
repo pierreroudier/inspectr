@@ -3,6 +3,7 @@
 \docType{methods}
 \name{splice}
 \alias{splice}
+\alias{splice,Spectra-method}
 \title{Splice correction of a spectra collected using ASD hardware}
 \usage{
 \S4method{splice}{Spectra}(x, locations = list(c(750, 1000), c(1830, 1950)))
