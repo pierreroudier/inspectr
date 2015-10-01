@@ -48,6 +48,12 @@ my_spectra %>%
   splice %>% 
   apply_spectra(diff, 1) %>%
   apply_spectra(snv)
+  
+# Another example using prospectr
+my_spectra %>% 
+  splice %>% 
+  apply_spectra(prospectr::continuumRemoval, wav = wl(.)) %>% 
+  plot
 ```
 
 ## Regression and Classification
