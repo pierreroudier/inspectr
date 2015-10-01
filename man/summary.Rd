@@ -6,9 +6,12 @@
 \alias{summary.Spectra}
 \title{Summary}
 \usage{
-\method{summary}{Spectra}(object, ...)
+summary(object, ...)
+}
+\arguments{
+\item{object}{an object of class \code{Spectra} or \code{SpectraDataFrame}}
 
-\method{print}{summary.Spectra}(x, ...)
+\item{...}{dditional arguments passed to \code{summary}}
 }
 \value{
 A \code{"summary.Spectra"} object
