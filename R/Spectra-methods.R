@@ -207,7 +207,9 @@ if (!isGeneric("spectra"))
 #' @description Either retrieves the spectra matrix from a \code{Spectra*} object, or
 #' creates a \code{Spectra*} object from a \code{"data.frame"} object different
 #' interfaces detailed below.When applied to a \code{Spectra*} object, this functions simply returns the spectra it is storing.
-#' 
+#' @param object an object of class \code{"Spectra"} or inheriting from this class
+#' @param ... see details below
+#' @param value see details below
 #' @details If applied on a \code{"data.frame"} object, it is an helper function to
 #' create a \code{Spectra*} object. Two kind of interfaces are then available.
 #' \code{value} can be: 
@@ -415,14 +417,21 @@ if (!isGeneric("ids"))
 #' @aliases ids ids<- ids,Spectra-method ids<-,Spectra-method
 #' ids<-,SpectraDataFrame-method
 #' @docType methods
+#' @usage 
+#' ids(object, ..., as.vector = TRUE)
+#' ids(object) <- value
+#' @param object an object of class \code{"Spectra"} or inheriting from this class
+#' @param ... currently ignored
+#' @param as.vector should the IDs be returned as a vector or as a data.frame?
+#' @param value character vector for new IDs
 #' @return The \code{ids} methods return a vector if \code{as.vector} is TRUE,
 #' a \code{data.frame} otherwise. The \code{"ids<-"} method return a
 #' \code{SpectraDataFrame} object (or a \code{Spectra} object if the column in
 #' the data slot that has been used to initiate the IDs was the only
 #' attribute).
 #' @section Methods: \itemize{
-#'  \item \code{ids(obj, ..., as.vector = TRUE)} 
-#'  \item \code{ids(obj) <- value} 
+#'  \item \code{ids(object, ..., as.vector = TRUE)} 
+#'  \item \code{ids(object) <- value} 
 #' }
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #' @examples
@@ -1098,7 +1107,12 @@ if (!isGeneric('melt_spectra'))
 #' @title Melts the spectra data of a Spectra object and returns it as wide format.
 #' 
 #' @description This function is very useful when wanting to plot spectra using the lattice or ggplot2 packages
-#' 
+#' @usage 
+#' melt_spectra(obj, ...)
+#' melt_spectra(obj, attr=NULL, ...)
+#' @param obj an object of class \code{"Spectra"} or inheriting from this class
+#' @param attr vector of id variables against which the spectra will be melted (see \code{melt})
+#' @param ... further arguments passed to or from other methods
 #' @section Methods: \describe{
 #' 
 #' \bold{x=Spectra}

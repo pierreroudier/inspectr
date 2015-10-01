@@ -6,12 +6,14 @@
 \alias{kenstone,Spectra-method}
 \title{Kennard-Stone algorithm for optimal calibration set selection.}
 \usage{
-\S4method{kenstone}{Spectra}(x, size, ...)
+kenstone(x, size, ...)
 }
 \arguments{
 \item{x}{a \code{Spectra} object}
 
 \item{size}{a positive number, the number of items to choose from}
+
+\item{...}{ignored}
 }
 \value{
 A vector of length size giving the indices of the selected

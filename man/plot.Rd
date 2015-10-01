@@ -6,7 +6,7 @@
 \alias{plot.Spectra}
 \title{Plots an object inheriting from the Spectra class}
 \usage{
-\method{plot}{Spectra}(x, gg = FALSE, gaps = TRUE, attr = NULL, ...)
+plot(x, gg = FALSE, gaps = TRUE, attr = NULL, ...)
 }
 \arguments{
 \item{x}{an object of class \code{"Spectra"} or inheriting from this class}
@@ -19,16 +19,7 @@ FALSE uses \code{matplot} from base graphics (much faster)}
 \item{attr}{attribute against which lines are coloured (only for \code{gg =
 TRUE}}
 
-\item{...}{options to be passed to \code{matplot}}
-
-\item{fun}{an aggregation function}
-
-\item{se}{if TRUE, plots the standard deviation around the summary spectra
-(computed by function as given by \code{fun}). If FALSE, does not plot
-dispersion information. If a function, uses this function instead of
-\code{sd}.}
-
-\item{offset}{Offset between spectra}
+\item{...}{additional parameters passed to \code{matplot}}
 }
 \description{
 The philosophy of this plotting routine is to provide a "quick'n'dirty" way

@@ -17,19 +17,14 @@
 #' \code{\link{melt_spectra}} alongside with ggplot2 or lattice is encouraged.
 #' 
 #' @aliases plot.Spectra plot,Spectra,ANY-method 
+#' @usage plot(x, gg = FALSE, gaps = TRUE, attr = NULL, ...)
 #' @param x an object of class \code{"Spectra"} or inheriting from this class
 #' @param gg if TRUE, uses the \code{ggplot2} package to plot the data, if
 #' FALSE uses \code{matplot} from base graphics (much faster)
 #' @param gaps if TRUE, gaps in the spectra are not plotted
 #' @param attr attribute against which lines are coloured (only for \code{gg =
 #' TRUE}
-#' @param fun an aggregation function
-#' @param se if TRUE, plots the standard deviation around the summary spectra
-#' (computed by function as given by \code{fun}). If FALSE, does not plot
-#' dispersion information. If a function, uses this function instead of
-#' \code{sd}.
-#' @param offset Offset between spectra
-#' @param ... options to be passed to \code{matplot}
+#' @param ... additional parameters passed to \code{matplot}
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #' @examples
 #' 
@@ -142,6 +137,14 @@ if (!isGeneric("plot_summary")) {
 #' @aliases plot_summary plot_summary,Spectra-method
 #' @name plot_summary
 #' @description Creates a summary plot of a collection of Spectra
+#' @usage plot_summary(x, fun = mean, se = TRUE, ...)
+#' @param x an object of class \code{"Spectra"} or inheriting from this class
+#' @param fun an aggregation function
+#' @param se if TRUE, plots the standard deviation around the summary spectra
+#' (computed by function as given by \code{fun}). If FALSE, does not plot
+#' dispersion information. If a function, uses this function instead of
+#' \code{sd}.
+#' @param ... additional parameters, currently ignored
 #' @author Pierre Roudier
 #' @examples 
 #'  oz <- load_oz()
@@ -214,6 +217,8 @@ if (!isGeneric("plot_stack")) {
 #' @name plot_stack
 #' @aliases plot_stack plot_stack,Spectra-method
 #' @description Creates a stacked plot of a collection of Spectra
+#' @usage plot_stack(x)
+#' @param x an object of class \code{"Spectra"} or inheriting from this class
 #' @author Pierre Roudier
 #' @examples 
 #'  oz <- load_oz(3)
@@ -242,6 +247,9 @@ if (!isGeneric("plot_offset")) {
 #' @name plot_offset
 #' @aliases plot_offset plot_offset,Spectra-method
 #' @description Creates an offset plot of a collection of Spectra
+#' @usage plot_offset(x, offset = 1)
+#' @param x an object of class \code{"Spectra"} or inheriting from this class
+#' @param offset Offset between spectra
 #' @author Pierre Roudier
 #' @examples 
 #'  oz <- load_oz(3)

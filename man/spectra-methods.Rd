@@ -18,6 +18,13 @@
 
 \S4method{spectra}{Spectra}(object) <- value
 }
+\arguments{
+\item{object}{an object of class \code{"Spectra"} or inheriting from this class}
+
+\item{...}{see details below}
+
+\item{value}{see details below}
+}
 \description{
 Either retrieves the spectra matrix from a \code{Spectra*} object, or
 creates a \code{Spectra*} object from a \code{"data.frame"} object different

@@ -133,19 +133,26 @@ if (!isGeneric("features"))
   setGeneric("features", function(obj, ...)
     standardGeneric("features"))
 
-#' Retrieves or sets the data slot of a SpectraDataFrame object.
-#' 
-#' Either retrieves the attributes values from the data slot of a
-#' SpectraDataFrame object, or upgrades a Spectra object to a SpectraDataFrame
-#' object by initialising its data slot by a suitable \code{"data.frame"}
-#' object.
-#' 
-#' 
+#' @title Retrieves or sets the data slot of a SpectraDataFrame object.
 #' @name features
 #' @aliases features features<- features-methods
 #' features,SpectraDataFrame-method features<-,Spectra-method
 #' features<-,SpectraDataFrame-method
 #' @docType methods
+#' @description Either retrieves the attributes values from the data slot of a
+#' SpectraDataFrame object, or upgrades a Spectra object to a SpectraDataFrame
+#' object by initialising its data slot by a suitable \code{"data.frame"}
+#' object.
+#' @usage 
+#' features(obj, safe=TRUE, key=NULL, exclude_id=TRUE) <- value
+#' features(obj, exclude_id=TRUE)
+#' features(obj, safe=TRUE, key=NULL, exclude_id=TRUE, append=TRUE) <- value
+#' @param obj a \code{Spectra} object
+#' @param safe see below
+#' @param key see below
+#' @param exclude_id see below
+#' @param append see below
+#' @param value see below
 #' @return The \code{features} methods return a \code{data.frame} object, while
 #' the \code{"features<-"} methods return a \code{SpectraDataFrame} object.
 #' @section Methods: \describe{

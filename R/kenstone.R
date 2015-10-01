@@ -5,11 +5,11 @@ if (!isGeneric("kenstone"))
 #' @title Kennard-Stone algorithm for optimal calibration set selection.
 #' @name kenstone
 #' @description An implemnentation of the Kennard-Stone algorithm for calibration set selection.
-#' 
-#' 
 #' @aliases kenstone kenstone,Spectra-method
+#' @usage kenstone(x, size, ...)
 #' @param x a \code{Spectra} object
 #' @param size a positive number, the number of items to choose from
+#' @param ... ignored
 #' @return A vector of length size giving the indices of the selected
 #' individuals in x.
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}

@@ -6,7 +6,19 @@
 \alias{plot_summary,Spectra-method}
 \title{Summary plot of a collection of spectra}
 \usage{
-\S4method{plot_summary}{Spectra}(x, fun = mean, se = TRUE, ...)
+plot_summary(x, fun = mean, se = TRUE, ...)
+}
+\arguments{
+\item{x}{an object of class \code{"Spectra"} or inheriting from this class}
+
+\item{fun}{an aggregation function}
+
+\item{se}{if TRUE, plots the standard deviation around the summary spectra
+(computed by function as given by \code{fun}). If FALSE, does not plot
+dispersion information. If a function, uses this function instead of
+\code{sd}.}
+
+\item{...}{additional parameters, currently ignored}
 }
 \description{
 Creates a summary plot of a collection of Spectra

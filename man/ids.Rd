@@ -9,11 +9,21 @@
 \alias{ids<-,SpectraDataFrame-method}
 \title{Retrieves or sets the ids of a \code{Spectra*} object.}
 \usage{
-\S4method{ids}{Spectra}(object, ..., as.vector = TRUE)
+ids(object, ..., as.vector = TRUE)
+ids(object) <- value
 
 \S4method{ids}{Spectra}(object) <- value
 
 \S4method{ids}{SpectraDataFrame}(object) <- value
+}
+\arguments{
+\item{object}{an object of class \code{"Spectra"} or inheriting from this class}
+
+\item{...}{currently ignored}
+
+\item{as.vector}{should the IDs be returned as a vector or as a data.frame?}
+
+\item{value}{character vector for new IDs}
 }
 \value{
 The \code{ids} methods return a vector if \code{as.vector} is TRUE,
@@ -32,8 +42,8 @@ in the Examples section).
 }
 \section{Methods}{
  \itemize{
- \item \code{ids(obj, ..., as.vector = TRUE)}
- \item \code{ids(obj) <- value}
+ \item \code{ids(object, ..., as.vector = TRUE)}
+ \item \code{ids(object) <- value}
 }
 }
 \examples{

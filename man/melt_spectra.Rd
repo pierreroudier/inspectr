@@ -8,9 +8,17 @@
 \alias{melt_spectra-methods}
 \title{Melts the spectra data of a Spectra object and returns it as wide format.}
 \usage{
-\S4method{melt_spectra}{Spectra}(obj, ...)
+melt_spectra(obj, ...)
+melt_spectra(obj, attr=NULL, ...)
 
 \S4method{melt_spectra}{SpectraDataFrame}(obj, attr = NULL, ...)
+}
+\arguments{
+\item{obj}{an object of class \code{"Spectra"} or inheriting from this class}
+
+\item{...}{further arguments passed to or from other methods}
+
+\item{attr}{vector of id variables against which the spectra will be melted (see \code{melt})}
 }
 \description{
 This function is very useful when wanting to plot spectra using the lattice or ggplot2 packages

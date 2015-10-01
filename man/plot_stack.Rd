@@ -6,7 +6,10 @@
 \alias{plot_stack,Spectra-method}
 \title{Stacked plot of a collection of spectra}
 \usage{
-\S4method{plot_stack}{Spectra}(x)
+plot_stack(x)
+}
+\arguments{
+\item{x}{an object of class \code{"Spectra"} or inheriting from this class}
 }
 \description{
 Creates a stacked plot of a collection of Spectra

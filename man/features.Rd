@@ -10,7 +10,22 @@
 \alias{features<-,SpectraDataFrame-method}
 \title{Retrieves or sets the data slot of a SpectraDataFrame object.}
 \usage{
-\S4method{features}{SpectraDataFrame}(obj, ..., exclude_id = TRUE)
+features(obj, safe=TRUE, key=NULL, exclude_id=TRUE) <- value
+features(obj, exclude_id=TRUE)
+features(obj, safe=TRUE, key=NULL, exclude_id=TRUE, append=TRUE) <- value
+}
+\arguments{
+\item{obj}{a \code{Spectra} object}
+
+\item{exclude_id}{see below}
+
+\item{safe}{see below}
+
+\item{key}{see below}
+
+\item{append}{see below}
+
+\item{value}{see below}
 }
 \value{
 The \code{features} methods return a \code{data.frame} object, while

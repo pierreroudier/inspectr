@@ -6,7 +6,12 @@
 \alias{plot_offset,Spectra-method}
 \title{Offset plot of a collection of spectra}
 \usage{
-\S4method{plot_offset}{Spectra}(x, offset = 1)
+plot_offset(x, offset = 1)
+}
+\arguments{
+\item{x}{an object of class \code{"Spectra"} or inheriting from this class}
+
+\item{offset}{Offset between spectra}
 }
 \description{
 Creates an offset plot of a collection of Spectra
