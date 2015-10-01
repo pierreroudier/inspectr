@@ -36,7 +36,7 @@ wls <- 350:2500
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
 \seealso{
-\code{\link{spectra}}, \code{\link{wl}},
-\code{\link{Spectra-class}}, \code{\link{SpectraDataFrame}}
+\code{spectra}, \code{wl},
+\code{Spectra-class}, \code{SpectraDataFrame}
 }
 

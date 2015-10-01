@@ -40,9 +40,4 @@ summary(l$validation)
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
-\seealso{
-\code{\link{split}}, \code{\link{melt_spectra}},
-\code{\link{lapply}}, and the \code{l*pply} family of function inthe plyr
-package.
-}
 

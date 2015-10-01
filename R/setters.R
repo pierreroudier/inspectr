@@ -96,7 +96,7 @@ setReplaceMethod("wl", "Spectra",
       # set of wavelengths
       else { 
         if (length(value) < length(object)) {
-          ind.wl <- which(wl(d) %in% value)
+          ind.wl <- which(wl(object) %in% value)
           nir <- spectra(object)[, ind.wl, drop = FALSE]
           res <- Spectra(id = ids(object, as.vector = FALSE), wl = value, nir = nir, units = units(object))
           if ("data" %in% slotNames(object))

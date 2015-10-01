@@ -3,6 +3,7 @@
 \docType{methods}
 \name{plot_summary}
 \alias{plot_summary}
+\alias{plot_summary,Spectra-method}
 \title{Summary plot of a collection of spectra}
 \usage{
 \S4method{plot_summary}{Spectra}(x, fun = mean, se = TRUE, ...)

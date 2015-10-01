@@ -2,13 +2,6 @@
 % Please edit documentation in R/Spectra-methods.R
 \docType{methods}
 \name{wl_units}
-\alias{res}
-\alias{res,Spectra-method}
-\alias{res,integer-method}
-\alias{res,numeric-method}
-\alias{res.Spectra}
-\alias{res.integer}
-\alias{res.numeric}
 \alias{wl_units}
 \alias{wl_units,Spectra-method}
 \alias{wl_units<-}
@@ -16,6 +9,8 @@
 \title{Wavelengths of Spectra* objects}
 \usage{
 \S4method{wl_units}{Spectra}(object)
+
+\S4method{wl_units}{Spectra}(object) <- value
 }
 \arguments{
 \item{object,x}{an object inheriting from class \code{Spectra}, or a
@@ -24,11 +19,10 @@
 \item{value}{a character string}
 }
 \value{
-A vector. \code{res} is giving NULL for irregularly spaced
-wavelengths (eg when there is parts of the spectra data have been removed).
+A vector
 }
 \description{
-Retrieves the wavelengths units and the spectral resolution from
+Retrieves the wavelengths units from
 \code{Spectra*} objects.
 }
 \examples{
@@ -39,7 +33,6 @@ spectra(australia) <- sr_no ~ ... ~ 350:2500
 # Print wavelength information
 wl(australia)
 range(wl(australia))
-res(australia)
 
 # Manipulate wavelength information
 wl(australia) <- wl(australia) + 1000

@@ -2,8 +2,6 @@
 % Please edit documentation in R/AAA-Classes.R
 \docType{class}
 \name{Spectra-class}
-\alias{SpatialSpectra-class}
-\alias{SpatialSpectraDataFrame-class}
 \alias{Spectra-class}
 \alias{SpectraDataFrame-class}
 \alias{as.data.frame.SpatialSpectra}
@@ -43,7 +41,22 @@ Common generic methods implemented for these classes include:
 \code{SpatialPoints} methods from the sp package can be applied to
 \code{SpatialSpectra} and \code{SpatialSpectraDataFrame} objects are they
 inherit from this class.
+
+Class for spectra collections with associated attributes
 }
+\section{Slots}{
+
+\describe{
+\item{\code{wl}}{object of class "\code{numeric}"; the wavelengths at which the spectra has been measured}
+
+\item{\code{nir}}{object of class "\code{matrix}"; the spectra, with as many columns as wavelengths, and as many rows as samples}
+
+\item{\code{id}}{object of class "\code{data.frame}" with one attribute; the identification strings for each sample in the collection}
+
+\item{\code{units}}{object of class "\code{character}"; units in which the wavelengths are expressed}
+
+\item{\code{data}}{object of class data.frame containing the attribute data}
+}}
 \section{Objects from the Class}{
  Objects can be created by calls of the form
 \code{new("Spectra", ...)}, with the constructor functions like
@@ -55,6 +68,8 @@ showClass("Spectra")
 showClass("SpectraDataFrame")
 }
 \author{
+Pierre Roudier \email{pierre.roudier@gmail.com}
+
 Pierre Roudier \email{pierre.roudier@gmail.com}
 }
 

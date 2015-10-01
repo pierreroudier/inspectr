@@ -56,8 +56,4 @@ ids(australia)
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
-\seealso{
-\code{\link{spectra}}, \code{\link{Spectra-class}},
-\code{\link{SpectraDataFrame-class}}
-}
 

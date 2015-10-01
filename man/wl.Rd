@@ -32,8 +32,7 @@ vector.
 Either retrieves the wavelengths from a \code{Spectra*} object, or creates a
 \code{Spectra*} object from a \code{"data.frame"} object by setting some of
 its columns as the wavelengths.
-}
-\details{
+
 When applied to a \code{Spectra*} object, this functions simply returns the
 wavelengths of the spectra it is storing.
 
@@ -69,7 +68,7 @@ summary(australia)
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
 \seealso{
-\code{\link{spectra}}, \code{\link{Spectra-class}},
-\code{\link{SpectraDataFrame-class}}
+\code{spectra}, \code{Spectra-class},
+\code{SpectraDataFrame-class}
 }
 

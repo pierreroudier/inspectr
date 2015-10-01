@@ -3,6 +3,7 @@
 \docType{methods}
 \name{plot_offset}
 \alias{plot_offset}
+\alias{plot_offset,Spectra-method}
 \title{Offset plot of a collection of spectra}
 \usage{
 \S4method{plot_offset}{Spectra}(x, offset = 1)

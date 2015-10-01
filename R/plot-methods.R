@@ -10,17 +10,13 @@
 #
 .defaultSpectraColours <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00")
 
-#' Plots an object inheriting from the Spectra class
-#' 
-#' Plots an object inheriting from the Spectra class
-#' 
-#' The philosophy of this plotting routine is to provide a "quick'n'dirty" way
+#' @title Plots an object inheriting from the Spectra class
+#' @name plot
+#' @description The philosophy of this plotting routine is to provide a "quick'n'dirty" way
 #' to plot your spectra collection. For advanced visualisations, the use of
 #' \code{\link{melt_spectra}} alongside with ggplot2 or lattice is encouraged.
 #' 
-#' @aliases plot.Spectra plot_summary plot_stack plot_offset
-#' plot,Spectra,ANY-method plot_summary,Spectra-method
-#' plot_stack,Spectra-method plot_offset,Spectra-method
+#' @aliases plot.Spectra plot,Spectra,ANY-method 
 #' @param x an object of class \code{"Spectra"} or inheriting from this class
 #' @param gg if TRUE, uses the \code{ggplot2} package to plot the data, if
 #' FALSE uses \code{matplot} from base graphics (much faster)
@@ -143,6 +139,7 @@ if (!isGeneric("plot_summary")) {
 }
 
 #' @title Summary plot of a collection of spectra
+#' @aliases plot_summary plot_summary,Spectra-method
 #' @name plot_summary
 #' @description Creates a summary plot of a collection of Spectra
 #' @author Pierre Roudier
@@ -215,6 +212,7 @@ if (!isGeneric("plot_stack")) {
 
 #' @title Stacked plot of a collection of spectra
 #' @name plot_stack
+#' @aliases plot_stack plot_stack,Spectra-method
 #' @description Creates a stacked plot of a collection of Spectra
 #' @author Pierre Roudier
 #' @examples 
@@ -242,6 +240,7 @@ if (!isGeneric("plot_offset")) {
 
 #' @title Offset plot of a collection of spectra
 #' @name plot_offset
+#' @aliases plot_offset plot_offset,Spectra-method
 #' @description Creates an offset plot of a collection of Spectra
 #' @author Pierre Roudier
 #' @examples 

@@ -11,7 +11,9 @@ if (!isGeneric("aggregate_spectra"))
 #' user-defined function
 #' 
 #' @details There is two distinct function for \code{Spectra} and \code{SpectraDataFrame} classes. For \code{SpectraDataFrame} objects, associated data is also aggregated using the function provided by the \code{fun} option. Additionally, the method for \code{SpectraDataFrame} has an \code{id} option that allows to specify an attribute which will be used to split the object, apply sequentially the \code{fun} function, and recombine the results in an unique object.
-#' 
+#' @param obj see below
+#' @param fun see below
+#' @param ... see below
 #' @section Methods: \describe{
 #' 
 #' \bold{x=Spectra}

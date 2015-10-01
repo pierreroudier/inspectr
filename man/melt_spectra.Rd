@@ -49,7 +49,7 @@ head(r)
 # using ggplot2
 
 # Create some factor
-australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE) # Generate some kind of factor
+australia$fact <- sample(LETTERS[1:3], size = nrow(australia), replace = TRUE)
 r <- melt_spectra(australia, attr = 'fact')
 
 # Create plot
@@ -65,8 +65,5 @@ Pierre Roudier \url{pierre.roudier@gmail.com}
 Hadley Wickham (2011). The Split-Apply-Combine Strategy for Data
 Analysis. Journal of Statistical Software, 40(1), 1-29. URL
 http://www.jstatsoft.org/v40/i01/.
-}
-\seealso{
-\code{\link{melt}}
 }
 

@@ -26,8 +26,7 @@ or can promote a \code{Spectra} object to a \code{SpectraDataFrame} object
 by adding data ("[[<-" and "$<-" methods).
 }
 \description{
-These methods emulates classic base methods '[', '[[' and '$' to extract or
-replace parts of Spectra* objects.
+These methods emulates classic base methods '[', '[[' and '$' to extract or replace parts of Spectra* objects.
 }
 \section{Methods}{
  \describe{
@@ -90,8 +89,5 @@ summary(s)
 }
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}
-}
-\seealso{
-\code{\link{subset}}, \code{\link{aggregate_spectra}}
 }
 

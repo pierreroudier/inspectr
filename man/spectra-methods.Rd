@@ -2,7 +2,12 @@
 % Please edit documentation in R/Spectra-methods.R, R/setters.R
 \docType{methods}
 \name{spectra-methods}
+\alias{spectra}
+\alias{spectra,Spectra-method}
+\alias{spectra,SpectraDataFrame-method}
+\alias{spectra,data.frame-method}
 \alias{spectra-methods}
+\alias{spectra<-}
 \alias{spectra<-,Spectra-method}
 \alias{spectra<-,data.frame-method}
 \title{Retrieves or sets the spectra of a \code{Spectra*} objects.}
@@ -116,20 +121,23 @@ summary(australia)
 # for demonstration's sake
 #
 m <- melt_spectra(australia)
-australia_by_col <- reshape2::acast(m, ... ~ sr_no)
-australia_by_col <- data.frame(wl = rownames(australia_by_col), australia_by_col, check.names = FALSE)
+oz_by_col <- reshape2::acast(m, ... ~ sr_no)
+oz_by_col <- data.frame(
+  wl = rownames(oz_by_col),
+  oz_by_col,
+  check.names = FALSE)
 
 # Here's colwise-formatted data
-big.head(australia_by_col)
+big.head(oz_by_col)
 
 # Convert it into Spectra object
-spectra(australia_by_col, mode = "colwise") <- wl ~ ...
-summary(australia_by_col)
+spectra(oz_by_col, mode = "colwise") <- wl ~ ...
+summary(oz_by_col)
 
 # Then data can be added to promote it as a SpectraDataFrame
 my.data <- features(australia, exclude_id = FALSE)
-features(australia_by_col, key = 'sr_no') <- my.data
-summary(australia_by_col)
+features(oz_by_col, key = 'sr_no') <- my.data
+summary(oz_by_col)
 }
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}

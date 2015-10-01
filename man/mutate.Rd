@@ -6,21 +6,7 @@
 \alias{mutate,Spectra-method}
 \alias{mutate.Spectra}
 \title{Mutate a Spectra* object by transforming the spectra values, and/or adding
-new or replacing existing attributes.
-
-This function is very similar to \code{\link{transform}} but it executes the
-transformations iteratively so that later transformations can use the
-columns created by earlier transformations. Like transform, unnamed
-components are silently dropped.
-
-Either the spectra, and/or the attributes (if the \code{.data} inherits from
-the \code{SpectraDataFrame} class) can be affected: \itemize{ \item To
-affect the spectra, one should use the \code{nir} placeholder, eg \code{nir
-= log(1/nir)} \item To affect the attributes of the object, the definitions
-of new columns are simply given using attributes names, \code{newAttribute =
-1/sqrt(attribute)} \item Both spectra and attrbutes can be transformed in
-one command, eg \code{mutate(s, nir = log(1/nir), newAttribute =
-1/sqrt(attribute)} }}
+new or replacing existing attributes.}
 \usage{
 \S4method{mutate}{Spectra}(.data, ...)
 }
@@ -30,10 +16,7 @@ one command, eg \code{mutate(s, nir = log(1/nir), newAttribute =
 \item{...}{named parameters giving definitions of new columns}
 }
 \description{
-Mutate a Spectra* object by transforming the spectra values, and/or adding
-new or replacing existing attributes.
-
-This function is very similar to \code{\link{transform}} but it executes the
+This function is very similar to \code{transform} but it executes the
 transformations iteratively so that later transformations can use the
 columns created by earlier transformations. Like transform, unnamed
 components are silently dropped.
