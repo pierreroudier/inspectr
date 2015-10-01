@@ -69,7 +69,6 @@ S3method("names<-", SpectraDataFrame)
 
 
 exportMethods(
-  "coordinates<-",
   spectra,
   "spectra<-",
   wl,
@@ -80,7 +79,6 @@ exportMethods(
   "features<-",
   wl_units,
   "wl_units<-",
-  "coordinates<-",
   res,
   "[",
   "$",
