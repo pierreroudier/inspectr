@@ -36,7 +36,7 @@ The idea is for the package to work quite well with the pipe (`%>%`) operator fr
 
 my_spectra %>% 
   splice %>% 
-  apply_spectra(diff, 1) %>% 
+  apply_spectra(diff, 1) %>%
   apply_spectra(snv)
 ```
 
