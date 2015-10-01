@@ -16,9 +16,7 @@
 \S4method{res}{Spectra}(x)
 }
 \arguments{
-\item{object}{an object inheriting from \code{Spectra}}
-
-\item{digits}{the number of significant digits}
+\item{x}{object an object inheriting from \code{Spectra}}
 }
 \value{
 a vector

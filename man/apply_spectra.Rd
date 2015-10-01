@@ -19,12 +19,12 @@ An object of the same class as \code{obj}
 \description{
 Aggregates spectral and data information of a \code{Spectra} object using a
 user-defined function.
-}
-\details{
+
 Apply a function and update the spectra of a \code{Spectra} object. This
 function is particularly interesting for pre-processing, e.g to derive the
-spectra, or apply pre-processing functions such as \code{\link{snv}}.
-
+spectra, or apply pre-processing functions such as \code{snv}.
+}
+\details{
 The philosophy of this function is to let the user free to use any function
 to pre-process a spectra collection, using either functions from the stats
 package, functions from other packages such as \code{signal}, or personal

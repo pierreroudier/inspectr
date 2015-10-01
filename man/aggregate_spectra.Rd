@@ -18,6 +18,8 @@
 \item{fun}{see below}
 
 \item{...}{see below}
+
+\item{id}{see below}
 }
 \value{
 An object of the same class as \code{obj}

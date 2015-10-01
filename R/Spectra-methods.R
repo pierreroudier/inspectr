@@ -462,18 +462,15 @@ if (!isGeneric("wl_units"))
 
 #' @title Wavelengths of Spectra* objects
 #' @name wl_units
-#' @description Retrieves the wavelengths units from
-#' \code{Spectra*} objects.
-#' 
+#' @description Retrieves the wavelengths units from \code{Spectra*} object
 #' @aliases wl_units wl_units<- wl_units,Spectra-method wl_units<-,Spectra-method 
 #' @docType methods
-#' @param object,x an object inheriting from class \code{Spectra}, or a
-#' \code{"numeric"} vector for \code{resolution}
+#' @usage wl_units(object)
+#' @param object an object inheriting from class \code{Spectra}
 #' @param value a character string
 #' @return A vector
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #' @examples
-#' 
 #' # Loading example data
 #' data(australia)
 #' spectra(australia) <- sr_no ~ ... ~ 350:2500
@@ -601,8 +598,7 @@ setMethod("res", "integer", .res.numeric)
 #' @title Returns the spectral resolution of an object
 #' @name res
 #' @aliases res,Spectra-method res,SpectraDataFrame-method 
-#' @param object an object inheriting from \code{Spectra}
-#' @param digits the number of significant digits
+#' @param x object an object inheriting from \code{Spectra}
 #' @return a vector
 #'
 #' @method resolution Spectra

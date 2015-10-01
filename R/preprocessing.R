@@ -1,13 +1,14 @@
-#' Apply a function on the spectra of a Spectra* object
-#' 
-#' Aggregates spectral and data information of a \code{Spectra} object using a
+#' @title Apply a function on the spectra of a Spectra* object
+#' @name apply_spectra
+#' @description Aggregates spectral and data information of a \code{Spectra} object using a
 #' user-defined function.
 #' 
 #' Apply a function and update the spectra of a \code{Spectra} object. This
 #' function is particularly interesting for pre-processing, e.g to derive the
-#' spectra, or apply pre-processing functions such as \code{\link{snv}}.
+#' spectra, or apply pre-processing functions such as \code{snv}.
 #' 
-#' The philosophy of this function is to let the user free to use any function
+#' @usage apply_spectra(obj, fun, ...)
+#' @details The philosophy of this function is to let the user free to use any function
 #' to pre-process a spectra collection, using either functions from the stats
 #' package, functions from other packages such as \code{signal}, or personal
 #' functions.
@@ -53,9 +54,10 @@ apply_spectra <- function(obj, fun, ...) {
   obj
 }
 
-#' Standard and Robust Normal Variate transformations
-#' 
-#' Standard and Robust Normal Variate transformations are often used in
+#' @title Standard and Robust Normal Variate transformations
+#' @name snv
+#' @aliases snv rnv
+#' @description Standard and Robust Normal Variate transformations are often used in
 #' chemometrics to normalise a spectra collection and remove the baseline
 #' effect.
 #' 
@@ -66,21 +68,21 @@ apply_spectra <- function(obj, fun, ...) {
 #' modification of the SNV to make it more robust to closure problems.
 #' 
 #' These function are to be used in conjonction with
-#' \code{\link{apply_spectra}}.
+#' \code{apply_spectra}.
 #' 
-#' @aliases snv rnv
 #' @param x a vector of numeric values
 #' @param r the percentile to use in the RNV computation
 #' @return A vector of numeric values
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-#' @seealso \code{\link{apply_spectra}}, \code{\link{baseline}}
-#' @references \itemize{ \item Barnes, R.J., Dhanoa, M.S., Lister, S.J. 1989.
+#' @references 
+#' \itemize{ 
+#'   \item Barnes, R.J., Dhanoa, M.S., Lister, S.J. 1989.
 #' Standard normal variate transformation and detrending of near-infra-red
 #' diffuse reflectance spectra. Applied Spectroscopy 43, 772--777.
-#' 
-#' \item Guo, Q., Wu, W., Massar, D.L. 1999. The robust normal variate
+#'   \item Guo, Q., Wu, W., Massar, D.L. 1999. The robust normal variate
 #' transform for pattern recognition with near-infrared data. Analytica Chimica
-#' Acta 382:1--2, 87--103.  }
+#' Acta 382:1--2, 87--103.  
+#' }
 #' @examples
 #' 
 #' # Loading example data
@@ -100,13 +102,12 @@ apply_spectra <- function(obj, fun, ...) {
 #' s <- apply_spectra(australia, rnv, r = 0.25)
 #' plot(s)
 #' 
-#' @export snv
+#' @export snv rnv
 snv <- function(x){
   (x - mean(x))/sd(x)
 }
 
-## RNV
-## Guo et al, 1999
+#' @rdname snv
 rnv <- function(x, r){
   pct <- as.numeric(quantile(x = x, probs = r, na.rm = TRUE))
   (x - pct)/(sd(x[x <= pct]))
@@ -116,91 +117,90 @@ rnv <- function(x, r){
 ## Baseline using the baseline package
 
 if (!isGeneric('base_line'))
-  #' Baseline correction using the baseline package
-  #' 
-  #' Estimates baselines for the spectra in the \code{obj} object, using the
-  #' algorithm named in 'method'.
-  #' 
-  #' The baseline package implements various algorithms for the baseline
-  #' correction. The following methods are available:
-  #' 
-  #' \itemize{ \item 'als': Baseline correction by 2nd derivative constrained
-  #' weighted regression \item 'fillPeaks': An iterative algorithm using
-  #' suppression of baseline by means in local windows \item 'irls' (default): An
-  #' algorithm with primary smoothing and repeated baseline suppressions and
-  #' regressions with 2nd derivative constraint \item 'lowpass': An algorithm for
-  #' removing baselines based on Fast Fourier Transform filtering \item
-  #' 'medianWindow': An implementation and extention of Mark S. Friedrichs'
-  #' model-free algorithm \item 'modpolyfit': An implementation of Chad A. Lieber
-  #' and Anita Mahadevan-Jansen's algorithm for polynomial fiting \item
-  #' 'peakDetection': A translation from Kevin R. Coombes et al.'s MATLAB code
-  #' for detecting peaks and removing baselines \item 'rfbaseline': Wrapper for
-  #' Andreas F. Ruckstuhl, Matthew P. Jacobson, Robert W. Field, James A. Dodd's
-  #' algorithm based on LOWESS and weighted regression \item 'rollingBall': Ideas
-  #' from Rolling Ball algorithm for X-ray spectra by M.A.Kneen and H.J.
-  #' Annegarn. Variable window width has been left out }
-  #' 
-  #' See baseline package documentation for more information and references.
-  #' 
-  #' Additionally, the baseline package provides a nice GUI that helps choosing
-  #' the good baseline method and the good parametrisation. This GUI can be used
-  #' with the \code{inspectr} package. This is demonstrate in the Examples
-  #' section.
-  #' 
-  #' @name base_line
-  #' @aliases base_line base_line,Spectra-method
-  #' @docType methods
-  #' @param object an object inheriting from class \code{Spectra}
-  #' @param ... additional arguments to be passed to the \code{baseline} function
-  #' in the baseline package. The main option would be \code{'method'}, to switch
-  #' between the several baseline methods presented in teh details section.
-  #' @return An object of the same class as \code{obj} with the continuum removed
-  #' from its spectra.
-  #' @author Interface to the baseline package by Pierre Roudier
-  #' \url{pierre.roudier@@gmail.com}, baseline package authored by Kristian Hovde
-  #' Liland and Bjorn-Helge Mevik
-  #' @seealso \code{\link{continuum_removal}}, \code{\link{snv}},
-  #' \code{\link{rnv}}
-  #' @references Kristian Hovde Liland and Bjrn-Helge Mevik (2011). baseline:
-  #' Baseline Correction of Spectra. R package version 1.0-1.
-  #' http://CRAN.R-project.org/package=baseline
-  #' @examples
-  #' 
-  #' # Loading example data
-  #' data(australia)
-  #' spectra(australia) <- sr_no ~ ... ~ 350:2500
-  #' 
-  #' # Correction using the default method (irls)
-  #' bl <- base_line(australia)
-  #' plot(bl)
-  #' 
-  #' # Specifying another method for baseline calculation
-  #' bl2 <- base_line(australia, method = "modpolyfit")
-  #' plot(bl2)
-  #' 
-  #' # Using the baseline package independently (useful to plot the corrections)
-  #' \dontrun{
-  #' library(baseline)
-  #' bl3 <- baseline(spectra(australia), method = 'irls')
-  #' class(bl3) # this is a baseline object
-  #' plot(bl3)
-  #' # Affecting the baseline-corrected spectra back
-  #' # to the SpectraDataFrame object
-  #' spectra(australia) <- getCorrected(bl3)
-  #' plot(australia)
-  #' 
-  #' # Using the baselineGUI with inspectr
-  #' baselineGUI(spectra(australia))
-  #' ## When happy with a configuration, clik "Apply to all" and 
-  #' ## save the results under a name, e.g. "corrected.spectra"
-  #' spectra(australia) <- getCorrected(corrected.spectra)
-  #' plot(australia)
-  #' }
-  #' 
   setGeneric('base_line', function(object, ...)
     standardGeneric('base_line')
 )
 
+#' @title Baseline correction using the baseline package#' 
+#' @name base_line
+#' @aliases base_line base_line,Spectra-method
+#' @docType methods
+#' @description Estimates baselines for the spectra in the \code{obj} object, using the
+#' algorithm named in 'method'.
+#' 
+#' @details The baseline package implements various algorithms for the baseline
+#' correction. The following methods are available:
+#' 
+#' \itemize{ \item 'als': Baseline correction by 2nd derivative constrained
+#' weighted regression \item 'fillPeaks': An iterative algorithm using
+#' suppression of baseline by means in local windows \item 'irls' (default): An
+#' algorithm with primary smoothing and repeated baseline suppressions and
+#' regressions with 2nd derivative constraint \item 'lowpass': An algorithm for
+#' removing baselines based on Fast Fourier Transform filtering \item
+#' 'medianWindow': An implementation and extention of Mark S. Friedrichs'
+#' model-free algorithm \item 'modpolyfit': An implementation of Chad A. Lieber
+#' and Anita Mahadevan-Jansen's algorithm for polynomial fiting \item
+#' 'peakDetection': A translation from Kevin R. Coombes et al.'s MATLAB code
+#' for detecting peaks and removing baselines \item 'rfbaseline': Wrapper for
+#' Andreas F. Ruckstuhl, Matthew P. Jacobson, Robert W. Field, James A. Dodd's
+#' algorithm based on LOWESS and weighted regression \item 'rollingBall': Ideas
+#' from Rolling Ball algorithm for X-ray spectra by M.A.Kneen and H.J.
+#' Annegarn. Variable window width has been left out }
+#' 
+#' See baseline package documentation for more information and references.
+#' 
+#' Additionally, the baseline package provides a nice GUI that helps choosing
+#' the good baseline method and the good parametrisation. This GUI can be used
+#' with the \code{inspectr} package. This is demonstrate in the Examples
+#' section.
+#' 
+#' @param object an object inheriting from class \code{Spectra}
+#' @param ... additional arguments to be passed to the \code{baseline} function
+#' in the baseline package. The main option would be \code{'method'}, to switch
+#' between the several baseline methods presented in teh details section.
+#' @return An object of the same class as \code{obj} with the continuum removed
+#' from its spectra.
+#' @author Interface to the baseline package by Pierre Roudier
+#' \url{pierre.roudier@@gmail.com}, baseline package authored by Kristian Hovde
+#' Liland and Bjorn-Helge Mevik
+#' @seealso \code{\link{continuum_removal}}, \code{\link{snv}},
+#' \code{\link{rnv}}
+#' @references Kristian Hovde Liland and Bjrn-Helge Mevik (2011). baseline:
+#' Baseline Correction of Spectra. R package version 1.0-1.
+#' http://CRAN.R-project.org/package=baseline
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Correction using the default method (irls)
+#' bl <- base_line(australia)
+#' plot(bl)
+#' 
+#' # Specifying another method for baseline calculation
+#' bl2 <- base_line(australia, method = "modpolyfit")
+#' plot(bl2)
+#' 
+#' # Using the baseline package independently (useful to plot the corrections)
+#' \dontrun{
+#' library(baseline)
+#' bl3 <- baseline(spectra(australia), method = 'irls')
+#' class(bl3) # this is a baseline object
+#' plot(bl3)
+#' # Affecting the baseline-corrected spectra back
+#' # to the SpectraDataFrame object
+#' spectra(australia) <- getCorrected(bl3)
+#' plot(australia)
+#' 
+#' # Using the baselineGUI with inspectr
+#' baselineGUI(spectra(australia))
+#' ## When happy with a configuration, clik "Apply to all" and 
+#' ## save the results under a name, e.g. "corrected.spectra"
+#' spectra(australia) <- getCorrected(corrected.spectra)
+#' plot(australia)
+#' }
+#' 
 setMethod('base_line', 'Spectra', function(object, ...) {
   nir <- spectra(object)
   new_nir <- baseline(nir, ...)

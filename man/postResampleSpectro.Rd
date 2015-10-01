@@ -5,7 +5,19 @@
 \alias{spectroSummary}
 \title{Calculates performance indictors across resamples}
 \usage{
+postResampleSpectro(pred, obs)
 spectroSummary(data, lev = NULL, model = NULL)
+}
+\arguments{
+\item{data}{a data frame or matrix with columns obs and pred for the observed and predicted outcomes}
+
+\item{lev}{a character vector of factors levels for the response. In regression cases, this would be NULL.}
+
+\item{model}{a character string for the model name}
+
+\item{pred}{A vector of numeric data}
+
+\item{obs}{A vector of numeric data}
 }
 \description{
 Given two numeric vectors of data, the root mean squared error, the R-squared, the bias, the RPD, the RPIQ, the CCC and the standard error are calculated. For two factors, the overall agreement rate and Kappa are determined.

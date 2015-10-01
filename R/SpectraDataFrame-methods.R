@@ -450,20 +450,22 @@ setMethod("melt_spectra", "SpectraDataFrame", function(obj, attr = NULL, ...){
   SpectraDataFrame(wl = wl(x), nir = spectra(x)[id_selected, , drop = FALSE], id = ids(x, as.vector = FALSE)[id_selected, 1, drop = FALSE], units = wl_units(x), data = df_sub)
 }
 
-#' Subset SpectraDataFrame object
-#' 
-#' Returns subsets of a SpectraDataFrame object.
-#' 
-#' 
+#' @title Subset SpectraDataFrame object
 #' @name subset
+#' @description Returns subsets of a SpectraDataFrame object.
 #' @aliases subset subset.SpectraDataFrame subset,SpectraDataFrame-method
 #' @docType methods
-#' @usage subset(x, subset, select, drop = FALSE, ...)
+#' @usage subset(x, ...)
 #' @param x SpectraDataFrame object
-#' @param subset logical expression indicating elements or rows to keep: missing values are taken as false
-#' @param select expression, indicating columns to select from the data slot
-#' @param drop passed on to "[" indexing operator
-#' @param ... Additional arguments
+#' @param ... see details below
+#' @details 
+#' Additional parameters:
+#' \describe{
+#'   \item{subset}{logical expression indicating elements or rows to keep: missing values are taken as false}
+#'   \item{select}{expression, indicating columns to select from the data slot}
+#'   \item{drop}{passed on to "[" indexing operator}
+#'   \item{...}{Additional arguments}
+#' }
 #' @return SpectraDataFrame object
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #' @seealso \code{\link{mutate}}

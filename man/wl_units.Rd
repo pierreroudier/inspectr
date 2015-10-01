@@ -8,13 +8,12 @@
 \alias{wl_units<-,Spectra-method}
 \title{Wavelengths of Spectra* objects}
 \usage{
-\S4method{wl_units}{Spectra}(object)
+wl_units(object)
 
 \S4method{wl_units}{Spectra}(object) <- value
 }
 \arguments{
-\item{object,x}{an object inheriting from class \code{Spectra}, or a
-\code{"numeric"} vector for \code{resolution}}
+\item{object}{an object inheriting from class \code{Spectra}}
 
 \item{value}{a character string}
 }
@@ -22,8 +21,7 @@
 A vector
 }
 \description{
-Retrieves the wavelengths units from
-\code{Spectra*} objects.
+Retrieves the wavelengths units from \code{Spectra*} object
 }
 \examples{
 # Loading example data

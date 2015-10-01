@@ -7,24 +7,27 @@
 \alias{subset.SpectraDataFrame}
 \title{Subset SpectraDataFrame object}
 \usage{
-subset(x, subset, select, drop = FALSE, ...)
+subset(x, ...)
 }
 \arguments{
 \item{x}{SpectraDataFrame object}
 
-\item{subset}{logical expression indicating elements or rows to keep: missing values are taken as false}
-
-\item{select}{expression, indicating columns to select from the data slot}
-
-\item{drop}{passed on to "[" indexing operator}
-
-\item{...}{Additional arguments}
+\item{...}{see details below}
 }
 \value{
 SpectraDataFrame object
 }
 \description{
 Returns subsets of a SpectraDataFrame object.
+}
+\details{
+Additional parameters:
+\describe{
+  \item{subset}{logical expression indicating elements or rows to keep: missing values are taken as false}
+  \item{select}{expression, indicating columns to select from the data slot}
+  \item{drop}{passed on to "[" indexing operator}
+  \item{...}{Additional arguments}
+}
 }
 \examples{
 # Loading example data

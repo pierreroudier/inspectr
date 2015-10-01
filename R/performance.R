@@ -64,6 +64,14 @@ postResampleSpectro <- function(pred, obs){
 #' @name postResampleSpectro
 #' @aliases postResampleSpectro spectroSummary
 #' @description Given two numeric vectors of data, the root mean squared error, the R-squared, the bias, the RPD, the RPIQ, the CCC and the standard error are calculated. For two factors, the overall agreement rate and Kappa are determined. 
+#' @usage 
+#' postResampleSpectro(pred, obs)
+#' spectroSummary(data, lev = NULL, model = NULL)
+#' @param pred A vector of numeric data
+#' @param obs A vector of numeric data
+#' @param data a data frame or matrix with columns obs and pred for the observed and predicted outcomes
+#' @param lev a character vector of factors levels for the response. In regression cases, this would be NULL.
+#' @param model a character string for the model name 
 #' @details This function extends \code{postResample} in the \code{caret} package.
 #' @author Pierre Roudier, adapted from code from Max Kuhn
 #' @examples
