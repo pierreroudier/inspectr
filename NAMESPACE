@@ -42,9 +42,7 @@ importFrom(epiR,
     
 exportClasses(
   Spectra,
-  SpectraDataFrame,
-  SpatialSpectra,
-  SpatialSpectraDataFrame
+  SpectraDataFrame
 )
 
 export(

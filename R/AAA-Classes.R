@@ -112,23 +112,3 @@ setClass(
     return(TRUE)
   }
 )
-
-#' Class for spectra collections that have
-#' associated spatial point locations
-#'
-setClass(
-  Class='SpatialSpectra',
-  representation=representation(
-    'SpatialPoints',
-    'Spectra'
-  ),
-  prototype=prototype(
-    bbox = matrix(NA),
-    proj4string = CRS(as.character(NA)),
-    coords = matrix(NA),
-    wl = numeric(),
-    nir = matrix(),
-    id = data.frame(NA),
-    units = as.character(NA)
-  )
-)
