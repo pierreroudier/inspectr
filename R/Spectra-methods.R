@@ -101,6 +101,10 @@ if (!isGeneric("summary"))
 #' @name summary
 #' @description Summarize a Spectra* object.
 #' @aliases summary.Spectra print.summary.Spectra
+#' @usage 
+#' summary(object, ...)
+#' @param object an object of class \code{Spectra} or \code{SpectraDataFrame}
+#' @param ... dditional arguments passed to \code{summary}
 #' @return A \code{"summary.Spectra"} object
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #' @examples
@@ -128,7 +132,6 @@ summary.Spectra <- function (object, ...){
 
 # setMethod("summary", "summary.Spectra", summary.Spectra)
 
-#' @rdname summary
 print.summary.Spectra <- function(x, ...) {
     cat(paste("Object of class ", x[["class"]], "\n", sep = ""))
     cat("Set of ", nrow(x[['id']])," spectra\n", sep = "")
@@ -624,7 +627,19 @@ setMethod("res", "Spectra", .res.Spectra)
 #' [[,SpectraDataFrame,ANY,missing-method [[<-,Spectra,ANY,missing-method
 #' [<-,SpectraDataFrame-method $<-,Spectra-method $,SpectraDataFrame-method
 #' @docType methods
-#' @return These methods either return an object of the same clss as \code{x},
+#' @usage 
+#' x[i, j, ..., drop = FALSE]
+#' x$name <- value
+#' x[[name]] <- value
+#' x$name
+#' x$name <- value
+#' @param x an object of class \code{Spectra} or \code{SpectraDataFrame}
+#' @param i,j,... indices specifying elements to extract or replace
+#' @param drop currently ignored
+#' @param name A literal character string or a name (possibly backtick quoted)
+#' @param value typically an array-like R object of a similar class as x
+#' 
+#' @return These methods either return an object of the same class as \code{x},
 #' or can promote a \code{Spectra} object to a \code{SpectraDataFrame} object
 #' by adding data ("[[<-" and "$<-" methods).
 #' @section Methods: \describe{

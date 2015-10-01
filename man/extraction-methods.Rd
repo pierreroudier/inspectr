@@ -18,10 +18,25 @@
 \alias{extraction-methods}
 \title{Extracting and replacing parts of Spectra* objects}
 \usage{
-\S4method{[}{Spectra,ANY,ANY,missing}(x, i, j, ..., drop = FALSE)
+x[i, j, ..., drop = FALSE]
+x$name <- value
+x[[name]] <- value
+x$name
+x$name <- value
+}
+\arguments{
+\item{x}{an object of class \code{Spectra} or \code{SpectraDataFrame}}
+
+\item{i,j,...}{indices specifying elements to extract or replace}
+
+\item{drop}{currently ignored}
+
+\item{name}{A literal character string or a name (possibly backtick quoted)}
+
+\item{value}{typically an array-like R object of a similar class as x}
 }
 \value{
-These methods either return an object of the same clss as \code{x},
+These methods either return an object of the same class as \code{x},
 or can promote a \code{Spectra} object to a \code{SpectraDataFrame} object
 by adding data ("[[<-" and "$<-" methods).
 }
