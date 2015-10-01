@@ -13,7 +13,6 @@
 
 % \SweaveOpts{prefix.string=<directory>/<filename-prefix>}
 
-% \VignetteDepends{sp}
 % \SweaveOpts{dev=png}
 
 \setkeys{Gin}{width=0.5\textwidth}
