@@ -36,15 +36,6 @@ importFrom(plyr,
   mutate
 )
 
-importFrom(sp,
-  bbox,
-  coordinates,
-  "coordinates<-",
-  coordnames,
-  CRS,
-  SpatialPoints
-)
-
 importFrom(epiR, 
   epi.ccc
 )
