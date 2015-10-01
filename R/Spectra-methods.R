@@ -1118,17 +1118,14 @@ if (!isGeneric('melt_spectra'))
     standardGeneric('melt_spectra')
 )
 
-#' melt_spectra
-#' 
-#' Melts the spectra data of a Spectra object and returns it as wide format.
-#' 
-#' This function is very useful when wanting to plot spectra using the lattice
-#' or ggplot2 packages.
-#' 
 #' @name melt_spectra
 #' @aliases melt_spectra melt_spectra-methods melt_spectra,Spectra-method
 #' melt_spectra,SpectraDataFrame-method
 #' @docType methods
+#' @title Melts the spectra data of a Spectra object and returns it as wide format.
+#' 
+#' @description This function is very useful when wanting to plot spectra using the lattice or ggplot2 packages
+#' 
 #' @section Methods: \describe{
 #' 
 #' \bold{x=Spectra}

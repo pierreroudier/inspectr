@@ -404,6 +404,7 @@ if (!isGeneric("melt_spectra"))
   setGeneric("melt_spectra", function(obj, attr, ...)
     standardGeneric("melt_spectra"))
 
+#' @rdname melt_spectra
 setMethod("melt_spectra", "SpectraDataFrame", function(obj, attr = NULL, ...){
   
   id.nm <- names(ids(obj, as.vector = FALSE))
