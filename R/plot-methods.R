@@ -289,47 +289,12 @@ setMethod("plot_offset", signature('Spectra'),
 
 
 
+if (!isGeneric("fill_spectra")) {
+  setGeneric("fill_spectra", function(obj, ...)
+    standardGeneric("fill_spectra"))
+}
 
-#' @title Fill missing wavelengths of a Spectra* object with a given value
-#' @name fill_spectra
-#' @description Fill missing wavelengths of a Spectra* object with a given value. This is
-#' mostly usefull to include NA values in the spectra in order to show missing
-#' bits in plots.
-#' 
-#' @details At this stage removing gaps does not work well with irreguarly spaced
-#' wavelengths. Results might be odd for binned spectra.
-#' 
-#' 
-#' @param obj an object inheriting from class \code{Spectra}
-#' @param ref a numeric vector, giving the reference wavelengths (ie the entire
-#' range of wavelengths expected to be in the spectra before some waveleng5ths
-#' have been cut out). If NULL, the function is trying to guess it.
-#' @param fill values to fill gaps in the data with
-#' @param ... ignored
-#' @return An object of the same class as \code{obj}
-#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
-#' @examples
-#' 
-#' # Loading example data
-#' data(australia)
-#' spectra(australia) <- sr_no ~ ... ~ 350:2500
-#' 
-#' # Cut wavelengths out of the collection
-#' oz <- cut(australia, wl=-1*c(355:400, 2480:2499))
-#' big.head(spectra(oz), , 7)
-#' 
-#' # Giving the wavelengths at which I want data
-#' oz_filled <- fill_spectra(oz, ref = 350:2500, fill = NA)
-#' big.head(spectra(oz_filled), , 7)
-#' plot(oz_filled)
-#' 
-#' # Trying to guess ref values
-#' oz_filled <- fill_spectra(oz, fill = -999)
-#' big.head(spectra(oz_filled), , 7)
-#' plot(oz_filled)
-#' 
-#' @export fill_spectra
-fill_spectra <- function(obj, ref = NULL, fill = NA, ...) {
+.fill_spectra <- function(obj, ref = NULL, fill = NA, ...) {
 
   if (is.null(ref)) {
     # Trying to get the most common resolution values
@@ -360,3 +325,43 @@ fill_spectra <- function(obj, ref = NULL, fill = NA, ...) {
 
   obj
 }
+
+#' @title Fill missing wavelengths of a Spectra* object with a given value
+#' @name fill_spectra
+#' @description Fill missing wavelengths of a Spectra* object with a given value. This is
+#' mostly usefull to include NA values in the spectra in order to show missing
+#' bits in plots.
+#' 
+#' @details At this stage removing gaps does not work well with irreguarly spaced
+#' wavelengths. Results might be odd for binned spectra.
+#' 
+#' @param obj an object inheriting from class \code{Spectra}
+#' @param ref a numeric vector, giving the reference wavelengths (ie the entire
+#' range of wavelengths expected to be in the spectra before some waveleng5ths
+#' have been cut out). If NULL, the function is trying to guess it.
+#' @param fill values to fill gaps in the data with
+#' @param ... ignored
+#' @return An object of the same class as \code{obj}
+#' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
+#' @examples
+#' 
+#' # Loading example data
+#' data(australia)
+#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Cut wavelengths out of the collection
+#' oz <- cut(australia, wl=-1*c(355:400, 2480:2499))
+#' big.head(spectra(oz), , 7)
+#' 
+#' # Giving the wavelengths at which I want data
+#' oz_filled <- fill_spectra(oz, ref = 350:2500, fill = NA)
+#' big.head(spectra(oz_filled), , 7)
+#' plot(oz_filled)
+#' 
+#' # Trying to guess ref values
+#' oz_filled <- fill_spectra(oz, fill = -999)
+#' big.head(spectra(oz_filled), , 7)
+#' plot(oz_filled)
+#' 
+#' @export fill_spectra
+setMethod("fill_spectra", signature('Spectra'), .fill_spectra)
