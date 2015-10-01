@@ -1,11 +1,6 @@
 import(ggplot2)
 import(methods)
 
-importClassesFrom("sp",
-  "Spatial",
-  "SpatialPoints"
-)
-
 importFrom(baseline,
   baseline,
   getCorrected
