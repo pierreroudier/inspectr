@@ -12,6 +12,16 @@ The `inspectr` package is making it easy (or at least *easier*!) to handle spect
 * some kind of ID
 * if available, some associated data (typically, some lab measurements)
 
+## Installation
+
+`inspectr` is not on CRAN (yet?), but you can install the latest version using the `devtools` package:
+
+```
+# Install devtools if you don't have it on your machine
+# install.packages('devtools')
+devtools::install_github("pierreroudier/inspectr")
+```
+
 ## Graphical Capabilities
 
 It also provides easy ways to plot a collection of spectra:
