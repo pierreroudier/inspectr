@@ -77,12 +77,13 @@ setMethod("aggregate_spectra", "Spectra",
 #' @rdname aggregate_spectra
 setMethod("aggregate_spectra", "SpectraDataFrame",
   function(obj, fun = mean, id = NULL, ...){
-
+    
     # No split --> the whole data is aggregated together
     if (is.null(id)) {
       # making up an id name from the aggregation function
       id_fun <- as.character(substitute(fun, env = parent.frame()))[1]
       id_obj <- as.character(substitute(obj, env = parent.frame()))
+      
       # Select and paste only alphanumeric chars
       id_obj <- paste(id_obj[grep(x = id_obj, pattern = '[[:alnum:]]')], collapse = '.')
       # Combine object name and function name into an id
