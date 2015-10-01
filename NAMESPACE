@@ -58,7 +58,12 @@ export(
   rnv,
 
   rbind.Spectra,
-  rbind.SpectraDataFrame
+  rbind.SpectraDataFrame,
+  
+  load_oz,
+  
+  spectroSummary,
+  postResampleSpectro
 )
 
 S3method(dim, Spectra)
@@ -69,7 +74,6 @@ S3method("names<-", SpectraDataFrame)
 S3method(as.data.frame, Spectra)
 S3method(as.data.frame, SpectraDataFrame)
 S3method(summary, Spectra)
-S3method(print, summary.Spectra)
 
 exportMethods(
   spectra,
@@ -83,24 +87,23 @@ exportMethods(
   wl_units,
   "wl_units<-",
   res,
-  "[",
-  "$",
-  "[[",
+  "[", "$", "[[",
+  "$<-", 
 #  nrow,
 #  ncol,
 #  dim,
-  cut,
-  melt_spectra,
-  base_line,
   aggregate_spectra,
-  subset,
+  base_line,
+  cut,
+  fill_spectra,
+  kenstone,
+  melt_spectra,
   mutate,
-  split,
   plot_summary,
   plot_stack,
   plot_offset,
-  kenstone,
-  splice
+  separate,
+  splice,
+  split,
+  subset
 )
-
-exportPattern("^[^\\.]")
