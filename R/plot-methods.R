@@ -328,6 +328,7 @@ if (!isGeneric("fill_spectra")) {
 
 #' @title Fill missing wavelengths of a Spectra* object with a given value
 #' @name fill_spectra
+#' @aliases fill_spectra fill_spectra,Spectra-method
 #' @description Fill missing wavelengths of a Spectra* object with a given value. This is
 #' mostly usefull to include NA values in the spectra in order to show missing
 #' bits in plots.

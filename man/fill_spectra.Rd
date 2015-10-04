@@ -3,6 +3,7 @@
 \docType{methods}
 \name{fill_spectra}
 \alias{fill_spectra}
+\alias{fill_spectra,Spectra-method}
 \title{Fill missing wavelengths of a Spectra* object with a given value}
 \usage{
 \S4method{fill_spectra}{Spectra}(obj, ref = NULL, fill = NA, ...)
