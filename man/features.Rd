@@ -19,13 +19,13 @@ features(obj, safe=TRUE, key=NULL, exclude_id=TRUE, append=TRUE) <- value
 
 \item{exclude_id}{see below}
 
+\item{value}{see below}
+
 \item{safe}{see below}
 
 \item{key}{see below}
 
 \item{append}{see below}
-
-\item{value}{see below}
 }
 \value{
 The \code{features} methods return a \code{data.frame} object, while

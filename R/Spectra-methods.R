@@ -421,11 +421,12 @@ if (!isGeneric("ids"))
 #' ids<-,SpectraDataFrame-method
 #' @docType methods
 #' @usage 
-#' ids(object, ..., as.vector = TRUE)
+#' ids(object, ...)
 #' ids(object) <- value
 #' @param object an object of class \code{"Spectra"} or inheriting from this class
-#' @param ... currently ignored
-#' @param as.vector should the IDs be returned as a vector or as a data.frame?
+#' @param ... \describe{
+#'   \item{\code{as.vector}}{Controls whether the IDs are returned as a vector or as a data.frame (defaults to TRUE)}
+#' }
 #' @param value character vector for new IDs
 #' @return The \code{ids} methods return a vector if \code{as.vector} is TRUE,
 #' a \code{data.frame} otherwise. The \code{"ids<-"} method return a
@@ -1111,7 +1112,7 @@ setMethod("separate", "Spectra", function(obj, calibration){
 })
 
 if (!isGeneric('melt_spectra'))
-  setGeneric('melt_spectra', function(obj, ...)
+  setGeneric('melt_spectra', function(obj, attr = NULL,...)
     standardGeneric('melt_spectra')
 )
 
@@ -1123,7 +1124,6 @@ if (!isGeneric('melt_spectra'))
 #' 
 #' @description This function is very useful when wanting to plot spectra using the lattice or ggplot2 packages
 #' @usage 
-#' melt_spectra(obj, ...)
 #' melt_spectra(obj, attr=NULL, ...)
 #' @param obj an object of class \code{"Spectra"} or inheriting from this class
 #' @param attr vector of id variables against which the spectra will be melted (see \code{melt})
@@ -1175,7 +1175,7 @@ if (!isGeneric('melt_spectra'))
 #' print(p)
 #' }
 #' 
-setMethod("melt_spectra", "Spectra", function(obj, ...){
+setMethod("melt_spectra", "Spectra", function(obj, attr = NULL, ...){
 
   id.nm <- names(ids(obj, as.vector = FALSE))
   x <- data.frame(ids(obj, as.vector = FALSE), spectra(obj))

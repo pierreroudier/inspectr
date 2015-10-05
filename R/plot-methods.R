@@ -129,7 +129,7 @@ plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
 }
 
 if (!isGeneric("plot_summary")) {
-    setGeneric("plot_summary", function(x, ...)
+    setGeneric("plot_summary", function(x, fun = mean, se = TRUE, ...)
         standardGeneric("plot_summary"))
 }
 
@@ -209,7 +209,7 @@ setMethod("plot_summary", signature('Spectra'),
 )
 
 if (!isGeneric("plot_stack")) {
-    setGeneric("plot_stack", function(x, ...)
+    setGeneric("plot_stack", function(x)
         standardGeneric("plot_stack"))
 }
 
@@ -239,7 +239,7 @@ setMethod("plot_stack", signature('Spectra'),
 )
 
 if (!isGeneric("plot_offset")) {
-    setGeneric("plot_offset", function(x, ...)
+    setGeneric("plot_offset", function(x, offset = 1)
         standardGeneric("plot_offset"))
 }
 

@@ -9,7 +9,7 @@
 \alias{ids<-,SpectraDataFrame-method}
 \title{Retrieves or sets the ids of a \code{Spectra*} object.}
 \usage{
-ids(object, ..., as.vector = TRUE)
+ids(object, ...)
 ids(object) <- value
 
 \S4method{ids}{Spectra}(object) <- value
@@ -19,9 +19,9 @@ ids(object) <- value
 \arguments{
 \item{object}{an object of class \code{"Spectra"} or inheriting from this class}
 
-\item{...}{currently ignored}
-
-\item{as.vector}{should the IDs be returned as a vector or as a data.frame?}
+\item{...}{\describe{
+  \item{\code{as.vector}}{Controls whether the IDs are returned as a vector or as a data.frame (defaults to TRUE)}
+}}
 
 \item{value}{character vector for new IDs}
 }

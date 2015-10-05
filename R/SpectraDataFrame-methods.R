@@ -130,7 +130,7 @@ setAs("SpectraDataFrame", "data.frame", function(from) {
 ## Getting the data
 
 if (!isGeneric("features"))
-  setGeneric("features", function(obj, ...)
+  setGeneric("features", function(obj, exclude_id = TRUE)
     standardGeneric("features"))
 
 #' @title Retrieves or sets the data slot of a SpectraDataFrame object.
@@ -148,11 +148,11 @@ if (!isGeneric("features"))
 #' features(obj, exclude_id=TRUE)
 #' features(obj, safe=TRUE, key=NULL, exclude_id=TRUE, append=TRUE) <- value
 #' @param obj a \code{Spectra} object
+#' @param value see below
 #' @param safe see below
 #' @param key see below
 #' @param exclude_id see below
 #' @param append see below
-#' @param value see below
 #' @return The \code{features} methods return a \code{data.frame} object, while
 #' the \code{"features<-"} methods return a \code{SpectraDataFrame} object.
 #' @section Methods: \describe{
@@ -228,7 +228,7 @@ if (!isGeneric("features"))
 #' features(australia)
 #' 
 setMethod("features", "SpectraDataFrame",
-  function(obj, ..., exclude_id = TRUE) {
+  function(obj, exclude_id = TRUE) {
     if (!exclude_id) {
       res <- data.frame(ids(obj, as.vector = FALSE), obj@data) 
     } else {
@@ -241,7 +241,7 @@ setMethod("features", "SpectraDataFrame",
 ## Append or replace data
 
 if (!isGeneric('features<-'))
-  setGeneric('features<-', function(object, value, ...)
+  setGeneric('features<-', function(object, value, safe = TRUE, key = NULL, exclude_id = TRUE, append = TRUE)
     standardGeneric('features<-')
 )
 
@@ -426,7 +426,7 @@ setMethod("melt_spectra", "SpectraDataFrame", function(obj, attr = NULL, ...){
     names(x) <- c(id.nm, wl(obj))
   }
   
-  res <- reshape2:::melt.data.frame(x, id.vars = c(id.nm, attr), variable.name = 'wl', value.name = "nir")
+  res <- melt(x, id.vars = c(id.nm, attr), variable.name = 'wl', value.name = "nir")
   res$wl <- as.numeric(as.character(res$wl))
   res
 })
