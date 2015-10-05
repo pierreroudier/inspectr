@@ -487,7 +487,7 @@ big.head(spectra(australia))
 
 # Retrieving associated data
 head(features(australia))
-head(features(australia, remove_id = FALSE))
+head(features(australia, exclude_id = FALSE))
 @
 
 \subsection{Subsetting {\tt Spectra} objects}
