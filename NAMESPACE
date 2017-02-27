@@ -99,6 +99,7 @@ exportMethods(
   kenstone,
   melt_spectra,
   mutate,
+  # plot,
   plot_summary,
   plot_stack,
   plot_offset,
