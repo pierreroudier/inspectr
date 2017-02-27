@@ -2,10 +2,11 @@
 
 #' @title Australia spectra library data set
 #' @name australia
+#' @aliases australia oz
 #' 
-#' @description This data set gathers 100 soil spectra, along side with their organic
+#' @description The \code{australia} data set gathers 100 soil spectra, along side with their organic
 #' carbon, pH and clay content values. This data set has been collected by
-#' CSIRO.
+#' CSIRO.The \code{oz} dataset is the first 5 samples of \code{australia}, and is here to keep examples fast to run.
 #' 
 #' The \code{data.frame} contains the following columns: 
 #' \itemize{
@@ -29,6 +30,11 @@
 #' spectra(australia) <- sr_no ~ ... ~ 350:2500
 #' summary(australia)
 #' 
+#' data(oz)
+#' big.head(oz)
+#' spectra(oz) <- sr_no ~ ... ~ 350:2500
+#' summary(oz)
+#' 
 NULL
 
 #' @title Load the australia dataset
@@ -44,12 +50,13 @@ NULL
 load_oz <- function(n = NULL) {
   # Load data as SPC
   data("australia", envir = environment())
-  spectra(australia) <- sr_no ~ ... ~ 350:2500
   
   if (!is.null(n)) {
     stopifnot(n > 0)
     australia <- australia[sample(1:nrow(australia), size = n),]
   }
+  
+  spectra(australia) <- sr_no ~ ... ~ 350:2500
   
   australia
 }
