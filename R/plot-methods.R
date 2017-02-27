@@ -11,13 +11,16 @@
 .defaultSpectraColours <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00")
 
 #' @title Plots an object inheriting from the Spectra class
-#' @name plot
+#' @name plot-Spectra
+#' @rdname plot-Spectra
 #' @description The philosophy of this plotting routine is to provide a "quick'n'dirty" way
 #' to plot your spectra collection. For advanced visualisations, the use of
 #' \code{\link{melt_spectra}} alongside with ggplot2 or lattice is encouraged.
 #' 
-#' @aliases plot.Spectra plot,Spectra,ANY-method 
-#' @usage plot(x, gg = FALSE, gaps = TRUE, attr = NULL, ...)
+#' @aliases plot plot.Spectra plot,Spectra,ANY-method 
+#' 
+#' @usage \method{plot}{Spectra}(x,gg,gaps,attr,\dots)
+#' 
 #' @param x an object of class \code{"Spectra"} or inheriting from this class
 #' @param gg if TRUE, uses the \code{ggplot2} package to plot the data, if
 #' FALSE uses \code{matplot} from base graphics (much faster)
@@ -33,10 +36,10 @@
 #' spectra(australia) <- sr_no ~ ... ~ 350:2500
 #' 
 #' # Default plotting method
-#' plot(australia)
+#' plot(australia[1:5,])
 #' 
 #' # Default plot using ggplot2
-#' plot(australia, gg = TRUE)
+#' plot(australia[1:5,], gg = TRUE)
 #' 
 #' \dontrun{
 #' 
@@ -75,8 +78,13 @@
 #' s <- aggregate_spectra(australia, fun = mean, id = 'fact')
 #' plot(s, gg = TRUE, attr = 'fact')
 #' }
-#' @export plot.Spectra
-plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
+NULL
+
+#' @rdname plot-Spectra
+#' @export plot
+plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...) .plot.Spectra(x, gg, gaps, attr, ...)
+
+.plot.Spectra <- function(x, gg = FALSE, gaps = TRUE, attr = NULL, ...){
 
   # Show gaps in the data?
   if (gaps) {

@@ -90,16 +90,16 @@ apply_spectra <- function(obj, fun, ...) {
 #' spectra(australia) <- sr_no ~ ... ~ 350:2500
 #' 
 #' # Standard Normal Variate transform
-#' s <- apply_spectra(australia, snv)
+#' s <- apply_spectra(australia[1:10,], snv)
 #' plot(s)
 #' 
 #' # The scale function in the base package is actually doing
 #' # the same thing!
-#' s <- apply_spectra(australia, scale, center = TRUE, scale = TRUE)
+#' s <- apply_spectra(australia[1:10,], scale, center = TRUE, scale = TRUE)
 #' plot(s)
 #' 
 #' # Robust Normal Variate transform
-#' s <- apply_spectra(australia, rnv, r = 0.25)
+#' s <- apply_spectra(australia[1:10,], rnv, r = 0.25)
 #' plot(s)
 #' 
 #' @export snv rnv
@@ -173,6 +173,9 @@ if (!isGeneric('base_line'))
 #' # Loading example data
 #' data(australia)
 #' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' 
+#' # Subsample for demo purposes
+#' australia <- australia[1:10,]
 #' 
 #' # Correction using the default method (irls)
 #' bl <- base_line(australia)

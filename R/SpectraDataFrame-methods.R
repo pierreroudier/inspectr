@@ -130,12 +130,12 @@ setAs("SpectraDataFrame", "data.frame", function(from) {
 ## Getting the data
 
 if (!isGeneric("features"))
-  setGeneric("features", function(obj, exclude_id = TRUE)
+  setGeneric("features", function(object, exclude_id = TRUE)
     standardGeneric("features"))
 
 #' @title Retrieves or sets the data slot of a SpectraDataFrame object.
 #' @name features
-#' @aliases features features<- features-methods
+#' @aliases features features<- features-methods 
 #' features,SpectraDataFrame-method features<-,Spectra-method
 #' features<-,SpectraDataFrame-method
 #' @docType methods
@@ -144,10 +144,10 @@ if (!isGeneric("features"))
 #' object by initialising its data slot by a suitable \code{"data.frame"}
 #' object.
 #' @usage 
-#' features(obj, safe=TRUE, key=NULL, exclude_id=TRUE) <- value
-#' features(obj, exclude_id=TRUE)
-#' features(obj, safe=TRUE, key=NULL, exclude_id=TRUE, append=TRUE) <- value
-#' @param obj a \code{Spectra} object
+#' \S4method{features}{SpectraDataFrame}(object,exclude_id)
+#' \S4method{features}{Spectra}(object,safe,exclude_id,key,append) <- value
+#' 
+#' @param object a \code{Spectra} object
 #' @param value see below
 #' @param safe see below
 #' @param key see below
@@ -159,13 +159,13 @@ if (!isGeneric("features"))
 #' 
 #' \bold{x=Spectra}
 #' 
-#' \code{features(obj, safe=TRUE, key=NULL, exclude_id=TRUE) <- value}
+#' \code{features(object, safe=TRUE, key=NULL, exclude_id=TRUE) <- value}
 #' 
-#' \tabular{rll}{ \tab \code{obj} \tab A \code{Spectra} object \cr \tab
+#' \tabular{rll}{ \tab \code{object} \tab A \code{Spectra} object \cr \tab
 #' \code{safe} \tab Logical. If TRUE, data is being added to the object using a
 #' SQL join (using a key field given by the \code{key} option), otherwise it is
 #' assumed the order of the rows is consitent with the order of the rows in
-#' \code{obj} \cr \tab \code{key} \tab Character, name of the column of the
+#' \code{object} \cr \tab \code{key} \tab Character, name of the column of the
 #' data.frame storing the ids for the SQL join. Ignored if \code{safe} is
 #' \code{FALSE}. \cr \tab \code{exclude_id} \tab Logical, if \code{TRUE}, ids
 #' used for the SQL join are removed from the data slot after the join. \cr }
@@ -177,11 +177,11 @@ if (!isGeneric("features"))
 #' \code{features(obj, safe=TRUE, key=NULL, exclude_id=TRUE, append=TRUE) <-
 #' value}
 #' 
-#' \tabular{rll}{ \tab \code{obj} \tab A \code{SpectraDataFrame} object \cr
+#' \tabular{rll}{ \tab \code{object} \tab A \code{SpectraDataFrame} object \cr
 #' \tab \code{safe} \tab Logical. If TRUE, data is being added to the object
 #' using a SQL join (using a key field given by the \code{key} option),
 #' otherwise it is assumed the order of the rows is consitent with the order of
-#' the rows in \code{obj} \cr \tab \code{key} \tab Character, name of the
+#' the rows in \code{object} \cr \tab \code{key} \tab Character, name of the
 #' column of the data.frame storing the ids for the SQL join. Ignored if
 #' \code{safe} is \code{FALSE}. \cr \tab \code{exclude_id} \tab Logical. For
 #' the \code{features} method, if \code{TRUE}, the spectra ids are added to the
@@ -198,20 +198,20 @@ if (!isGeneric("features"))
 #' @examples
 #' 
 #' # Loading example data
-#' data(australia)
-#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' data(oz)
+#' spectra(oz) <- sr_no ~ ... ~ 350:2500
 #' 
 #' # Printing available data
-#' features(australia)
+#' features(oz)
 #' 
 #' # Promoting a Spectra to a SpectraDataFrame object
-#' s <- as(australia, "Spectra")
+#' s <- as(oz, "Spectra")
 #' 
 #' # Generating dummy data
 #' d <- data.frame(
-#'   id = ids(australia), 
-#'   foo = runif(nrow(australia)), 
-#'   bar = sample(LETTERS[1:5], size = nrow(australia), replace = TRUE)
+#'   id = ids(oz), 
+#'   foo = runif(nrow(oz)), 
+#'   bar = sample(LETTERS[1:5], size = nrow(oz), replace = TRUE)
 #' )
 #' head(d)
 #' 
@@ -220,19 +220,19 @@ if (!isGeneric("features"))
 #' summary(s)
 #' 
 #' # Adding data to an existing SpectraDataFrame object
-#' features(australia, key = 'id') <- d
-#' features(australia)
+#' features(oz, key = 'id') <- d
+#' features(oz)
 #' 
 #' # Replacing data of an existing SpectraDataFrame object
-#' features(australia, key = 'id', append = FALSE) <- d
-#' features(australia)
+#' features(oz, key = 'id', append = FALSE) <- d
+#' features(oz)
 #' 
 setMethod("features", "SpectraDataFrame",
-  function(obj, exclude_id = TRUE) {
+  function(object, exclude_id = TRUE) {
     if (!exclude_id) {
-      res <- data.frame(ids(obj, as.vector = FALSE), obj@data) 
+      res <- data.frame(ids(object, as.vector = FALSE), object@data) 
     } else {
-      res <- obj@data
+      res <- object@data
     }
     res
   }

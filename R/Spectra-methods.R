@@ -101,17 +101,16 @@ if (!isGeneric("summary"))
 #' @name summary
 #' @description Summarize a Spectra* object.
 #' @aliases summary.Spectra print.summary.Spectra
-#' @usage 
-#' summary(object, ...)
+#' @usage \\method{summary}{Spectra}(object, ...)
 #' @param object an object of class \code{Spectra} or \code{SpectraDataFrame}
-#' @param ... dditional arguments passed to \code{summary}
+#' @param ... Additional arguments passed to \code{summary}
 #' @return A \code{"summary.Spectra"} object
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #' @examples
 #' 
-#' data(australia)
-#' spectra(australia) <- sr_no ~ ... ~ 350:2500
-#' summary(australia)
+#' data(oz)
+#' spectra(oz) <- sr_no ~ ... ~ 350:2500
+#' summary(oz)
 #' 
 summary.Spectra <- function (object, ...){
     obj = list()
@@ -253,53 +252,53 @@ if (!isGeneric("spectra"))
 #' @examples
 #' 
 #' # Loading example data
-#' data(australia)
-#' class(australia) # this is a simple data.frame
+#' data(oz)
+#' class(oz) # this is a simple data.frame
 #' # structure of the data.frame: it is rowwise-formatted
-#' big.head(australia) 
+#' big.head(oz) 
 #' 
 #' ## CREATING Spectra OBJECTS
 #' ##
 #' 
 #' # Using spectra() to initiate a Spectra from 
 #' # the data.frame
-#' spectra(australia) <- sr_no ~ 350:2500
-#' summary(australia)
+#' spectra(oz) <- sr_no ~ 350:2500
+#' summary(oz)
 #' 
 #' # It is possible to select wavelengths using the formula interface
-#' data(australia)
-#' spectra(australia) <- sr_no ~ 350:5:2500
-#' summary(australia)
+#' data(oz)
+#' spectra(oz) <- sr_no ~ 350:5:2500
+#' summary(oz)
 #' 
-#' data(australia)
-#' spectra(australia) <- sr_no ~ 500:1800
-#' summary(australia)
+#' data(oz)
+#' spectra(oz) <- sr_no ~ 500:1800
+#' summary(oz)
 #' 
 #' ## CREATING SpectraDataFrame OBJECTS
 #' ##
 #' 
 #' # Using spectra() to initiate a SpectraDataFrame from 
 #' # the data.frame
-#' data(australia)
-#' spectra(australia) <- sr_no ~ carbon + ph + clay ~ 350:2500
-#' summary(australia)
+#' data(oz)
+#' spectra(oz) <- sr_no ~ carbon + ph + clay ~ 350:2500
+#' summary(oz)
 #' 
 #' # Selecting data to be included in the SpectradataFrame object
-#' data(australia)
-#' spectra(australia) <- sr_no ~ carbon ~ 350:2500
-#' summary(australia)
+#' data(oz)
+#' spectra(oz) <- sr_no ~ carbon ~ 350:2500
+#' summary(oz)
 #' 
 #' # Forcing the creation of new ids using the id keyword in the 
 #' # formula interface
-#' data(australia)
-#' spectra(australia) <- id ~ carbon ~ 350:2500
-#' summary(australia)
-#' ids(australia, as.vector = TRUE)
+#' data(oz)
+#' spectra(oz) <- id ~ carbon ~ 350:2500
+#' summary(oz)
+#' ids(oz, as.vector = TRUE)
 #' 
 #' # Using the "..." short-hand to select all the remaining columns
-#' data(australia)
-#' spectra(australia) <- sr_no ~ ... ~ 350:2500
-#' summary(australia)
+#' data(oz)
+#' spectra(oz) <- sr_no ~ ... ~ 350:2500
+#' summary(oz)
 #' 
 #' ## CREATING Spectra OBJECTS FROM
 #' ## BY-COLS-FORMATTED DATA
@@ -311,7 +310,7 @@ if (!isGeneric("spectra"))
 #' # Transforming data into colwise format
 #' # for demonstration's sake
 #' #
-#' m <- melt_spectra(australia)
+#' m <- melt_spectra(oz)
 #' oz_by_col <- reshape2::acast(m, ... ~ sr_no)
 #' oz_by_col <- data.frame(
 #'   wl = rownames(oz_by_col), 
@@ -326,7 +325,7 @@ if (!isGeneric("spectra"))
 #' summary(oz_by_col)
 #' 
 #' # Then data can be added to promote it as a SpectraDataFrame
-#' my.data <- features(australia, exclude_id = FALSE)
+#' my.data <- features(oz, exclude_id = FALSE)
 #' features(oz_by_col, key = 'sr_no') <- my.data
 #' summary(oz_by_col)
 #' 
@@ -379,21 +378,21 @@ if (!isGeneric("wl"))
 #' @examples
 #' 
 #' # Loading example data
-#' data(australia)
-#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' data(oz)
+#' spectra(oz) <- sr_no ~ ... ~ 350:2500
 #' 
 #' # Retrieving wavelengths from Spectra* object
-#' wl(australia)
+#' wl(oz)
 #' 
 #' # Replacing wavelength values - USE WITH CAUTION!
-#' wl(australia) <- 1:length(australia)
-#' wl(australia)
+#' wl(oz) <- 1:length(oz)
+#' wl(oz)
 #' 
 #' # Use to initiate a Spectra* object from a data.frame
-#' data(australia)
-#' wl(australia) <- 350:2500
-#' ids(australia) <- ~ sr_no
-#' summary(australia)
+#' data(oz)
+#' wl(oz) <- 350:2500
+#' ids(oz) <- ~ sr_no
+#' summary(oz)
 #' 
 #' @export wl
 setMethod("wl", "Spectra",
@@ -441,20 +440,20 @@ if (!isGeneric("ids"))
 #' @examples
 #' 
 #' # Loading example data
-#' data(australia)
-#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' data(oz)
+#' spectra(oz) <- sr_no ~ ... ~ 350:2500
 #' 
 #' # Retrieving ids
-#' ids(australia)
+#' ids(oz)
 #' 
 #' # Setting ids using a vector of values
-#' ids(australia) <- seq_len(nrow(australia))
-#' ids(australia)
+#' ids(oz) <- seq_len(nrow(oz))
+#' ids(oz)
 #' 
 #' # Setting ids using an attribute
-#' australia$new_id <- seq_len(nrow(australia)) + 1000
-#' ids(australia) <- ~ new_id
-#' ids(australia)
+#' oz$new_id <- seq_len(nrow(oz)) + 1000
+#' ids(oz) <- ~ new_id
+#' ids(oz)
 #' 
 #' @export ids
 setMethod("ids", "Spectra",
@@ -485,16 +484,16 @@ if (!isGeneric("wl_units"))
 #' @author Pierre Roudier \url{pierre.roudier@@gmail.com}
 #' @examples
 #' # Loading example data
-#' data(australia)
-#' spectra(australia) <- sr_no ~ ... ~ 350:2500
+#' data(oz)
+#' spectra(oz) <- sr_no ~ ... ~ 350:2500
 #' 
 #' # Print wavelength information
-#' wl(australia)
-#' range(wl(australia))
+#' wl(oz)
+#' range(wl(oz))
 #' 
 #' # Manipulate wavelength information
-#' wl(australia) <- wl(australia) + 1000
-#' wl(australia)
+#' wl(oz) <- wl(oz) + 1000
+#' wl(oz)
 #' 
 setMethod("wl_units", signature = "Spectra",
   function(object)
@@ -608,7 +607,8 @@ setMethod("res", "integer", .res.numeric)
   r
 }
 
-#' @title Returns the spectral resolution of an object
+#' @title Spectral resolution
+#' @description Returns the spectral resolution of an object
 #' @name res
 #' @aliases res,Spectra-method res,SpectraDataFrame-method 
 #' @param x object an object inheriting from \code{Spectra}
@@ -623,17 +623,18 @@ setMethod("res", "Spectra", .res.Spectra)
 #' @title Extracting and replacing parts of Spectra* objects
 #' @name extraction-methods
 #' @description These methods emulates classic base methods '[', '[[' and '$' to extract or replace parts of Spectra* objects.
-#' @aliases [ [<- [[ [[<- $ $<- [,Spectra,ANY,ANY,missing-method
-#' [,SpectraDataFrame,ANY,ANY,missing-method
-#' [[,SpectraDataFrame,ANY,missing-method [[<-,Spectra,ANY,missing-method
-#' [<-,SpectraDataFrame-method $<-,Spectra-method $,SpectraDataFrame-method
+#' 
+#' @aliases [ [<- [[ [[<- $ $<- [,Spectra-method [[,Spectra-method [[<-,Spectra-method [,Spectra,ANY,ANY,missing-method [,SpectraDataFrame,ANY,ANY,missing-method [[,SpectraDataFrame,ANY,missing-method [[<-,Spectra,ANY,missing-method [<-,SpectraDataFrame-method $<-,Spectra-method $,SpectraDataFrame-method
+#' 
 #' @docType methods
+#' 
 #' @usage 
-#' x[i, j, ..., drop = FALSE]
-#' x$name <- value
-#' x[[name]] <- value
-#' x$name
-#' x$name <- value
+#' \\S4method{[}{Spectra}(x,i,j,\dots,drop=FALSE)
+#' \\S4method{[[}{Spectra}(x,i,j,\dots)
+#' \\S4method{$}{SpectraDataFrame}(x,name)
+#' \\S4method{$}{Spectra}(x,name) <- value
+#' \\S4method{[[}{Spectra}(x,i,j,\dots) <- value
+#' 
 #' @param x an object of class \code{Spectra} or \code{SpectraDataFrame}
 #' @param i,j,... indices specifying elements to extract or replace
 #' @param drop currently ignored
