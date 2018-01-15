@@ -2,11 +2,11 @@
 % Please edit documentation in R/Spectra-methods.R
 \docType{methods}
 \name{res,numeric-method}
+\alias{res,numeric-method}
+\alias{res,integer-method}
 \alias{res}
 \alias{res,Spectra-method}
 \alias{res,SpectraDataFrame-method}
-\alias{res,integer-method}
-\alias{res,numeric-method}
 \title{Spectral resolution}
 \usage{
 \S4method{res}{numeric}(x)
@@ -27,4 +27,3 @@ Returns the spectral resolution of an object
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
-

@@ -39,10 +39,9 @@ data(australia)
 big.head(australia)
 
 }
-\author{
-Pierre Roudier \url{pierre.roudier@gmail.com}
-}
 \seealso{
 \code{\link{head}}, \code{\link{tail}}
 }
-
+\author{
+Pierre Roudier \url{pierre.roudier@gmail.com}
+}

@@ -2,13 +2,16 @@
 % Please edit documentation in R/Spectra-methods.R
 \docType{methods}
 \name{dimensions}
-\alias{dim}
-\alias{dim.Spectra}
 \alias{dimensions}
-\alias{length}
 \alias{length.Spectra}
-\alias{ncol,Spectra-method}
 \alias{nrow,Spectra-method}
+\alias{ncol,Spectra-method}
+\alias{dim}
+\alias{length}
+\alias{dim.Spectra}
+\alias{nrow,Spectra-method}
+\alias{ncol,Spectra-method}
+\alias{dim.Spectra}
 \title{Retrieve dimensions of Spectra* objects}
 \usage{
 \method{length}{Spectra}(x)
@@ -64,4 +67,3 @@ dim(australia)
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
-

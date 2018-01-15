@@ -10,4 +10,3 @@ Stores and eases the manipulation of spectra and associated data.
 \author{
 Pierre Roudier
 }
-

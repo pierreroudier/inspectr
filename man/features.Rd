@@ -3,9 +3,9 @@
 \docType{methods}
 \name{features}
 \alias{features}
-\alias{features,SpectraDataFrame-method}
-\alias{features-methods}
 \alias{features<-}
+\alias{features-methods}
+\alias{features,SpectraDataFrame-method}
 \alias{features<-,Spectra-method}
 \alias{features<-,SpectraDataFrame-method}
 \title{Retrieves or sets the data slot of a SpectraDataFrame object.}
@@ -75,6 +75,7 @@ existing data. \cr }
 
 }
 }
+
 \examples{
 
 # Loading example data
@@ -108,11 +109,10 @@ features(oz, key = 'id', append = FALSE) <- d
 features(oz)
 
 }
-\author{
-Pierre Roudier \url{pierre.roudier@gmail.com}
-}
 \seealso{
 \code{\link{spectra}}, \code{\link{wl}},
 \code{\link{SpectraDataFrame-class}}
 }
-
+\author{
+Pierre Roudier \url{pierre.roudier@gmail.com}
+}

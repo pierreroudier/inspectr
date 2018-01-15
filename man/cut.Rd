@@ -51,4 +51,3 @@ plot(s)
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
-

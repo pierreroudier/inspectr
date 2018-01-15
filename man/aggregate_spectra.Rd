@@ -5,6 +5,7 @@
 \alias{aggregate_spectra}
 \alias{aggregate_spectra,Spectra-method}
 \alias{aggregate_spectra,SpectraDataFrame-method}
+\alias{aggregate_spectra,SpectraDataFrame-method}
 \title{Aggregates spectral and data information}
 \usage{
 \S4method{aggregate_spectra}{Spectra}(obj, fun = mean, ...)
@@ -53,6 +54,7 @@ Expressions evaluated in the context of \code{fun} \cr }
 
 }
 }
+
 \examples{
 
 # Loading example data
@@ -73,10 +75,9 @@ m <- aggregate_spectra(australia, fun = mean, id = 'fact')
 summary(m)
 plot(m)
 }
-\author{
-Pierre Roudier \url{pierre.roudier@gmail.com}
-}
 \seealso{
 \code{\link{apply_spectra}}
 }
-
+\author{
+Pierre Roudier \url{pierre.roudier@gmail.com}
+}

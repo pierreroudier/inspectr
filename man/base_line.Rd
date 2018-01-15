@@ -87,11 +87,6 @@ plot(australia)
 }
 
 }
-\author{
-Interface to the baseline package by Pierre Roudier
-\url{pierre.roudier@gmail.com}, baseline package authored by Kristian Hovde
-Liland and Bjorn-Helge Mevik
-}
 \references{
 Kristian Hovde Liland and Bjrn-Helge Mevik (2011). baseline:
 Baseline Correction of Spectra. R package version 1.0-1.
@@ -101,4 +96,8 @@ http://CRAN.R-project.org/package=baseline
 \code{\link{continuum_removal}}, \code{\link{snv}},
 \code{\link{rnv}}
 }
-
+\author{
+Interface to the baseline package by Pierre Roudier
+\url{pierre.roudier@gmail.com}, baseline package authored by Kristian Hovde
+Liland and Bjorn-Helge Mevik
+}

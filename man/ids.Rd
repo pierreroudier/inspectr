@@ -3,8 +3,10 @@
 \docType{methods}
 \name{ids}
 \alias{ids}
-\alias{ids,Spectra-method}
 \alias{ids<-}
+\alias{ids,Spectra-method}
+\alias{ids<-,Spectra-method}
+\alias{ids<-,SpectraDataFrame-method}
 \alias{ids<-,Spectra-method}
 \alias{ids<-,SpectraDataFrame-method}
 \title{Retrieves or sets the ids of a \code{Spectra*} object.}
@@ -46,6 +48,7 @@ in the Examples section).
  \item \code{ids(object) <- value} 
 }
 }
+
 \examples{
 
 # Loading example data
@@ -68,4 +71,3 @@ ids(oz)
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
-

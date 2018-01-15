@@ -45,11 +45,10 @@ object, either from scratch, or from an existing Spectra object.
   my.sdf <- SpectraDataFrame(my.s, data = my.data)
 
 }
-\author{
-Pierre Roudier \url{pierre.roudier@gmail.com}
-}
 \seealso{
 \code{\link{spectra}}, \code{\link{wl}},
 \code{\link{Spectra-class}}
 }
-
+\author{
+Pierre Roudier \url{pierre.roudier@gmail.com}
+}

@@ -3,8 +3,8 @@
 \docType{methods}
 \name{separate}
 \alias{separate}
-\alias{separate,Spectra-method}
 \alias{separate.Spectra}
+\alias{separate,Spectra-method}
 \title{Separates a \code{Spectra*} object into a calibration and a validation set.}
 \usage{
 \S4method{separate}{Spectra}(obj, calibration)
@@ -42,4 +42,3 @@ summary(l$validation)
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
-

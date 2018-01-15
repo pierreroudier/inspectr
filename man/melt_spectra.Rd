@@ -3,9 +3,10 @@
 \docType{methods}
 \name{melt_spectra}
 \alias{melt_spectra}
+\alias{melt_spectra-methods}
 \alias{melt_spectra,Spectra-method}
 \alias{melt_spectra,SpectraDataFrame-method}
-\alias{melt_spectra-methods}
+\alias{melt_spectra,SpectraDataFrame-method}
 \title{Melts the spectra data of a Spectra object and returns it as wide format.}
 \usage{
 melt_spectra(obj, attr=NULL, ...)
@@ -42,6 +43,7 @@ to split the spectra against. \cr \tab \code{...} \tab Ignored \cr }
 
 }
 }
+
 \examples{
 
 # Loading example data
@@ -67,12 +69,11 @@ print(p)
 }
 
 }
-\author{
-Pierre Roudier \url{pierre.roudier@gmail.com}
-}
 \references{
 Hadley Wickham (2011). The Split-Apply-Combine Strategy for Data
 Analysis. Journal of Statistical Software, 40(1), 1-29. URL
 http://www.jstatsoft.org/v40/i01/.
 }
-
+\author{
+Pierre Roudier \url{pierre.roudier@gmail.com}
+}

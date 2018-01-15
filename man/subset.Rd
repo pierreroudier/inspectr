@@ -3,8 +3,8 @@
 \docType{methods}
 \name{subset}
 \alias{subset}
-\alias{subset,SpectraDataFrame-method}
 \alias{subset.SpectraDataFrame}
+\alias{subset,SpectraDataFrame-method}
 \title{Subset SpectraDataFrame object}
 \usage{
 subset(x, ...)
@@ -43,10 +43,9 @@ summary(s)
 s <- subset(australia, carbon < 5, select = 1)
 summary(s)
 }
-\author{
-Pierre Roudier \url{pierre.roudier@gmail.com}
-}
 \seealso{
 \code{\link{mutate}}
 }
-
+\author{
+Pierre Roudier \url{pierre.roudier@gmail.com}
+}

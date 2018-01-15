@@ -55,4 +55,3 @@ plot(oz_filled)
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
-

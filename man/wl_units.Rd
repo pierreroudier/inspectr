@@ -3,8 +3,9 @@
 \docType{methods}
 \name{wl_units}
 \alias{wl_units}
-\alias{wl_units,Spectra-method}
 \alias{wl_units<-}
+\alias{wl_units,Spectra-method}
+\alias{wl_units<-,Spectra-method}
 \alias{wl_units<-,Spectra-method}
 \title{Wavelengths of Spectra* objects}
 \usage{
@@ -40,4 +41,3 @@ wl(oz)
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
-

@@ -53,11 +53,10 @@ plot(r)
 }
 
 }
-\author{
-Pierre Roudier \url{pierre.roudier@gmail.com}
-}
 \seealso{
 \code{\link{aggregate_spectra}}, \code{\link{snv}},
 \code{\link{rnv}}
 }
-
+\author{
+Pierre Roudier \url{pierre.roudier@gmail.com}
+}

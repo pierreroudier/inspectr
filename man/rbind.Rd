@@ -4,19 +4,22 @@
 \alias{rbind}
 \alias{rbind.Spectra}
 \alias{rbind.SpectraDataFrame}
+\alias{rbind}
+\alias{rbind.SpectraDataFrame}
 \title{Stacking \code{Spectra} objects together}
 \usage{
-rbind.Spectra(..., create_new_ids = FALSE, new_ids = NULL)
+\method{rbind}{Spectra}(..., create_new_ids = FALSE, new_ids = NULL)
 
-rbind.SpectraDataFrame(..., create_new_ids = FALSE, new_ids = NULL)
+\method{rbind}{SpectraDataFrame}(..., create_new_ids = FALSE,
+  new_ids = NULL)
 }
 \arguments{
+\item{\dots}{The \code{Spectra} objects to be combined.}
+
 \item{create_new_ids}{allows creation of new ids if the ids of the
 \code{Spectra*} objects you are trying to stack are redondant}
 
 \item{new_ids}{vector of new ids to be given to the new object}
-
-\item{\dots}{The \code{Spectra} objects to be combined.}
 }
 \value{
 a \code{Spectra*} object.
@@ -37,4 +40,3 @@ l <- separate(australia, calibration = 0.6)
 s <- rbind(l$validation, l$calibration)
 summary(s)
 }
-

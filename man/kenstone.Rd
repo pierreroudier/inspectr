@@ -22,10 +22,9 @@ individuals in x.
 \description{
 An implemnentation of the Kennard-Stone algorithm for calibration set selection.
 }
-\author{
-Pierre Roudier \url{pierre.roudier@gmail.com}
-}
 \references{
 Kennard, L.A. Stone, Technometrics 11 (1969) 137.
 }
-
+\author{
+Pierre Roudier \url{pierre.roudier@gmail.com}
+}

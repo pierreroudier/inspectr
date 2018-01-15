@@ -3,8 +3,8 @@
 \docType{methods}
 \name{split}
 \alias{split}
-\alias{split,Spectra-method}
 \alias{split.Spectra}
+\alias{split,Spectra-method}
 \title{Split a Spectra* object using factors}
 \usage{
 \S4method{split}{Spectra}(x, f, drop = FALSE, ...)
@@ -60,4 +60,3 @@ lapply(r, nrow)
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
-

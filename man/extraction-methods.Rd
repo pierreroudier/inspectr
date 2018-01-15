@@ -2,23 +2,23 @@
 % Please edit documentation in R/Spectra-methods.R
 \docType{methods}
 \name{extraction-methods}
-\alias{$}
-\alias{$,SpectraDataFrame-method}
-\alias{$<-}
-\alias{$<-,Spectra-method}
-\alias{[}
-\alias{[,Spectra,ANY,ANY,missing-method}
-\alias{[,Spectra-method}
-\alias{[,SpectraDataFrame,ANY,ANY,missing-method}
-\alias{[<-}
-\alias{[<-,SpectraDataFrame-method}
-\alias{[[}
-\alias{[[,Spectra-method}
-\alias{[[,SpectraDataFrame,ANY,missing-method}
-\alias{[[<-}
-\alias{[[<-,Spectra,ANY,missing-method}
-\alias{[[<-,Spectra-method}
 \alias{extraction-methods}
+\alias{[}
+\alias{[<-}
+\alias{[[}
+\alias{[[<-}
+\alias{$}
+\alias{$<-}
+\alias{[,Spectra-method}
+\alias{[[,Spectra-method}
+\alias{[[<-,Spectra-method}
+\alias{[,Spectra,ANY,ANY,missing-method}
+\alias{[,SpectraDataFrame,ANY,ANY,missing-method}
+\alias{[[,SpectraDataFrame,ANY,missing-method}
+\alias{[[<-,Spectra,ANY,missing-method}
+\alias{[<-,SpectraDataFrame-method}
+\alias{$<-,Spectra-method}
+\alias{$,SpectraDataFrame-method}
 \title{Extracting and replacing parts of Spectra* objects}
 \usage{
 \\S4method{[}{Spectra}(x,i,j,\dots,drop=FALSE)
@@ -80,6 +80,7 @@ Selected wavelengths \cr \tab \code{k} \tab Selected columns in the @data
 slot\cr \tab \code{name} \tab A literal character string or a name \cr \tab
 \code{...} \tab Ignored \cr \tab \code{drop} \tab Ignored \cr }}
 }
+
 \examples{
 
 # Loading example data
@@ -110,4 +111,3 @@ summary(s)
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
-

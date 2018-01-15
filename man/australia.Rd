@@ -32,13 +32,12 @@ spectra(oz) <- sr_no ~ ... ~ 350:2500
 summary(oz)
 
 }
+\references{
+Viscarra Rossel, R. and Behrens, T. 2010.
+}
 \author{
 Data kindly contributed by Raphael Viscarra Rossel. To reduce the
 size of the package, the original dataset has been reduced to 100 spectra
 using the Kennard-Stone algorithm.
 }
-\references{
-Viscarra Rossel, R. and Behrens, T. 2010.
-}
 \keyword{datasets}
-

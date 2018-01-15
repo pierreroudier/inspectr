@@ -23,4 +23,3 @@ summary(oz)
 \author{
 Pierre Roudier
 }
-

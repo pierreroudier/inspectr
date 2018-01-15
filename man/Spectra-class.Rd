@@ -3,15 +3,16 @@
 \docType{class}
 \name{Spectra-class}
 \alias{Spectra-class}
+\alias{inspectr}
 \alias{SpectraDataFrame-class}
-\alias{as.data.frame.SpatialSpectra}
 \alias{as.data.frame.Spectra}
 \alias{as.data.frame.SpectraDataFrame}
-\alias{inspectr}
+\alias{as.data.frame.SpatialSpectra}
 \alias{names.SpectraDataFrame}
 \alias{names<-.SpectraDataFrame}
 \alias{print,Spectra-method}
 \alias{show,Spectra-method}
+\alias{SpectraDataFrame-class}
 \title{Spectra* classes}
 \description{
 The inspectr package provides the user with S4 classes that have been
@@ -57,12 +58,14 @@ Class for spectra collections with associated attributes
 
 \item{\code{data}}{object of class data.frame containing the attribute data}
 }}
+
 \section{Objects from the Class}{
  Objects can be created by calls of the form
 \code{new("Spectra", ...)}, with the constructor functions like
 \code{Spectra(...)}, or with the helper functions such as \code{wl} and
 \code{spectra}.
 }
+
 \examples{
 
 showClass("Spectra")
@@ -74,4 +77,3 @@ Pierre Roudier \email{pierre.roudier@gmail.com}
 
 Pierre Roudier \email{pierre.roudier@gmail.com}
 }
-

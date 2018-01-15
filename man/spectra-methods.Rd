@@ -2,14 +2,14 @@
 % Please edit documentation in R/Spectra-methods.R, R/setters.R
 \docType{methods}
 \name{spectra-methods}
+\alias{spectra-methods}
 \alias{spectra}
+\alias{spectra<-}
+\alias{spectra,data.frame-method}
 \alias{spectra,Spectra-method}
 \alias{spectra,SpectraDataFrame-method}
-\alias{spectra,data.frame-method}
-\alias{spectra-methods}
-\alias{spectra<-}
-\alias{spectra<-,Spectra-method}
 \alias{spectra<-,data.frame-method}
+\alias{spectra<-,Spectra-method}
 \title{Retrieves or sets the spectra of a \code{Spectra*} objects.}
 \usage{
 \S4method{spectra}{Spectra}(object)
@@ -151,4 +151,3 @@ summary(oz_by_col)
 \author{
 Pierre Roudier \url{pierre.roudier@gmail.com}
 }
-

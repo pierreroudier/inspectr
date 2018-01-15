@@ -3,8 +3,8 @@
 \docType{methods}
 \name{mutate}
 \alias{mutate}
-\alias{mutate,Spectra-method}
 \alias{mutate.Spectra}
+\alias{mutate,Spectra-method}
 \title{Mutate a Spectra* object by transforming the spectra values, and/or adding
 new or replacing existing attributes.}
 \usage{
@@ -45,13 +45,12 @@ m <- mutate(australia, sqrt_carbon = sqrt(carbon), foo = clay + ph, nir = log1p(
 summary(m)
 plot(m)
 }
-\author{
-Pierre Roudier \url{pierre.roudier@gmail.com}, from code from
-Hadley Wickham
-}
 \references{
 Hadley Wickham (2011). The Split-Apply-Combine Strategy for Data
 Analysis. Journal of Statistical Software, 40(1), 1-29. URL
 http://www.jstatsoft.org/v40/i01/.
 }
-
+\author{
+Pierre Roudier \url{pierre.roudier@gmail.com}, from code from
+Hadley Wickham
+}

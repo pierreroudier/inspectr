@@ -34,11 +34,10 @@ Constructor for the Spectra class. Creates a Spectra object from scratch.
   summary(s)
 
 }
-\author{
-Pierre Roudier \url{pierre.roudier@gmail.com}
-}
 \seealso{
 \code{spectra}, \code{wl},
 \code{Spectra-class}, \code{SpectraDataFrame}
 }
-
+\author{
+Pierre Roudier \url{pierre.roudier@gmail.com}
+}

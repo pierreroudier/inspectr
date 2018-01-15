@@ -21,4 +21,3 @@ Creates a stacked plot of a collection of Spectra
 \author{
 Pierre Roudier
 }
-

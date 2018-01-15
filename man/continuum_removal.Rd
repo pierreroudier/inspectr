@@ -42,10 +42,6 @@ s <- apply_spectra(australia, continuum_removal, upper = FALSE)
 plot(s)
 
 }
-\author{
-Pierre Roudier \url{pierre.roudier@gmail.com}, based on code from
-Raphael Viscarra-Rossel.
-}
 \references{
 Clark, R.N., and Roush, T.L. 1984. Reflectance spectroscopy:
 Quantitative analysis techniques for remote sensing applications. Journal of
@@ -54,4 +50,7 @@ Geophysical Research 89, 6329--6340.
 \seealso{
 \code{\link{baseline}}, \code{\link{snv}}, \code{\link{rnv}}
 }
-
+\author{
+Pierre Roudier \url{pierre.roudier@gmail.com}, based on code from
+Raphael Viscarra-Rossel.
+}

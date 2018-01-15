@@ -30,4 +30,3 @@ Creates a summary plot of a collection of Spectra
 \author{
 Pierre Roudier
 }
-

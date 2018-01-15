@@ -33,4 +33,3 @@ apply(predicted, 2, postResampleSpectro, obs = observed)
 \author{
 Pierre Roudier, adapted from code from Max Kuhn
 }
-
